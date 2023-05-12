@@ -3,6 +3,8 @@ package DoAnJava.LinhKienDienTu.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "product")
@@ -14,7 +16,7 @@ public class Product {
     @Column(name = "product_name", length = 144, nullable = false)
     private String productName;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 255)
     private String description;
 
     @Column(name = "image")
@@ -26,10 +28,13 @@ public class Product {
     @Column(name = "amount")
     private Long amount;
 
-    @Column(name = "note")
+    @Column(name = "note", length = 144)
     private String note;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    private Set<BillDetail> billDetails;
 }
