@@ -6,6 +6,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,15 @@ public class UserController {
         }
         userService.register(user, getSiteURL(request));
         return "redirect:/login";
+    }
+
+    @GetMapping("/verify")
+    public String verifyUser(@Param("code") String code) {
+        if (userService.verify(code)) {
+            return "user/verify_success";
+        } else {
+            return "user/verify_fail";
+        }
     }
 
     private String getSiteURL(HttpServletRequest request) {

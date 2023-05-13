@@ -65,4 +65,18 @@ public class UserService {
 
         mailSender.send(message);
     }
+
+    public boolean verify(String verificationCode) {
+        User user = userReponsitory.findByVerificationCode(verificationCode);
+
+        if (user == null || user.isEnabled()) {
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userReponsitory.save(user);
+
+            return true;
+        }
+    }
 }

@@ -38,9 +38,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/", "/register", "/error")
+                        .requestMatchers("/css/**", "/js/**", "/", "/register", "/verify", "/error")
                         .permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
