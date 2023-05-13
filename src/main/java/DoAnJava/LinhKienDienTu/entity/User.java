@@ -27,18 +27,27 @@ public class User {
     private String phone;
 
     @Email(message = "Email invalid")
-    @Column(name = "email", length = 144, nullable = false)
+    @Column(name = "email", length = 144, nullable = false, unique = true)
     @NotBlank(message = "Email is required")
     @ValidEmail
     private String email;
 
     @Column(name = "username", length = 64, nullable = false, unique = true)
     @NotBlank(message = "Username is required")
-    @Size(max = 64, message = "Username must be less than 64 characters")
+    @Size(min = 6, max = 64, message = "Username must be more than 6 characters")
     @ValidUsername
     private String username;
 
     @Column(name = "password", length = 144, nullable = false)
     @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be more than 6 characters")
     private String password;
+
+    @Column(name = "confirm_password", nullable = false)
+    private String confirmPassword;
+
+    @Column(name = "verifycation_code", length = 64)
+    private String verificationCode;
+
+    private boolean enabled;
 }

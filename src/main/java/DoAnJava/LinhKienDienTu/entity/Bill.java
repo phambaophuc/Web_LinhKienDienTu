@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "cart")
+@Table(name = "bill")
 public class Bill {
     @Id
     @GeneratedValue

@@ -37,6 +37,11 @@
         <input type="password" class="form-control" th:field="*{password}" id="password">
         <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
       </div>
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirm Password:</label><span class="text-danger">*</span>
+        <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirmPassword">
+        <span class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
+      </div>
       <div class="d-grid gap-2">
         <button type="submit" class="btn btn-info">Sign up</button>
       </div>

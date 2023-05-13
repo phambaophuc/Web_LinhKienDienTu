@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "cart_detail")
+@Table(name = "bill_detail")
 public class BillDetail {
     @EmbeddedId
     private BillDetailKey id;

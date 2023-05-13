@@ -2,6 +2,8 @@ package DoAnJava.LinhKienDienTu.controller;
 
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.UserService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Controller
@@ -32,8 +35,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") User user,
-                           BindingResult result, Model model) {
+    public String register(@Valid @ModelAttribute("user") User user, HttpServletRequest request, BindingResult result, Model model)
+            throws UnsupportedEncodingException, MessagingException {
         if (result.hasErrors()) {
             List<FieldError> errors = result.getFieldErrors();
             for (FieldError error : errors) {
@@ -41,8 +44,12 @@ public class UserController {
             }
             return "user/register";
         }
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userService.saveUser(user);
+        userService.register(user, getSiteURL(request));
         return "redirect:/login";
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
     }
 }
