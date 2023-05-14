@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -24,10 +25,15 @@ public class UserService {
     @Autowired
     private JavaMailSender mailSender;
 
+    public User getUserByUsername(String username) {
+        return userReponsitory.findByUsername(username);
+    }
+
     public void register(User user, String siteURL)
             throws UnsupportedEncodingException, MessagingException {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        user.setConfirmPassword(encodedPassword);
 
         String randomCode = RandomStringUtils.randomAlphanumeric(64);
         user.setVerificationCode(randomCode);

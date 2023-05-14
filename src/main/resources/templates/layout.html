@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/all.min.css}">
 </head>
 <body>
 <header th:fragment="header">
@@ -22,7 +23,8 @@
                 </ul>
                 <ul class="navbar-nav">
                     <Li class="d-flex" sec:authorize="isAuthenticated()">
-                        <a class="nav-link me-3" th:text="${#authentication.name}"></a>
+                        <a class="nav-link link-info text-uppercase me-3"
+                           th:href="@{/profile}" th:text="${#authentication.name}"></a>
                         <form th:action="@{/logout}" method="post">
                             <button class="btn btn-outline-danger" type="submit">Logout</button>
                         </form>
@@ -42,6 +44,7 @@
 
 <footer th:fragment="footer">
     <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/all.min.js}"></script>
 </footer>
 </body>
 </html>
