@@ -38,8 +38,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/webfonts/**", "/", "/register",
-                                "/verify", "/error", "/forgot-password", "/reset-password")
+                        .requestMatchers("/css/**", "/js/**", "/webfonts/**", "/register", "/verify",
+                                "/error", "/forgot-password", "/reset-password", "/")
                         .permitAll()
                         .anyRequest().authenticated()
                 )

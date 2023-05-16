@@ -3,12 +3,13 @@ package DoAnJava.LinhKienDienTu.entity;
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidEmail;
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidUsername;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -49,4 +50,9 @@ public class User {
 
     private boolean enabled;
 
+    @ManyToMany
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }

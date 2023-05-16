@@ -1,6 +1,7 @@
 package DoAnJava.LinhKienDienTu.services;
 
 import DoAnJava.LinhKienDienTu.entity.User;
+import DoAnJava.LinhKienDienTu.reponsitory.IRoleReponsitory;
 import DoAnJava.LinhKienDienTu.reponsitory.IUserReponsitory;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -26,6 +27,9 @@ public class UserService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private IRoleReponsitory roleReponsitory;
 
     public User getUserByUsername(String username) {
         return userReponsitory.findByUsername(username);
@@ -64,6 +68,11 @@ public class UserService {
         user.setEnabled(false);
 
         userReponsitory.save(user);
+        UUID userId = userReponsitory.getUserIdByUsername(user.getUsername());
+        Long roleId = roleReponsitory.getRoleIdByRoleName("USER");
+        if (roleId != 0 && userId != null) {
+            userReponsitory.addRoleToUser(userId, roleId);
+        }
 
         sendVerificationEmail(user, siteURL);
     }
