@@ -41,17 +41,12 @@ public class User {
     @Size(min = 6, max = 144, message = "Mật khẩu của bạn phải từ 6-144 ký tự.")
     private String password;
 
-    @Column(name = "confirm_password", length = 144, nullable = false)
-    @NotBlank(message = "Vui lòng nhập mật khẩu xác nhận.")
-    private String confirmPassword;
-
     @Column(name = "verifycation_code", length = 64)
     private String verificationCode;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
     private boolean enabled;
 
-    @AssertTrue(message = "Mật khẩu xác nhận phải giống mật khẩu.")
-    public boolean isPasswordConfirmed() {
-        return password != null && password.equals(confirmPassword);
-    }
 }

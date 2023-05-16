@@ -52,9 +52,9 @@ public class UserController {
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code) {
         if (userService.verify(code)) {
-            return "user/verify_success";
+            return "user/verify-success";
         } else {
-            return "user/verify_fail";
+            return "user/verify-fail";
         }
     }
 

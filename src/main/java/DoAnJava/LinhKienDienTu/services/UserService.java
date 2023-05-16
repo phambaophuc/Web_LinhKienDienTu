@@ -7,6 +7,8 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -29,11 +31,33 @@ public class UserService {
         return userReponsitory.findByUsername(username);
     }
 
+    public void updateResetPasswordToken(String token, String email) throws UsernameNotFoundException {
+        User user = userReponsitory.findByEmail(email);
+        if (user != null) {
+            user.setResetPasswordToken(token);
+            userReponsitory.save(user);
+        } else {
+            throw new UsernameNotFoundException("Không tìm thấy user với email là: " + email);
+        }
+    }
+
+    public User getByResetPasswordToken(String token) {
+        return userReponsitory.findByResetPasswordToken(token);
+    }
+
+    public void updatePassword(User user, String newPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+
+        user.setResetPasswordToken(null);
+        userReponsitory.save(user);
+    }
+
     public void register(User user, String siteURL)
             throws UnsupportedEncodingException, MessagingException {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        user.setConfirmPassword(encodedPassword);
 
         String randomCode = RandomStringUtils.randomAlphanumeric(64);
         user.setVerificationCode(randomCode);

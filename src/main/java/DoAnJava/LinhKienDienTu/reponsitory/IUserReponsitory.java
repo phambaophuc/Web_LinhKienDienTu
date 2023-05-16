@@ -15,4 +15,6 @@ public interface IUserReponsitory extends JpaRepository<User, UUID> {
 
     @Query("SELECT u FROM User u WHERE u.verificationCode = ?1")
     public User findByVerificationCode(String code);
+
+    public User findByResetPasswordToken(String token);
 }
