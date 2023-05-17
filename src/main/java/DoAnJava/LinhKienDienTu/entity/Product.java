@@ -37,4 +37,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private Set<BillDetail> billDetails;
+
+    @OneToMany(mappedBy = "product")
+    private Set<Comment> comments;
 }

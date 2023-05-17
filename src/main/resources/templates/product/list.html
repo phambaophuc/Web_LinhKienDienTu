@@ -31,7 +31,7 @@
 
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="mb-0">
-                                <a class="nav-link" th:href="@{'/product/detail/' + ${product.productId}}" th:text="${product.productName}"></a>
+                                <a class="nav-link" th:href="@{'/product/' + ${product.productId}}" th:text="${product.productName}"></a>
                             </h5>
                             <h5 class="text-dark mb-0" th:text="${product.price}"></h5>
                         </div>
