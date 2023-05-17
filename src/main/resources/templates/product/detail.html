@@ -56,7 +56,7 @@
                                                 <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
                                                 <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                                             </div>
-                                            <p class="mb-0" th:text="${comment.content}"></p>
+                                            <p class="mb-0" th:utext="${comment.content}" style="white-space: pre-line;"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -75,7 +75,7 @@
                         <div class="card-footer py-3 border-0">
                             <div class="d-flex flex-start w-100">
                                 <img class="rounded-circle shadow-1-strong me-3"
-                                     src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar" width="40"
+                                     src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="40"
                                      height="40" />
                                 <div class="form-outline w-100">
                                     <textarea class="form-control" id="textAreaExample" rows="4"
