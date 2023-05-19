@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**")
                         .permitAll()
+                        .requestMatchers("/admin/**")
+                        .hasAnyAuthority("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
