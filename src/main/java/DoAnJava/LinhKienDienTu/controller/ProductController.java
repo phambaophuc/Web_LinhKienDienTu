@@ -2,7 +2,6 @@ package DoAnJava.LinhKienDienTu.controller;
 
 import DoAnJava.LinhKienDienTu.entity.Comment;
 import DoAnJava.LinhKienDienTu.entity.Product;
-import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.CommentService;
 import DoAnJava.LinhKienDienTu.services.ProductService;
 import DoAnJava.LinhKienDienTu.services.UserService;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 

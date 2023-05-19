@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/all.min.css}">
+    <link th:fragment="link-css" rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <link th:fragment="link-css" rel="stylesheet" th:href="@{/vendor/font-awesome/css/all.min.css}">
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -23,7 +23,7 @@
                     <div class="d-flex justify-content-center h-100">
                         <form th:action="@{/product/search}" method="GET">
                             <div class="searchbar">
-                                <input class="search_input" name="name" type="text" placeholder="Search...">
+                                <input class="search_input" name="name" type="text" placeholder="Search..." autocomplete="off">
                                 <button class="search_icon" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -37,10 +37,10 @@
     <div id="menuHolder">
         <div role="navigation" class="sticky-top border-bottom border-top" id="mainNavigation">
             <div class="flexMain">
-                <div class="flex2">
+                <div>
                     <button class="whiteLink siteLink" style="border-right:1px solid #eaeaea" onclick="menuToggle()"><i class="fas fa-bars me-2"></i> MENU</button>
                 </div>
-                <div class="flex3 text-center text-uppercase" id="siteBrand">
+                <div class="text-uppercase ms-3" id="siteBrand">
                     electronic components
                 </div>
 
@@ -188,8 +188,9 @@
         <a class="fw-bold link-info" href="#">Phạm Bảo Phúc</a>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
 </footer>
 </body>

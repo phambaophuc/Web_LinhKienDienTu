@@ -159,7 +159,7 @@ body,html {
 }
 
 .searchbar:hover > .search_icon {
-    background: white;
+    background: transparent;
     color: #e74c3c;
 }
 
@@ -170,8 +170,8 @@ body,html {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    color:#e74c3c;
-    background-color: white;
+    border : none;
+    color: white;
+    background-color: transparent;
     text-decoration:none;
 }

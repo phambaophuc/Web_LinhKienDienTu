@@ -38,7 +38,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webfonts/**")
+                        .requestMatchers("/css/**", "/js/**", "/img/**")
                         .permitAll()
                         .anyRequest().permitAll()
                 )
