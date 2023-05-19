@@ -26,6 +26,11 @@ public class ProductService {
         }
     }
 
+    public List<Product> getProductByName(String productName) {
+        List<Product> products = productReponsitory.findProductByName(productName);
+        return products;
+    }
+
     public void saveProduct(Product product) {
         productReponsitory.save(product);
     }
