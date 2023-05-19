@@ -19,7 +19,14 @@
                 <div><strong>Website bán linh kiện điện tử</strong></div>
             </div>
             <div class="flex1">
-
+                <div class="container h-100">
+                    <div class="d-flex justify-content-center h-100">
+                        <div class="searchbar">
+                            <input class="search_input" type="text" name="" placeholder="Search...">
+                            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -33,12 +40,8 @@
                     electronic components
                 </div>
 
-                <div class="flex2 text-end d-block d-md-none">
-                    <button class="whiteLink siteLink"><i class="fas fa-search"></i></button>
-                </div>
-
                 <div class="flex2 text-end d-none d-md-block">
-                    <div class="d-flex justify-content-center" sec:authorize="isAuthenticated()">
+                    <div class="d-flex justify-content-end me-3" sec:authorize="isAuthenticated()">
                         <a class="nav-link link-dark fw-bold text-uppercase me-3 ps-0"
                            th:href="@{/profile}">
                             <i class="fa-solid fa-user"></i>
@@ -48,7 +51,7 @@
                             <button class="btn btn-outline-danger" type="submit">Logout</button>
                         </form>
                     </div>
-                    <div sec:authorize="!isAuthenticated()">
+                    <div class="me-3" sec:authorize="!isAuthenticated()">
                         <a class="btn btn-outline-primary" href="/login">Login</a>
                     </div>
                 </div>
