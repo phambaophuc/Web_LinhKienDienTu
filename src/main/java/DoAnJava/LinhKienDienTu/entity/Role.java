@@ -7,14 +7,15 @@ import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "role")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+    @GeneratedValue
+    private UUID roleId;
 
     @Size(max = 50, message = "Name must be less than 50 characters")
     @NotBlank(message = "Name is required")

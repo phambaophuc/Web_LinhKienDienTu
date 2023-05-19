@@ -26,7 +26,7 @@ public interface IUserReponsitory extends JpaRepository<User, Long> {
     @Transactional
     @Query(value = "INSERT INTO user_role (user_id, role_id) " +
             "VALUES (?1, ?2)", nativeQuery = true)
-    void addRoleToUser(UUID userId, Long roleId);
+    void addRoleToUser(UUID userId, UUID roleId);
 
     @Query("SELECT u.userId FROM User u WHERE u.username = ?1")
     UUID getUserIdByUsername(String username);

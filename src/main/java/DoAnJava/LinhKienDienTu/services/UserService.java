@@ -69,8 +69,8 @@ public class UserService {
 
         userReponsitory.save(user);
         UUID userId = userReponsitory.getUserIdByUsername(user.getUsername());
-        Long roleId = roleReponsitory.getRoleIdByRoleName("USER");
-        if (roleId != 0 && userId != null) {
+        UUID roleId = roleReponsitory.getRoleIdByRoleName("USER");
+        if (roleId != null && userId != null) {
             userReponsitory.addRoleToUser(userId, roleId);
         }
 
