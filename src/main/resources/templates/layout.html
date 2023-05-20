@@ -17,6 +17,9 @@
                     <select  class="me-3 border-0 bg-light">
                         <option value="en-us">EN-US</option>
                     </select>
+                    <span class="me-3" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="text-danger" th:href="@{/admin}"><i class="fa-solid fa-house-user"></i> Admin</a>
+                    </span>
                     <span class="d-none d-lg-inline-block d-md-inline-block d-sm-inline-block d-xs-none me-3"><strong>info@somedomain.com</strong></span>
                     <span class="me-3"><i class="fa-solid fa-phone me-1 text-warning"></i> <strong>1-800-123-1234</strong></span>
                 </div>
