@@ -19,8 +19,8 @@
                             <p class="text-white mb-0 small">x4</p>
                         </div>
                     </div>
-                    <img th:src="@{'http://localhost:8080/img/product/' + ${product.image} + '.webp'}"
-                         class="card-img-top" alt="${product.category.categoryName}" />
+                    <img th:src="@{'/img/product/' + ${product.image} + '.webp'}"
+                         class="m-auto" alt="${product.category.categoryName}" style="width:200px"/>
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <p class="small">
