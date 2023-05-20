@@ -31,6 +31,11 @@ public class ProductService {
         return products;
     }
 
+    public List<Product> getProductByCategory(String categoryName) {
+        List<Product> products = productReponsitory.findProductByCategory(categoryName);
+        return products;
+    }
+
     public void saveProduct(Product product) {
         productReponsitory.save(product);
     }

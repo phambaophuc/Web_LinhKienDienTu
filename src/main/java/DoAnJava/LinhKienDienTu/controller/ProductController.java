@@ -63,10 +63,18 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String searchProduct(@RequestParam("name") String searchString, Model model) {
-        List<Product> products = productService.getProductByName(searchString);
-        model.addAttribute("products", products);
-        model.addAttribute("searchString", searchString);
-        return "product/list-search";
+    public String searchProduct(@RequestParam(value = "name", required = false) String productName, Model model,
+                                @RequestParam(value = "category", required = false) String categoryName) {
+        if (productName != null && categoryName == null) {
+            List<Product> products = productService.getProductByName(productName);
+            model.addAttribute("products", products);
+            model.addAttribute("searchString", productName);
+            return "product/list-search";
+        } else {
+            List<Product> products = productService.getProductByCategory(categoryName);
+            model.addAttribute("products", products);
+            model.addAttribute("searchString", categoryName);
+            return "product/list-search";
+        }
     }
 }
