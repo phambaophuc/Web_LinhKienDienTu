@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,10 @@ public class UserService {
 
     @Autowired
     private IRoleReponsitory roleReponsitory;
+
+    public List<User> getAllUsers() {
+        return userReponsitory.findAll();
+    }
 
     public User getUserByUsername(String username) {
         return userReponsitory.findByUsername(username);
