@@ -1,8 +1,10 @@
 package DoAnJava.LinhKienDienTu.controller;
 
 import DoAnJava.LinhKienDienTu.entity.Product;
+import DoAnJava.LinhKienDienTu.entity.Role;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.ProductService;
+import DoAnJava.LinhKienDienTu.services.RoleService;
 import DoAnJava.LinhKienDienTu.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,9 +20,10 @@ public class AdminController {
 
     @Autowired
     private ProductService productService;
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
     @GetMapping
     public String index() {
@@ -39,5 +42,12 @@ public class AdminController {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "admin/m-user";
+    }
+
+    @GetMapping("/list-role")
+    public String getAllRole(Model model) {
+        List<Role> roles = roleService.getAllRoles();
+        model.addAttribute("roles", roles);
+        return "admin/m-role";
     }
 }

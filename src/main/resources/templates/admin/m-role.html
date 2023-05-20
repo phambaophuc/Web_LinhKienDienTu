@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý quyền</title>
+  <th:block th:replace="layout-admin :: link-css"></th:block>
+  <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+<div id="wrapper">
+  <th:block th:replace="layout-admin :: header"></th:block>
+  <div id="content-wrapper">
+    <div id="content">
+      <th:block th:replace="layout-admin :: nav"></th:block>
+      <div class="container-fluid">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">DataTables Role</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Role Name</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                  <th>Id</th>
+                  <th>Role Name</th>
+                </tr>
+                </tfoot>
+                <tbody>
+                <tr th:each="role: ${roles}">
+                  <td th:text="${role.roleId}"></td>
+                  <td th:text="${role.roleName}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <th:block th:replace="layout-admin :: footer"></th:block>
+    </div>
+  </div>
+</div>
+
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/js/datatables-demo.js"></script>
+</body>
+</html>
