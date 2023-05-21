@@ -25,7 +25,9 @@
 
             <div class="d-flex">
                 <button class="btn btn-success me-2">Đặt hàng</button>
-                <button class="btn btn-outline-danger">Thêm vào giỏ hàng</button>
+                <form th:action="@{'/product/add-to-cart/' + ${product.productId}}" method="POST">
+                    <button class="btn btn-outline-danger" type="submit">Thêm vào giỏ hàng</button>
+                </form>
             </div>
         </div>
 

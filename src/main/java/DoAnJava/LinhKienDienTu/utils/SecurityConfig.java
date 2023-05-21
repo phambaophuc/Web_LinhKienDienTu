@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasAnyAuthority("ADMIN", "MANAGE")
+                        .requestMatchers("/cart", "/product/add-to-cart/**")
+                        .hasAnyAuthority("USER")
                         .anyRequest().permitAll()
                 )
                 .logout(logout -> logout.logoutUrl("/logout")

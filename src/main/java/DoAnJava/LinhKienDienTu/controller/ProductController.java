@@ -1,10 +1,7 @@
 package DoAnJava.LinhKienDienTu.controller;
 
-import DoAnJava.LinhKienDienTu.entity.Comment;
-import DoAnJava.LinhKienDienTu.entity.Product;
-import DoAnJava.LinhKienDienTu.services.CommentService;
-import DoAnJava.LinhKienDienTu.services.ProductService;
-import DoAnJava.LinhKienDienTu.services.UserService;
+import DoAnJava.LinhKienDienTu.entity.*;
+import DoAnJava.LinhKienDienTu.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -20,10 +18,12 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
-
     @Autowired
     private CommentService commentService;
-
+    @Autowired
+    private BillService billService;
+    @Autowired
+    private BillDetailService billDetailService;
     @Autowired
     private UserService userService;
 
@@ -77,4 +77,20 @@ public class ProductController {
             return "product/list-search";
         }
     }
+
+    @PostMapping("/add-to-cart/{productId}")
+    public String addProductToBill(@PathVariable Long productId, Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        Bill bill = billService.getBillByUser(user.getUserId());
+
+        if (bill == null) {
+            billService.saveBill(new Bill(), user);
+            bill = billService.getBillByUser(user.getUserId());
+        }
+
+        billDetailService.addProductToBill(productId, bill.getBillId());
+
+        return "redirect:/product";
+    }
+
 }

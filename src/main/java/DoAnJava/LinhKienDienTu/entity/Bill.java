@@ -3,7 +3,7 @@ package DoAnJava.LinhKienDienTu.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -11,15 +11,19 @@ import java.util.Set;
 @Table(name = "bill")
 public class Bill {
     @Id
-    @GeneratedValue
-    private Long cartId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long billId;
 
     @Column(name = "total_price")
     private Double totalPrice;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @OneToMany(mappedBy = "bill")
     private Set<BillDetail> billDetails;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

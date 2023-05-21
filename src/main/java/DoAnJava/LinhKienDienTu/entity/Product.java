@@ -3,6 +3,8 @@ package DoAnJava.LinhKienDienTu.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Set;
 
 @Data
@@ -22,8 +24,8 @@ public class Product {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "price")
-    private Double price;
+    @Column(name = "price", precision = 5, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "amount")
     private Long amount;

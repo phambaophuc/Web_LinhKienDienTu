@@ -66,7 +66,11 @@
                 </ul>
                 <ul class="navbar-nav ms-auto d-flex">
                     <li class="nav-item">
-                        <a class="nav-link mx-1 text-uppercase" href="#"><i class="fa-solid fa-cart-shopping me-1"></i> Cart</a>
+                        <a class="nav-link mx-1 text-uppercase" th:href="@{/cart}">
+                            <i class="fa-solid fa-cart-shopping me-1"></i>
+                            Cart
+                            <sup class="text-danger" id="cartItemCount" style="font-size:14px"></sup>
+                        </a>
                     </li>
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
                         <a class="nav-link mx-1 text-uppercase text-success" th:href="@{/login}"><i class="fa-solid fa-circle-user me-1"></i> Login</a>
@@ -196,6 +200,22 @@
         <a class="fw-bold link-info" href="#">Phạm Bảo Phúc</a>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var cartItemCountElement = document.getElementById("cartItemCount");
+
+            // Gọi API để lấy số lượng sản phẩm trong chi tiết hóa đơn
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/cartItemCount", true);
+            xhr.onload = function() {
+              if (xhr.status === 200) {
+                var cartItemCount = JSON.parse(xhr.responseText);
+                cartItemCountElement.textContent = cartItemCount;
+              }
+            };
+            xhr.send();
+        });
+    </script>
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
