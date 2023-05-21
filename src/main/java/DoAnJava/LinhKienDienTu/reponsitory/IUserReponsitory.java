@@ -11,7 +11,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface IUserReponsitory extends JpaRepository<User, Long> {
+public interface IUserReponsitory extends JpaRepository<User, UUID> {
     User findByEmail(String email);
 
     @Query("SELECT u FROM User u WHERE u.username = ?1")

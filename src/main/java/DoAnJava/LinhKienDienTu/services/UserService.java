@@ -16,6 +16,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,6 +39,19 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return userReponsitory.findByUsername(username);
+    }
+
+    public User getUserById(UUID id) {
+        Optional<User> optionalUser = userReponsitory.findById(id);
+        return optionalUser.orElse(null);
+    }
+
+    public void addRoleToUser(UUID userId, UUID roleId) {
+        userReponsitory.addRoleToUser(userId, roleId);
+    }
+
+    public String[] getRolesOfUser(UUID id) {
+        return userReponsitory.getRolesOfUser(id);
     }
 
     public void updateResetPasswordToken(String token, String email) throws UsernameNotFoundException {

@@ -27,6 +27,7 @@
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Username</th>
+                                    <th>Role</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -36,15 +37,23 @@
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Username</th>
+                                    <th>Role</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
                                 <tr th:each="user: ${users}">
                                     <td th:text="${user.userId}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/assign-role/{id}(id=${user.userId})}" th:text="${user.username}"></a>
+                                    </td>
                                     <td th:text="${user.fullname}"></td>
-                                    <td th:text="${user.phone}"></td>
                                     <td th:text="${user.email}"></td>
-                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.phone}"></td>
+                                    <td>
+                                        <ul>
+                                            <li th:each="role : ${user.roles}" th:text="${role.roleName}"></li>
+                                        </ul>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

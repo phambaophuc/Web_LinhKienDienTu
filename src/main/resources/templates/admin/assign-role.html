@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${'Gán quyền cho ' + user.username}"></title>
+  <th:block th:replace="layout-admin :: link-css"></th:block>
+  <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+<div id="wrapper">
+  <th:block th:replace="layout-admin :: header"></th:block>
+  <div id="content-wrapper">
+    <div id="content">
+      <th:block th:replace="layout-admin :: nav"></th:block>
+      <div class="container-fluid">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Phân quyền cho người dùng</h6>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-danger d-inline-block" th:if="${exists}" th:text="${exists}"></div>
+            <div class="alert alert-success d-inline-block" th:if="${success}" th:text="${success}"></div>
+            <form th:action="@{/admin/assign-role}" method="POST">
+              <input type="hidden" name="userId" th:value="${user.userId}">
+              <div>
+                <label class="form-label">Username:
+                  <span class="text-uppercase" th:text="${user.username}"></span>
+                </label>
+              </div>
+
+              <div class="mt-2">
+                <label class="form-label">Tên người dùng:
+                  <span class="text-uppercase" th:text="${user.fullname}"></span>
+                </label>
+              </div>
+
+              <div class="mt-2">
+                <label class="form-label">Quyền hiện có:
+                  <span th:each="roleUser, iterStat : ${roleOfUser}">
+                    <span th:text="${roleUser}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="mt-2">
+                <label class="form-label" for="role">Role: </label>
+                <select class="form-control-sm" id="role" name="roleId">
+                  <option th:each="role : ${roles}" th:value="${role.roleId}"
+                          th:text="${role.roleName}"></option>
+                </select>
+              </div>
+              <button class="btn btn-sm btn-outline-success mt-3" type="submit">Gán quyền</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <th:block th:replace="layout-admin :: footer"></th:block>
+    </div>
+  </div>
+</div>
+
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/js/datatables-demo.js"></script>
+</body>
+</html>
