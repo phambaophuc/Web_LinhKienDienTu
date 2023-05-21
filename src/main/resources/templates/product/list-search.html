@@ -22,18 +22,19 @@
                     <img th:src="@{'/img/product/' + ${product.image} + '.webp'}"
                          class="m-auto" alt="${product.category.categoryName}" style="width:200px"/>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <p class="small">
-                                <a href="#!" class="text-muted"th:text="${product.category.categoryName}"></a>
-                            </p>
-                            <p class="small text-danger"><s th:text="${product.price * 2}"></s></p>
+                        <p class="mb-0 text-center text-truncate">
+                            <a class="text-decoration-none" style="font-size:20px" th:title="${product.productName}"
+                               th:href="@{'/product/' + ${product.productId}}" th:text="${product.productName}"></a>
+                        </p>
+                        <div class="d-flex justify-content-end">
+                            <p class="small text-danger"><s th:text="${product.price * 2 + ' $'}"></s></p>
                         </div>
 
                         <div class="d-flex justify-content-between mb-3">
-                            <h5 class="mb-0">
-                                <a class="nav-link" th:href="@{'/product/' + ${product.productId}}" th:text="${product.productName}"></a>
-                            </h5>
-                            <h5 class="text-dark mb-0" th:text="${product.price}"></h5>
+                            <p class="small">
+                                <a href="#!" class="text-muted"th:text="${product.category.categoryName}"></a>
+                            </p>
+                            <h5 class="text-dark mb-0" th:text="${product.price + ' $'}"></h5>
                         </div>
 
                         <div class="d-flex justify-content-between mb-2">
