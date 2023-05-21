@@ -27,7 +27,6 @@
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Username</th>
-                                    <th>Role</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -37,7 +36,6 @@
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Username</th>
-                                    <th>Role</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -49,11 +47,6 @@
                                     <td th:text="${user.fullname}"></td>
                                     <td th:text="${user.email}"></td>
                                     <td th:text="${user.phone}"></td>
-                                    <td>
-                                        <ul>
-                                            <li th:each="role : ${user.roles}" th:text="${role.roleName}"></li>
-                                        </ul>
-                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
