@@ -43,6 +43,7 @@ public class AdminController {
         return "admin/list-product";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-user")
     public String getAllUser(Model model) {
         List<User> users = userService.getAllUsers();
