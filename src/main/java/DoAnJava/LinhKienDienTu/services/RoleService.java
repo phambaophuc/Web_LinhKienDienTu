@@ -22,4 +22,8 @@ public class RoleService {
         Optional<Role> role = roleReponsitory.findById(id);
         return role.orElse(null);
     }
+
+    public void saveRole(Role role) {
+        roleReponsitory.save(role);
+    }
 }

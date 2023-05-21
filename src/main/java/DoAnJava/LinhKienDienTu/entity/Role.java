@@ -18,7 +18,7 @@ public class Role {
     private UUID roleId;
 
     @Size(max = 50, message = "Name must be less than 50 characters")
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Role name is required")
     @Column(name = "role_name", length = 50, nullable = false)
     private String roleName;
 

@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/img/**")
                         .permitAll()
                         .requestMatchers("/admin/**")
-                        .hasAnyAuthority("ADMIN")
+                        .hasAnyAuthority("ADMIN", "MANAGE")
                         .anyRequest().permitAll()
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
