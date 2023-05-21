@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title th:text="${product.productName}"></title>
     <th:block th:replace="layout :: link-css"></th:block>
+    <style>
+        textarea {
+            resize: none;
+        }
+    </style>
 </head>
 <body>
 <th:block th:replace="layout :: header"></th:block>
@@ -84,11 +89,11 @@
                                             style="background: #fff;" th:field="${newComment.content}">
                                     </textarea>
                                     <label class="form-label" for="textAreaExample">Message</label>
+                                    <div class="float-end mt-2">
+                                        <button type="submit" class="btn btn-success btn-sm" id="postCommentBtn">Post comment</button>
+                                        <button type="button" class="btn btn-outline-success btn-sm">Cancel</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="float-end mt-2 pt-1">
-                                <button type="submit" class="btn btn-success btn-sm" id="postCommentBtn">Post comment</button>
-                                <button type="button" class="btn btn-outline-success btn-sm">Cancel</button>
                             </div>
                         </div>
                     </form>
