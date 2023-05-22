@@ -44,12 +44,7 @@ public class BillDetailService {
         return billDetailReponsitory.countItemCart(userId);
     }
 
-    public void removeProductFromBill(Bill bill, Product product) {
-        BillDetailKey key = new BillDetailKey();
-        key.setBillId(bill.getBillId());
-        key.setProductId(product.getProductId());
-
-        bill.getBillDetails().removeIf(cp -> cp.getId().equals(key));
-        billDetailReponsitory.deleteById(key);
+    public void deleteByProductIdAndBillId(Long productId, Long billId) {
+        billDetailReponsitory.deleteByProductIdAndBillId(productId, billId);
     }
 }

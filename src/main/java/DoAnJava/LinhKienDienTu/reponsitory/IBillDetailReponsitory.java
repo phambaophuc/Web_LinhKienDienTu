@@ -43,4 +43,9 @@ public interface IBillDetailReponsitory extends JpaRepository<BillDetail, BillDe
             "JOIN user u ON u.user_id = b.user_id " +
             "WHERE u.user_id = :userId", nativeQuery = true)
     int countItemCart(@Param("userId") UUID userId);
+
+    @Modifying
+    @Query(value = "DELETE FROM bill_detail bd WHERE bd.product_id = :productId " +
+            "AND bd.bill_id = :billId", nativeQuery = true)
+    void deleteByProductIdAndBillId(@Param("productId") Long productId, @Param("billId") Long billId);
 }
