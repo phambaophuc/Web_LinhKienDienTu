@@ -54,6 +54,10 @@ public class UserService {
         return userReponsitory.getRolesOfUser(id);
     }
 
+    public void saveUser(User user) {
+        userReponsitory.save(user);
+    }
+
     public void updateResetPasswordToken(String token, String email) throws UsernameNotFoundException {
         User user = userReponsitory.findByEmail(email);
         if (user != null) {

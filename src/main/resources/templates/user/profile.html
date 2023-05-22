@@ -63,7 +63,7 @@
                 <p class="text-muted mb-0" th:text="*{&quot;*&quot; + ' *'.repeat(user.password.length() / 2)}"></p>
               </div>
               <div class="col-sm-3">
-                <a class="nav-link link-primary" href="#">Đổi mật khẩu</a>
+                <a class="text-decoration-none" th:href="@{/change-password}">Đổi mật khẩu</a>
               </div>
             </div>
           </div>

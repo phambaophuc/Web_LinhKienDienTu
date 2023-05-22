@@ -1,4 +1,4 @@
-package DoAnJava.LinhKienDienTu.utils;
+package DoAnJava.LinhKienDienTu.config;
 
 import DoAnJava.LinhKienDienTu.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;

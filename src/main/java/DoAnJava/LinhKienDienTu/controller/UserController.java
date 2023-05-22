@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,14 +17,19 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
     public String login() {
@@ -48,6 +54,10 @@ public class UserController {
         userService.register(user, getSiteURL(request));
         return "redirect:/login";
     }
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
+    }
 
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code) {
@@ -69,8 +79,26 @@ public class UserController {
         return "user/profile";
     }
 
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
+    @GetMapping("/change-password")
+    public String changePasswordForm() {
+        return "user/change-password";
+    }
+    @PostMapping("/change-password")
+    public String changePassword(@RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.getUserByUsername(principal.getName());
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu hiện tại không đúng.");
+            return "redirect:/change-password";
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userService.saveUser(user);
+
+        redirectAttributes.addFlashAttribute("success", "Mật khẩu đã được thay đổi.");
+
+        return "redirect:/change-password";
     }
 }
