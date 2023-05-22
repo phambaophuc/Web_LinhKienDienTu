@@ -1,7 +1,5 @@
 package DoAnJava.LinhKienDienTu.controller.api;
 
-import DoAnJava.LinhKienDienTu.entity.Bill;
-import DoAnJava.LinhKienDienTu.entity.Product;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.BillDetailService;
 import DoAnJava.LinhKienDienTu.services.BillService;
@@ -36,7 +34,7 @@ public class CartApiController {
         }
     }
 
-    @PostMapping("/cart/{productId}/{billId}")
+    @DeleteMapping("/cart/{productId}/{billId}")
     @Transactional
     public ResponseEntity<?> deleteBillDetail(@PathVariable Long productId, @PathVariable Long billId) {
         billDetailService.deleteByProductIdAndBillId(productId, billId);
