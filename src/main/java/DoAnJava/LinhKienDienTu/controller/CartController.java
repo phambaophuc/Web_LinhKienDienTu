@@ -41,6 +41,8 @@ public class CartController {
             billService.saveBill(new Bill(), user);
         }
 
+        if (page < 0) page = 0;
+
         Page<BillDetail> billDetailsPage = billDetailService.getAllBillDetail(user.getUserId(), page, pageSize);
         List<BillDetail> billDetails = billDetailsPage.getContent();
 
