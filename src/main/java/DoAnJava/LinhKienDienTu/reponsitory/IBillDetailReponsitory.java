@@ -2,6 +2,8 @@ package DoAnJava.LinhKienDienTu.reponsitory;
 
 import DoAnJava.LinhKienDienTu.entity.BillDetail;
 import DoAnJava.LinhKienDienTu.entity.compositeKey.BillDetailKey;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,10 +22,20 @@ public interface IBillDetailReponsitory extends JpaRepository<BillDetail, BillDe
             "WHERE u.userId = :userId")
     List<BillDetail> findAllBillDetailByUser(@Param("userId") UUID userId);
 
+    @Query("SELECT bd FROM BillDetail bd " +
+            "JOIN Bill b ON b.billId = bd.id.billId " +
+            "JOIN User u ON u.userId = b.user.userId " +
+            "WHERE u.userId = :userId")
+    Page<BillDetail> findAllBillDetailByUser(@Param("userId") UUID userId, Pageable pageable);
+
+    @Query("SELECT bd FROM BillDetail bd " +
+            "WHERE bd.product.productId = :productId")
+    BillDetail findBillDetailByProduct(@Param("productId") Long productId);
+
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO bill_detail (product_id, bill_id) " +
-            "VALUES (?1, ?2)", nativeQuery = true)
+    @Query(value = "INSERT INTO bill_detail (product_id, bill_id, amount) " +
+            "VALUES (?1, ?2, 1)", nativeQuery = true)
     void addProductToBill(Long productId, Long billId);
 
     @Query(value = "SELECT COUNT(*) FROM bill_detail bd " +

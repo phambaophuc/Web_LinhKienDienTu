@@ -20,4 +20,7 @@ public class BillDetail {
     @MapsId("billId")
     @JoinColumn(name = "bill_id")
     private Bill bill;
+
+    @Column(name = "amount")
+    private Long amount;
 }

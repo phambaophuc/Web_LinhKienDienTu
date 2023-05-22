@@ -2,12 +2,17 @@ package DoAnJava.LinhKienDienTu.controller;
 
 import DoAnJava.LinhKienDienTu.entity.*;
 import DoAnJava.LinhKienDienTu.services.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -28,9 +33,15 @@ public class ProductController {
     private UserService userService;
 
     @GetMapping
-    public String listProducts(Model model) {
-        List<Product> products = productService.getAllProducts();
-        model.addAttribute("products", products);
+    public String listProducts(Model model,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "6") int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Product> productPage = productService.getAllProducts(pageable);
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
         return "product/list";
     }
 
@@ -79,18 +90,26 @@ public class ProductController {
     }
 
     @PostMapping("/add-to-cart/{productId}")
-    public String addProductToBill(@PathVariable Long productId, Principal principal) {
+    public String addProductToBill(@PathVariable Long productId, Principal principal,
+                                   HttpServletRequest request, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByUsername(principal.getName());
         Bill bill = billService.getBillByUser(user.getUserId());
+        String previousPage = request.getHeader("Referer");
 
         if (bill == null) {
             billService.saveBill(new Bill(), user);
             bill = billService.getBillByUser(user.getUserId());
         }
 
-        billDetailService.addProductToBill(productId, bill.getBillId());
+        BillDetail billDetail = billDetailService.getBillDetailByProduct(productId);
+        if (billDetail != null) {
+            billDetail.setAmount(billDetail.getAmount() + 1);
+            billDetailService.saveBillDetail(billDetail);
+        } else {
+            billDetailService.addProductToBill(productId, bill.getBillId());
+        }
 
-        return "redirect:/product";
+        return "redirect:" + previousPage;
     }
 
 }

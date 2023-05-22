@@ -21,31 +21,31 @@
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Amount</th>
-                  <th>Note</th>
-                  <th>Category</th>
-                </tr>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Note</th>
+                    <th>Category</th>
+                  </tr>
                 </thead>
                 <tfoot>
-                <tr>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Amount</th>
-                  <th>Note</th>
-                  <th>Category</th>
-                </tr>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Note</th>
+                    <th>Category</th>
+                  </tr>
                 </tfoot>
                 <tbody>
-                <tr th:each="product: ${products}">
-                  <td th:text="${product.productName}"></td>
-                  <td th:text="${product.price}"></td>
-                  <td th:text="${product.amount}"></td>
-                  <td th:text="${product.note}"></td>
-                  <td th:text="${product.category.categoryName}"></td>
-                </tr>
+                  <tr th:each="product: ${products}">
+                    <td th:text="${product.productName}"></td>
+                    <td th:text="${product.price}"></td>
+                    <td th:text="${product.amount}"></td>
+                    <td th:text="${product.note}"></td>
+                    <td th:text="${product.category.categoryName}"></td>
+                  </tr>
                 </tbody>
               </table>
             </div>

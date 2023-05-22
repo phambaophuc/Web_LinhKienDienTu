@@ -3,6 +3,8 @@ package DoAnJava.LinhKienDienTu.services;
 import DoAnJava.LinhKienDienTu.entity.Product;
 import DoAnJava.LinhKienDienTu.reponsitory.IProductReponsitory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,10 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return productReponsitory.findAll();
+    }
+
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productReponsitory.findAll(pageable);
     }
 
     public Product getProductById(Long id) {
