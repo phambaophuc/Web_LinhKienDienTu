@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasAnyAuthority("ADMIN", "MANAGE")
-                        .requestMatchers("/cart", "/product/add-to-cart/**")
+                        .requestMatchers("/cart", "/product/add-to-cart/**", "/wallet")
                         .hasAnyAuthority("USER")
                         .anyRequest().permitAll()
                 )
