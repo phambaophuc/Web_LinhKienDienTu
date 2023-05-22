@@ -119,7 +119,6 @@
                     <h5 class="text-uppercase">Total price</h5>
                     <h5 th:text="${totalPrice + ' $'}"></h5>
                   </div>
-
                   <button type="button" class="btn btn-dark btn-block btn-lg"
                           data-mdb-ripple-color="dark">Register</button>
                 </div>
@@ -131,20 +130,7 @@
     </div>
   </div>
 </section>
-<script th:inline="javascript">
-  function apiDelete(link) {
-    if (confirm('Are you sure to delete this product on your cart')) {
-      $.ajax({
-        url: link.href,
-        type: 'DELETE',
-        success: function(response) {
-          alert('Delete Successfully!');
-          location.reload();
-        }
-      })
-    }
-  }
-</script>
+<script th:src="@{/js/apiDelete.js}"></script>
 <th:block th:replace="layout :: footer"></th:block>
 </body>
 </html>
