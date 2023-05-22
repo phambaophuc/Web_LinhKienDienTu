@@ -11,4 +11,24 @@ public class HomeController {
     public String index() {
         return "home/index";
     }
+
+    @GetMapping("/about")
+    public String about() {
+        return "home/about";
+    }
+
+    @GetMapping("/catalog")
+    public String catalog() {
+        return "home/catalog";
+    }
+
+    @GetMapping("/services")
+    public String services() {
+        return "home/services";
+    }
+
+    @GetMapping("/offers")
+    public String offers() {
+        return "home/offers";
+    }
 }
