@@ -136,7 +136,7 @@
     if (confirm('Are you sure to delete this product on your cart')) {
       $.ajax({
         url: $(link).attr('href'),
-        type: 'DELETE',
+        type: 'POST',
         success: function(response) {
           alert('Delete Successfully!');
           location.reload();
