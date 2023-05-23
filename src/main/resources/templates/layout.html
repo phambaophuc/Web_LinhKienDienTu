@@ -18,7 +18,7 @@
                         <option value="en-us">EN-US</option>
                     </select>
                     <span class="me-3" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGE')">
-                        <a class="text-danger" th:href="@{/admin}"><i class="fa-solid fa-house-user"></i> Admin</a>
+                        <a class="text-danger text-decoration-none" th:href="@{/admin}"><i class="fa-solid fa-house-user"></i> Admin</a>
                     </span>
                     <span class="d-none d-lg-inline-block d-md-inline-block d-sm-inline-block d-xs-none me-3">
                         <strong>info@somedomain.com</strong>
@@ -159,16 +159,16 @@
                         Products
                     </h6>
                     <p>
-                        <a href="#!" class="text-reset">Laptop</a>
+                        <a th:href="@{/product/search?category=cpu}" class="text-reset">CPU</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Computer</a>
+                        <a th:href="@{/product/search?category=mainboard}" class="text-reset">Mainboard</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Keyboard</a>
+                        <a th:href="@{/product/search?category=ram}" class="text-reset">RAM</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Mouse</a>
+                        <a th:href="@{/product/search?category=vga}" class="text-reset">VGA</a>
                     </p>
                 </div>
                 <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
@@ -176,16 +176,16 @@
                         Useful links
                     </h6>
                     <p>
-                        <a href="#!" class="text-reset">Pricing</a>
+                        <a th:href="@{/offers}" class="text-reset">Offers</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Settings</a>
+                        <a th:href="@{/product}" class="text-reset">Product</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Orders</a>
+                        <a th:href="@{/services}" class="text-reset">Services</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-reset">Help</a>
+                        <a th:href="@{/about}" class="text-reset">About</a>
                     </p>
                 </div>
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">

@@ -47,30 +47,12 @@
                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                       <h6 class="mb-0" th:text="${billDetail.product.price + ' $'}"></h6>
                     </div>
-                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                      <a th:href="@{'/cart/' + ${billDetail.product.productId} + '/' + ${billDetail.bill.billId}}"
-                         class="text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <form class="col-md-1 col-lg-1 col-xl-1 text-end"
+                          th:action="@{'/cart/' + ${billDetail.product.productId} + '/' + ${billDetail.bill.billId}}" method="POST">
+                      <button type="submit" class="btn btn-sm" onclick="return confirm('Xóa sản phẩm này khỏi giỏ hàng?')">
                         <i class="fas fa-times"></i>
-                      </a>
-                      <!-- Modal -->
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa sản phẩm trong giỏ hàng.</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body text-center" th:text="${'Bạn có muốn xóa sản phẩm này khỏi giỏ hàng?'}"></div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                              <form th:action="@{'/cart/' + ${billDetail.product.productId} + '/' + ${billDetail.bill.billId}}" method="POST">
-                                <button class="btn btn-danger" type="submit">Xóa</button>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      </button>
+                    </form>
 
                     <hr class="my-4" th:unless="${iterStat.count == #lists.size(billDetails)}">
                   </div>
