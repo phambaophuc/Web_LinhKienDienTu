@@ -6,13 +6,14 @@ import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.BillDetailService;
 import DoAnJava.LinhKienDienTu.services.BillService;
 import DoAnJava.LinhKienDienTu.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -63,6 +64,14 @@ public class CartController {
         model.addAttribute("totalPages", billDetailsPage.getTotalPages());
 
         return "product/cart";
+    }
+
+    @PostMapping("/{productId}/{billId}")
+    public String deleteBillDetail(@PathVariable Long productId, @PathVariable Long billId,
+                                   HttpServletRequest request) {
+        String previousPage = request.getHeader("Referer");
+        billDetailService.deleteByProductIdAndBillId(productId, billId);
+        return "redirect:" + previousPage;
     }
 
 }

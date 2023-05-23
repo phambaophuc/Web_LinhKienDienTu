@@ -33,11 +33,4 @@ public class CartApiController {
             return ResponseEntity.ok(cartItemCount);
         }
     }
-
-    @DeleteMapping("/cart/{productId}/{billId}")
-    @Transactional
-    public ResponseEntity<?> deleteBillDetail(@PathVariable Long productId, @PathVariable Long billId) {
-        billDetailService.deleteByProductIdAndBillId(productId, billId);
-        return ResponseEntity.ok("Deleted Successfully!");
-    }
 }
