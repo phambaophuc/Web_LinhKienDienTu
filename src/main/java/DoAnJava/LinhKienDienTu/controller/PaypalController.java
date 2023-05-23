@@ -78,7 +78,10 @@ public class PaypalController {
                 User user = userService.getUserByUsername(principal.getName());
                 Wallet wallet = walletService.getWalletByUserId(user.getUserId());
 
-                wallet.setPrice(amount);
+                BigDecimal currentPrice = wallet.getPrice();
+                BigDecimal updatedPrice = currentPrice.add(amount);
+
+                wallet.setPrice(updatedPrice);
                 walletService.saveWallet(wallet);
 
                 return "wallet/pay-success";
