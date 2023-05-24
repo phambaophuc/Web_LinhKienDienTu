@@ -36,7 +36,7 @@ public class AdminController {
         return "admin/index";
     }
 
-    /* ProductController */
+    //region ProductController
     @GetMapping("/list-product")
     public String getAllProduct(Model model) {
         List<Product> products = productService.getAllProducts();
@@ -49,9 +49,9 @@ public class AdminController {
         productService.deleteProduct(id);
         return "redirect:/admin/list-product";
     }
-    /* End ProductController */
+    //endregion
 
-    /* UserController */
+    //region UserController
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-user")
     public String getAllUser(Model model) {
@@ -59,9 +59,9 @@ public class AdminController {
         model.addAttribute("users", users);
         return "admin/list-user";
     }
-    /* End UserController */
+    //endregion
 
-    /* RoleController */
+    //region RoleController
     @GetMapping("/list-role")
     public String getAllRole(Model model) {
         List<Role> roles = roleService.getAllRoles();
@@ -116,5 +116,5 @@ public class AdminController {
             return "redirect:/admin/assign-role/" + userId;
         }
     }
-    /* End RoleController */
+    //endregion
 }
