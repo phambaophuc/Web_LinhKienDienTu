@@ -27,8 +27,4 @@ public class HomeController {
         return "home/services";
     }
 
-    @GetMapping("/offers")
-    public String offers() {
-        return "home/offers";
-    }
 }

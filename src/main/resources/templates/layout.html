@@ -28,10 +28,11 @@
                     </span>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-none d-lg-block d-md-block-d-sm-block d-xs-none text-end">
-                    <span class="me-3"><i class="fa-solid fa-file text-muted me-2"></i><a class="text-muted" href="#">Policy</a></span>
-                    <span class="me-3"><i class="fa-solid fa-wallet text-muted me-1"></i>
-                        <a class="text-muted" th:href="@{/wallet}">Wallet</a>
+                    <span class="me-3">
+                        <i class="fa-solid fa-wrench text-muted me-1"></i>
+                        <a class="text-muted" href="#">Xây dựng cấu hình</a>
                     </span>
+                    <span class="me-3"><i class="fa-solid fa-file text-muted me-2"></i><a class="text-muted" href="#">Policy</a></span>
                 </div>
             </div>
         </div>
@@ -53,11 +54,7 @@
                         </div>
                     </form>
                 </div>
-                <ul class="navbar-nav ms-auto ">
-                    <li class="nav-item">
-                        <a class="nav-link mx-1 text-uppercase" aria-current="page" th:href="@{/offers}">Offers</a>
-                    </li>
-                    <li class="nav-item">
+                <ul class="navbar-nav ms-auto">
                         <a class="nav-link mx-1 text-uppercase" th:href="@{/product?page=0}">Products</a>
                     </li>
                     <li class="nav-item">
@@ -87,21 +84,32 @@
                             <i class="fa-solid fa-circle-user me-1"></i>
                             <span class="text-primary" th:text="${#authentication.name}"></span>
                         </a>
-
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li>
                                 <a class="dropdown-item text-uppercase fw-bold" th:href="@{/profile}">
+                                    <i class="fa-solid fa-id-card me-1"></i>
                                     Profile
                                 </a>
                             </li>
-                            <li>
+                            <li class="mt-1">
+                                <a class="dropdown-item text-uppercase fw-bold" th:href="@{/wallet}">
+                                    <i class="fa-solid fa-wallet me-1"></i>
+                                    Wallet
+                                </a>
+                            </li>
+                            <li class="mt-1">
                                 <a class="dropdown-item text-uppercase fw-bold" href="#">
+                                    <i class="fa-solid fa-gear me-1"></i>
                                     Setting
                                 </a>
                             </li>
-                            <form class="dropdown-item text-center mt-3" th:action="@{/logout}" method="POST">
-                                <button class="btn btn-sm btn-outline-danger form-control" type="submit">Logout</button>
-                            </form>
+                            <hr>
+                            <li>
+                                <a class="dropdown-item text-uppercase fw-bold link-danger" th:href="@{/logout}">
+                                    <i class="fa-solid fa-right-from-bracket me-1"></i>
+                                    Logout
+                                </a>
+                            </li>
                         </ul>
                     </ul>
                 </ul>
@@ -176,7 +184,7 @@
                         Useful links
                     </h6>
                     <p>
-                        <a th:href="@{/offers}" class="text-reset">Offers</a>
+                        <a th:href="@{/catalog}" class="text-reset">Catalog</a>
                     </p>
                     <p>
                         <a th:href="@{/product}" class="text-reset">Product</a>

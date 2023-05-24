@@ -1,67 +1,67 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="">
 <head>
-  <meta charset="UTF-8">
-  <title>Wallet</title>
-  <th:block th:replace="layout :: link-css"></th:block>
-  <link rel="stylesheet" th:href="@{/css/styleWallet.css}">
+    <meta charset="UTF-8">
+    <title>Wallet</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styleWallet.css}">
 </head>
 <body>
 <th:block th:replace="layout :: header"></th:block>
 <div class="container d-flex justify-content-center">
-  <div class="iphone">
-    <div class="header">
-      <div class="header-summary">
-        <div class="summary-text">
-          My Balance
-        </div>
-        <div class="summary-balance" th:text="${wallet.price + '$'}"></div>
-      </div>
-      <div class="user-profile">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" class="user-photo">
-      </div>
-    </div>
-    <div class="content">
-      <div class="card">
-        <div class="upper-row">
-          <div class="card-item">
-            <span>Active Balance</span>
-            <span>1&nbsp;804 $</span>
-          </div>
-          <div class="card-item">
-            <span>My Save it</span>
-            <span>2&nbsp;000 $</span>
-          </div>
-        </div>
-        <div class="lower-row">
-          <div class="icon-item">
-            <div class="icon"><i class="fas fa-upload"></i></div>
-            <div class="icon-text text-muted" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-              Nạp tiền
+    <div class="iphone">
+        <div class="header">
+            <div class="header-summary">
+                <div class="summary-text">
+                    My Balance
+                </div>
+                <div class="summary-balance" th:text="${wallet.price + '$'}"></div>
             </div>
-          </div>
-          <div class="icon-item">
-            <div class="icon"><i class="fas fa-money-check-alt"></i></div>
-            <a class="icon-text">Withdraw</a>
-          </div>
-          <div class="icon-item">
-            <div class="icon"><i class="fas fa-paper-plane"></i></div>
-            <div class="icon-text">Send</div>
-          </div>
-          <div class="icon-item">
-            <div class="icon"><i class="fas fa-wallet"></i></div>
-            <div class="icon-text">Pay</div>
-          </div>
+            <div class="user-profile">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" class="user-photo">
+            </div>
         </div>
-      </div>
-      <div class="collapse mt-1" id="collapseExample">
-        <form class="form-group d-flex" th:action="@{/wallet/pay}" method="POST">
-          <input class="form-control" type="number" name="price" placeholder="Nhập số tiền cần nạp">
-          <button class="btn btn-outline-success" type="submit">Nạp</button>
-        </form>
-      </div>
+        <div class="content">
+            <div class="card">
+                <div class="upper-row">
+                    <div class="card-item">
+                        <span>Active Balance</span>
+                        <span>1&nbsp;804 $</span>
+                    </div>
+                    <div class="card-item">
+                        <span>My Save it</span>
+                        <span>2&nbsp;000 $</span>
+                    </div>
+                </div>
+                <div class="lower-row">
+                    <div class="icon-item">
+                        <div class="icon"><i class="fas fa-upload"></i></div>
+                        <div class="icon-text text-muted" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Nạp tiền
+                        </div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon"><i class="fas fa-money-check-alt"></i></div>
+                        <a class="icon-text">Withdraw</a>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon"><i class="fas fa-paper-plane"></i></div>
+                        <div class="icon-text">Send</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon"><i class="fas fa-wallet"></i></div>
+                        <div class="icon-text">Pay</div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse mt-1" id="collapseExample">
+                <form class="form-group d-flex" th:action="@{/wallet/pay}" method="POST">
+                    <input class="form-control" type="number" name="price" placeholder="Nhập số tiền cần nạp">
+                    <button class="btn btn-outline-success" type="submit">Nạp</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <th:block th:replace="layout :: footer"></th:block>
 </body>

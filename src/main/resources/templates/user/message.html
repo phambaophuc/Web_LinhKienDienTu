@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="">
 <head>
-  <meta charset="UTF-8">
-  <title>Message</title>
-  <th:block th:replace="layout :: link-css"></th:block>
+    <meta charset="UTF-8">
+    <title>Message</title>
+    <th:block th:replace="layout :: link-css"></th:block>
 </head>
 <body>
 <th:block th:replace="layout :: header"></th:block>
 <div class="container text-center fst-italic font-monospace m-3">
-  <h2 th:text="${message}"></h2>
+    <h2 th:text="${message}"></h2>
 </div>
 <th:block th:replace="layout :: footer"></th:block>
 </body>

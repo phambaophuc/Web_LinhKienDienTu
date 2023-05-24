@@ -1,66 +1,66 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="">
 <head>
-  <meta charset="UTF-8">
-  <title>Quản lý sản phẩm</title>
-  <th:block th:replace="layout-admin :: link-css"></th:block>
-  <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Quản lý sản phẩm</title>
+    <th:block th:replace="layout-admin :: link-css"></th:block>
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
 <div id="wrapper">
-  <th:block th:replace="layout-admin :: header"></th:block>
-  <div id="content-wrapper">
-    <div id="content">
-      <th:block th:replace="layout-admin :: nav"></th:block>
-      <div class="container-fluid">
-        <div class="card shadow mb-4">
-          <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Product</h6>
-          </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Amount</th>
-                    <th>Note</th>
-                    <th>Category</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tfoot>
-                  <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Amount</th>
-                    <th>Note</th>
-                    <th>Category</th>
-                    <th>Action</th>
-                  </tr>
-                </tfoot>
-                <tbody>
-                  <tr th:each="product: ${products}">
-                    <td th:text="${product.productName}"></td>
-                    <td th:text="${product.price}"></td>
-                    <td th:text="${product.amount}"></td>
-                    <td th:text="${product.note}"></td>
-                    <td th:text="${product.category.categoryName}"></td>
-                    <td>
-                      <a th:href="@{/admin/delete-product/{id} (id=${product.productId})}"
-                         onclick="return confirm('Xóa sản phẩm này?')"><i class="fas fa-times"></i></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+    <th:block th:replace="layout-admin :: header"></th:block>
+    <div id="content-wrapper">
+        <div id="content">
+            <th:block th:replace="layout-admin :: nav"></th:block>
+            <div class="container-fluid">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">DataTables Product</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Amount</th>
+                                    <th>Note</th>
+                                    <th>Category</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Amount</th>
+                                    <th>Note</th>
+                                    <th>Category</th>
+                                    <th>Action</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr th:each="product: ${products}">
+                                    <td th:text="${product.productName}"></td>
+                                    <td th:text="${product.price}"></td>
+                                    <td th:text="${product.amount}"></td>
+                                    <td th:text="${product.note}"></td>
+                                    <td th:text="${product.category.categoryName}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/delete-product/{id} (id=${product.productId})}"
+                                           onclick="return confirm('Xóa sản phẩm này?')"><i class="fas fa-times"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <th:block th:replace="layout-admin :: footer"></th:block>
         </div>
-      </div>
-      <th:block th:replace="layout-admin :: footer"></th:block>
     </div>
-  </div>
 </div>
 
 <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
