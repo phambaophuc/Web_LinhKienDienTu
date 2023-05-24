@@ -43,6 +43,14 @@ public class AdminController {
         return "admin/list-product";
     }
 
+    @GetMapping("/delete-product/{id}")
+    public String deleteProduct(@PathVariable("id") Long id) {
+        productService.deleteProduct(id);
+        return "redirect:/admin/list-product";
+    }
+
+
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-user")
     public String getAllUser(Model model) {

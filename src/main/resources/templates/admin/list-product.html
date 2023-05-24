@@ -27,6 +27,7 @@
                     <th>Amount</th>
                     <th>Note</th>
                     <th>Category</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -36,6 +37,7 @@
                     <th>Amount</th>
                     <th>Note</th>
                     <th>Category</th>
+                    <th>Action</th>
                   </tr>
                 </tfoot>
                 <tbody>
@@ -45,6 +47,10 @@
                     <td th:text="${product.amount}"></td>
                     <td th:text="${product.note}"></td>
                     <td th:text="${product.category.categoryName}"></td>
+                    <td>
+                      <a th:href="@{/admin/delete-product/{id} (id=${product.productId})}"
+                         onclick="return confirm('Xóa sản phẩm này?')"><i class="fas fa-times"></i></a>
+                    </td>
                   </tr>
                 </tbody>
               </table>
