@@ -41,7 +41,8 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Components:</h6>
-                <a class="collapse-item" th:href="@{/admin/add-role}">Add Role</a>
+                <a class="collapse-item" sec:authorize="hasAnyAuthority('ADMIN')"
+                   th:href="@{/admin/add-role}">Add Role</a>
             </div>
         </div>
     </li>
@@ -89,12 +90,12 @@
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
         <a class="nav-link" th:href="@{/admin/list-user}">
             <i class="fas fa-fw fa-table"></i>
             <span>Tables User</span></a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
         <a class="nav-link" th:href="@{/admin/list-role}">
             <i class="fas fa-fw fa-table"></i>
             <span>Tables Role</span></a>

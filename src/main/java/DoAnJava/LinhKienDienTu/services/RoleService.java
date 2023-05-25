@@ -26,4 +26,8 @@ public class RoleService {
     public void saveRole(Role role) {
         roleReponsitory.save(role);
     }
+
+    public void removeRole(UUID roleId) {
+        roleReponsitory.deleteById(roleId);
+    }
 }

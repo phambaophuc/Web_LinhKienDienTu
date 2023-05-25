@@ -111,8 +111,6 @@
     </div>
 </div>
 <th:block th:replace="layout :: footer"></th:block>
-</body>
-</html>
 <script>
 $(document).ready(function() {
     $("#postCommentBtn").click(function(event) {
@@ -131,3 +129,16 @@ $(document).ready(function() {
     }
 });
 </script>
+<script>
+    $(document).ready(function () {
+        $('.edit-btn').click(function () {
+            var commentId = $(this).attr('data-comment-id');
+            var commentText = $(this).parent().siblings('p').text();
+
+            $(this).parent().siblings('p').hide();
+            $(this).parent().siblings('input').val(commentText).show().focus();
+        });
+    });
+</script>
+</body>
+</html>
