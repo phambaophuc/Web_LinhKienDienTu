@@ -62,8 +62,14 @@
                                                     <span class="badge bg-primary">Pending</span>
                                                 </p>
                                                 <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                                                <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
                                                 <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                                                <div th:if="${comment.user.username == currentUsername}">
+                                                    <form th:action="@{/product/delete-comment/{commentId}(commentId=${comment.commentId})}" method="POST">
+                                                        <button class="btn btn-sm" type="submit" onclick="return confirm('Bạn có muốn xóa comment?')">
+                                                            <i class="fa-sharp fa-solid fa-xmark" style="color:red"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                             <p class="mb-0" th:utext="${comment.content}" style="white-space: pre-line;"></p>
                                         </div>

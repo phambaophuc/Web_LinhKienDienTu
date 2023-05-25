@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -48,6 +49,10 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public String detailProduct(@PathVariable Long productId, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        model.addAttribute("currentUsername", currentUsername);
+
         Product product = productService.getProductById(productId);
         model.addAttribute("product", product);
 
@@ -72,6 +77,20 @@ public class ProductController {
         commentService.saveComment(comment);
 
         return "redirect:/product/{productId}";
+    }
+
+    @PostMapping("/delete-comment/{commentId}")
+    public String deleteComment(@PathVariable UUID commentId, HttpServletRequest request) {
+        String previoustPage = request.getHeader("Referer");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Comment comment = commentService.getCommentById(commentId);
+        if (comment.getUser().getUsername().equals(username)) {
+            commentService.removeComment(commentId);
+        }
+
+        return "redirect:" + previoustPage;
     }
 
     @GetMapping("/search")

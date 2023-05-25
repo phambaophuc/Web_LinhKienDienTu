@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CommentService {
@@ -18,8 +19,16 @@ public class CommentService {
         return comment;
     }
 
+    public Comment getCommentById(UUID id) {
+        return commentReponsitory.findById(id).orElse(null);
+    }
+
     public void saveComment(Comment comment) {
         comment.setCreatedAt(LocalDate.now());
         commentReponsitory.save(comment);
+    }
+
+    public void removeComment(UUID id) {
+        commentReponsitory.deleteById(id);
     }
 }
