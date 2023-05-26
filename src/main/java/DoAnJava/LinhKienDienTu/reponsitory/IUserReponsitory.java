@@ -34,4 +34,9 @@ public interface IUserReponsitory extends JpaRepository<User, UUID> {
     @Query(value = "SELECT r.role_name FROM Role r INNER JOIN user_role ur " +
             "ON r.role_id = ur.role_id WHERE ur.user_id = ?1", nativeQuery = true)
     String[] getRolesOfUser(UUID userId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM user_role WHERE user_id = ?1 AND role_id = ?2", nativeQuery = true)
+    void removeRoleFromUser(UUID userId, UUID roleId);
 }

@@ -13,44 +13,93 @@
             <th:block th:replace="layout-admin :: nav"></th:block>
             <div class="container-fluid">
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Phân quyền cho người dùng</h6>
+                    <div class="card-header py-4">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAssign"
+                                aria-expanded="false" aria-controls="collapseAssign">
+                            Gán quyền
+                        </button>
+                        <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#collapseDelRole"
+                                aria-expanded="false" aria-controls="collapseDelRole">
+                            Xóa quyền
+                        </button>
                     </div>
-                    <div class="card-body">
-                        <div class="alert alert-danger d-inline-block" th:if="${exists}" th:text="${exists}"></div>
-                        <div class="alert alert-success d-inline-block" th:if="${success}" th:text="${success}"></div>
-                        <form th:action="@{/admin/assign-role}" method="POST">
-                            <input type="hidden" name="userId" th:value="${user.userId}">
-                            <div>
-                                <label class="form-label">Username:
-                                    <span class="text-uppercase" th:text="${user.username}"></span>
-                                </label>
-                            </div>
+                    <div class="collapse" id="collapseAssign">
+                        <div class="card-body">
+                            <div class="alert alert-danger d-inline-block" th:if="${exists}" th:text="${exists}"></div>
+                            <div class="alert alert-success d-inline-block" th:if="${success}" th:text="${success}"></div>
+                            <form th:action="@{/admin/assign-role}" method="POST">
+                                <input type="hidden" name="userId" th:value="${user.userId}">
+                                <div>
+                                    <label class="form-label">Username:
+                                        <span class="text-uppercase" th:text="${user.username}"></span>
+                                    </label>
+                                </div>
 
-                            <div class="mt-2">
-                                <label class="form-label">Tên người dùng:
-                                    <span class="text-uppercase" th:text="${user.fullname}"></span>
-                                </label>
-                            </div>
+                                <div class="mt-2">
+                                    <label class="form-label">Tên người dùng:
+                                        <span class="text-uppercase" th:text="${user.fullname}"></span>
+                                    </label>
+                                </div>
 
-                            <div class="mt-2">
-                                <label class="form-label">Quyền hiện có:
-                                    <span th:each="roleUser, iterStat : ${roleOfUser}">
-                    <span th:text="${roleUser}"></span>
-                    <span th:if="${!iterStat.last}">,</span>
-                  </span>
-                                </label>
-                            </div>
+                                <div class="mt-2">
+                                    <label class="form-label">Quyền hiện có:
+                                        <span th:each="roleUser, iterStat : ${roleOfUser}">
+                                        <span th:text="${roleUser}"></span>
+                                        <span th:if="${!iterStat.last}">,</span>
+                                    </span>
+                                    </label>
+                                </div>
 
-                            <div class="mt-2">
-                                <label class="form-label" for="role">Role: </label>
-                                <select class="form-control-sm" id="role" name="roleId">
-                                    <option th:each="role : ${roles}" th:value="${role.roleId}"
-                                            th:text="${role.roleName}"></option>
-                                </select>
-                            </div>
-                            <button class="btn btn-sm btn-outline-success mt-3" type="submit">Gán quyền</button>
-                        </form>
+                                <div class="mt-2">
+                                    <label class="form-label" for="assign-role">Chọn quyền cần gán: </label>
+                                    <select class="form-control-sm" id="assign-role" name="roleId">
+                                        <option th:each="role : ${roles}" th:value="${role.roleId}"
+                                                th:text="${role.roleName}"></option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-sm btn-outline-success mt-3" type="submit">Gán quyền</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Xóa quyền -->
+                    <div class="collapse" id="collapseDelRole">
+                        <div class="card-body">
+                            <div th:if="${notExist}" class="alert alert-warning d-inline-block" th:text="${notExist}"></div>
+                            <div th:if="${success}" class="alert alert-success d-inline-block" th:text="${success}"></div>
+                            <form th:action="@{/admin/remove-role-from-user}" method="POST">
+                                <input type="hidden" name="userId" th:value="${user.userId}">
+                                <div>
+                                    <label class="form-label">Username:
+                                        <span class="text-uppercase" th:text="${user.username}"></span>
+                                    </label>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="form-label">Tên người dùng:
+                                        <span class="text-uppercase" th:text="${user.fullname}"></span>
+                                    </label>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="form-label">Quyền hiện có:
+                                        <span th:each="roleUser, iterStat : ${roleOfUser}">
+                                        <span th:text="${roleUser}"></span>
+                                        <span th:if="${!iterStat.last}">,</span>
+                                    </span>
+                                    </label>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="form-label text-danger" for="assign-role">Chọn quyền cần xóa: </label>
+                                    <select class="form-control-sm" id="delete-role" name="roleId">
+                                        <option th:each="role : ${roles}" th:value="${role.roleId}"
+                                                th:text="${role.roleName}"></option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger mt-3" type="submit">Xóa quyền</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

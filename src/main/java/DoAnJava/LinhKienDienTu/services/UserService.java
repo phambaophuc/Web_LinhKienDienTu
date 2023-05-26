@@ -50,6 +50,10 @@ public class UserService {
         userReponsitory.addRoleToUser(userId, roleId);
     }
 
+    public void removeRoleFromUser(UUID userId, UUID roleId) {
+        userReponsitory.removeRoleFromUser(userId, roleId);
+    }
+
     public String[] getRolesOfUser(UUID id) {
         return userReponsitory.getRolesOfUser(id);
     }

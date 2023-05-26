@@ -193,6 +193,23 @@ public class    AdminController {
             return "redirect:/admin/assign-role/" + userId;
         }
     }
+
+    // Xóa quyền User
+    @PostMapping("/remove-role-from-user")
+    public String removeRoleFromUser(@RequestParam("userId") UUID userId,
+                                     @RequestParam("roleId") UUID roleId, RedirectAttributes redirectAttributes) {
+        String[] roles = userService.getRolesOfUser(userId);
+        String roleName = roleService.getRoleById(roleId).getRoleName();
+
+        if (Arrays.asList(roles).contains(roleName)) {
+            userService.removeRoleFromUser(userId, roleId);
+            redirectAttributes.addFlashAttribute("success", "Đã xóa quyền cho người dùng này");
+        } else {
+            redirectAttributes.addFlashAttribute("notExist", "Người dùng không có quyền này");
+        }
+
+        return "redirect:/admin/assign-role/" + userId;
+    }
     //endregion
 
 }

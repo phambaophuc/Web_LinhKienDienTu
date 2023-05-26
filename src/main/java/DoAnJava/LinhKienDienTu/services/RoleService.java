@@ -30,4 +30,5 @@ public class RoleService {
     public void removeRole(UUID roleId) {
         roleReponsitory.deleteById(roleId);
     }
+
 }
