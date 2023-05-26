@@ -70,7 +70,7 @@ public class    AdminController {
     }
 
     @GetMapping("/edit-product/{id}")
-    public String editBookForm (@PathVariable("id") Long id, Model model) {
+    public String editProductForm (@PathVariable("id") Long id, Model model) {
         model.addAttribute("categories", categoryService.getAllCategory());
         Product product = productService.getProductById(id);
         if (product != null) {
