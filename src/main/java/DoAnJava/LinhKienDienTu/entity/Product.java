@@ -1,6 +1,9 @@
 package DoAnJava.LinhKienDienTu.entity;
 
+import DoAnJava.LinhKienDienTu.validator.annotation.ValidCategoryId;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -18,24 +21,23 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @NotNull(message = "Tên sản phẩm không được trống")
-    @Size(min = 3, max = 144, message = "Tên sản phẩm 3-144 kí tự")
+    @NotEmpty(message = "Vui lòng nhập tên sản phẩm.")
     @Column(name = "product_name", length = 144, nullable = false)
     private String productName;
 
-    @NotNull(message = "Mô tả sản phẩm không được trống")
+    @NotEmpty(message = "Vui lòng nhập nội dung sản phẩm.")
     @Column(name = "description", length = 10000, nullable = false)
     private String description;
 
-    @NotNull(message = "Hình ảnh sản phẩm không được trống")
+    @NotEmpty(message = "Vui lòng chọn hình ảnh sản phẩm.")
     @Column(name = "image")
     private String image;
 
-    @NotNull(message = "Giá sản phẩm không được trống")
+    @NotNull(message = "Vui lòng nhập giá sản phẩm.")
     @Column(name = "price", precision = 5, scale = 2, nullable = false)
     private BigDecimal price;
 
-    @NotNull(message = "Số lượng sản phẩm không được trống")
+    @NotNull(message = "Vui lòng nhập số lượng sản phẩm.")
     @Column(name = "amount", nullable = false)
     private Long amount;
 
@@ -44,6 +46,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @ValidCategoryId
     private Category category;
 
     @OneToMany(mappedBy = "product")

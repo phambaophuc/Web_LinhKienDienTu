@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý hóa đơn</title>
+    <title>Quản lý quyền</title>
     <th:block th:replace="layout-admin :: link-css"></th:block>
     <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
@@ -15,30 +15,35 @@
             <div class="container-fluid">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTables Bills</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">DataTables Role</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>Id</th>
-                                    <th>Tổng Tiền</th>
-                                    <th>Ngày tạo</th>
+                                    <th>Role Name</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>Id</th>
-                                    <th>Tổng Tiền</th>
-                                    <th>Ngày tạo</th>
+                                    <th>Role Name</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="bill: ${bills}">
-                                    <td th:text="${bill.billId}"></td>
-                                    <td th:text="${bill.totalPrice}"></td>
-                                    <td th:text="${bill.createAt}"></td>
+                                <tr th:each="role: ${roles}">
+                                    <td th:text="${role.roleName}"></td>
+                                    <td th:text="${role.description}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/edit-role/{roleId}(roleId=${role.roleId})}">
+                                            <i class="fas fa-pen-to-square mr-3"></i></a>
+                                        <a th:href="@{/admin/delete-role/{roleId}(roleId=${role.roleId})}"
+                                           onclick="return confirm('Delete this role?')"><i class="fas fa-times" style="color:red"></i></a>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

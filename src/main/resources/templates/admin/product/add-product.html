@@ -17,45 +17,55 @@
                         <h6 class="m-0 font-weight-bold text-primary">Thêm sản phẩm</h6>
                     </div>
                     <form class="p-4" th:action="@{/admin/add-product}" th:object="${product}" method="POST">
-                        <div class="mt-2">
-                            <label class="form-label" for="productName">Tên Sản Phẩm: </label>
-                            <input class="form-control" type="text" id="productName" th:field="*{productName}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label class="form-label" for="productName">Tên Sản Phẩm: </label>
+                                <input class="form-control" type="text" id="productName" th:field="*{productName}">
+                                <span class="text-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="category">Loại sản phẩm:</label>
+                                <select class="form-control" id="category" name="category.categoryId">
+                                    <option value="">-- Chọn loại sản phẩm --</option>
+                                    <option th:each="category: ${categories}" th:value="${category.categoryId}"
+                                            th:text="${category.categoryName}"></option>
+                                </select>
+                                <span class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+                            </div>
                         </div>
+
                         <div class="mt-2">
                             <label class="form-label" for="description">Mô Tả: </label>
-                            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                            <textarea class="form-control" id="description" th:field="*{description}" style="height:300px"></textarea>
                             <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
                         </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="image">Hình Ảnh: </label>
-                            <input class="form-control" type="text" id="image" th:field="*{image}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label class="form-label" for="note">Ghi Chú: </label>
+                                <input class="form-control" type="text" id="note" th:field="*{note}">
+                                <span class="text-danger" th:if="${#fields.hasErrors('note')}" th:errors="*{note}"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="image">Hình Ảnh: </label>
+                                <input class="form-control" type="text" id="image" th:field="*{image}">
+                                <span class="text-danger" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+                            </div>
                         </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="price">Giá: </label>
-                            <input class="form-control" type="text" id="price" th:field="*{price}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label class="form-label" for="price">Giá: </label>
+                                <input class="form-control" type="text" id="price" th:field="*{price}">
+                                <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="amount">Số Lượng: </label>
+                                <input class="form-control" type="number" id="amount" th:field="*{amount}">
+                                <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+                            </div>
                         </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="amount">Số Lượng: </label>
-                            <input class="form-control" type="text" id="amount" th:field="*{productName}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="note">Ghi Chú: </label>
-                            <input class="form-control" type="text" id="note" th:field="*{note}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('note')}" th:errors="*{note}"></span>
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="category">Loại sản phẩm:</label>
-                            <select class="form-control" id="category" name="category.categoryId">
-                                <option value=""></option>
-                                <option th:each="category: ${categories}" th:value="${category.categoryId}"
-                                        th:text="${category.categoryName}"></option>
-                            </select>
-                        </div>
-                        <button class="btn btn-success form-control mt-3" type="submit">Thêm</button>
+                        <button class="btn btn-success form-control mt-3" type="submit">Thêm sản phẩm</button>
                     </form>
                 </div>
             </div>

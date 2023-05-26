@@ -43,6 +43,7 @@ public class    AdminController {
         model.addAttribute("products", products);
         return "admin/product/list-product";
     }
+
     @GetMapping("/add-product")
     public String addProductForm(Model model) {
         model.addAttribute("product", new Product());
@@ -54,6 +55,7 @@ public class    AdminController {
                              BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors())
         {
+            model.addAttribute("categories", categoryService.getAllCategory());
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors)
             {
@@ -67,14 +69,14 @@ public class    AdminController {
     }
 
     @GetMapping("/edit-product/{id}")
-    public String editProductForm (@PathVariable("id") Long id, Model model) {
+    public String editProductForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("categories", categoryService.getAllCategory());
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
         return "admin/product/edit-product";
     }
     @PostMapping("/edit-product")
-    public String editProduct (@ModelAttribute("product") Product product,
+    public String editProduct(@ModelAttribute("product") Product product,
                                BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors())
         {
@@ -84,7 +86,7 @@ public class    AdminController {
             {
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
-            return "admin/product/add-product";
+            return "admin/product/edit-product/" + product.getProductId();
         }
         productService.saveProduct(product);
         return "redirect:/admin/list-product";
@@ -112,14 +114,14 @@ public class    AdminController {
     public String getAllRole(Model model) {
         List<Role> roles = roleService.getAllRoles();
         model.addAttribute("roles", roles);
-        return "admin/list-role";
+        return "admin/role/list-role";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/add-role")
     public String addRoleForm(Model model) {
         model.addAttribute("role", new Role());
-        return "admin/add-role";
+        return "admin/role/add-role";
     }
     @PostMapping("/add-role")
     public String addRole(@Valid @ModelAttribute("role") Role role, BindingResult bindingResult, Model model) {
@@ -128,7 +130,7 @@ public class    AdminController {
             for (FieldError error : errors) {
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
-            return "admin/add-role";
+            return "admin/role/add-role";
         }
         roleService.saveRole(role);
         return "redirect:/admin/list-role";
@@ -146,7 +148,7 @@ public class    AdminController {
     public String editRoleForm(@PathVariable("roleId") UUID roleId, Model model) {
         Role role = roleService.getRoleById(roleId);
         model.addAttribute("role", role);
-        return "admin/edit-role";
+        return "admin/role/edit-role";
     }
     @PostMapping("/edit-role/{roleId}")
     public String editRole(@Valid @ModelAttribute("role") Role role,
@@ -156,7 +158,7 @@ public class    AdminController {
             for (FieldError error : errors) {
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
-            return "admin/edit-role";
+            return "admin/role/edit-role";
         }
         roleService.saveRole(role);
         return "redirect:/admin/list-role";
@@ -174,7 +176,7 @@ public class    AdminController {
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
         model.addAttribute("roleOfUser", rolesOfUser);
-        return "admin/assign-role";
+        return "admin/role/assign-role";
     }
     @PostMapping("/assign-role")
     public String addRoleToUser(@RequestParam UUID userId,

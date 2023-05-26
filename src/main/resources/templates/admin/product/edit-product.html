@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Sửa Sản Phẩm</title>
     <th:block th:replace="layout-admin :: link-css"></th:block>
+    <style>
+</style>
 </head>
 <body id="page-top">
 <div id="wrapper">
@@ -18,43 +20,45 @@
                     </div>
                     <form class="p-4" th:action="@{/admin/edit-product}" th:object="${product}" method="POST">
                         <input type="hidden" th:field="*{productId}">
-                        <div class="mt-2">
-                            <label class="form-label" for="productName">Tên Sản Phẩm: </label>
-                            <input class="form-control" type="text" id="productName" th:field="*{productName}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label class="form-label" for="productName">Tên Sản Phẩm: </label>
+                                <input class="form-control" type="text" id="productName" th:field="*{productName}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="category">Loại sản phẩm:</label>
+                                <select class="form-control" id="category" name="category.categoryId">
+                                    <option th:each="category: ${categories}" th:value="${category.categoryId}" th:text="${category.categoryName}"
+                                            th:selected="${product.category.categoryId == category.categoryId}"></option>
+                                </select>
+                            </div>
                         </div>
+
                         <div class="mt-2">
                             <label class="form-label" for="description">Mô Tả: </label>
-                            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
-                            <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                            <textarea class="form-control" id="description" th:field="*{description}" style="height:300px"></textarea>
                         </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="image">Hình Ảnh: </label>
-                            <input class="form-control" type="text" id="image" th:field="*{image}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label class="form-label" for="note">Ghi Chú: </label>
+                                <input class="form-control" type="text" id="note" th:field="*{note}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="image">Hình Ảnh: </label>
+                                <input class="form-control" type="text" id="image" th:field="*{image}">
+                            </div>
                         </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="price">Giá: </label>
-                            <input class="form-control" type="text" id="price" th:field="*{price}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="amount">Số Lượng: </label>
-                            <input class="form-control" type="text" id="amount" th:field="*{amount}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="note">Ghi Chú: </label>
-                            <input class="form-control" type="text" id="note" th:field="*{note}">
-                            <span class="text-danger" th:if="${#fields.hasErrors('note')}" th:errors="*{note}"></span>
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label" for="category">Loại sản phẩm:</label>
-                            <select class="form-control" id="category" name="category.categoryId">
-                                <option value=""></option>
-                                <option th:each="category: ${categories}" th:value="${category.categoryId}" th:text="${category.categoryName}"
-                                        th:selected="${product.category.categoryId == category.categoryId}"></option>
-                            </select>
+
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label class="form-label" for="price">Giá: </label>
+                                <input class="form-control" type="text" id="price" th:field="*{price}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="amount">Số Lượng: </label>
+                                <input class="form-control" type="number" id="amount" th:field="*{amount}">
+                            </div>
                         </div>
                         <button class="btn btn-success form-control mt-3" type="submit">Sửa</button>
                     </form>

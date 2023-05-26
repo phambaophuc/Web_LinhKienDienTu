@@ -3,10 +3,7 @@ package DoAnJava.LinhKienDienTu.entity;
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidEmail;
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidUsername;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.HashSet;
@@ -22,7 +19,7 @@ public class User {
     private UUID userId;
 
     @Column(name = "fullname", length = 60, nullable = false)
-    @Size(min = 4, message = "Tên của bạn phải từ 4 ký tự trở lên.")
+    @NotEmpty(message = "Vui lòng nhập tên của bạn.")
     @Size(max = 60, message = "Tên của bạn không được vượt quá 60 ký tự.")
     private String fullname;
 
@@ -32,20 +29,19 @@ public class User {
 
     @Email(message = "Email invalid")
     @Column(name = "email", length = 144, nullable = false, unique = true)
-    @NotBlank(message = "Vui lòng nhập Email của bạn.")
+    @NotBlank(message = "Vui lòng nhập Email.")
     @ValidEmail
     private String email;
 
     @Column(name = "username", length = 40, nullable = false, unique = true)
-    @Size(min = 5, message = "Tài khoản của bạn phải từ 5 ký tự trở lên.")
-    @Size(max = 40, message = "Tài khoản của bạn không được vượt quá 40 ký tự.")
+    @Size(min = 5, message = "Tên tài khoản phải ít nhất 5 ký tự.")
+    @Size(max = 40, message = "Tài khoản không được vượt quá 40 ký tự.")
     @ValidUsername
     private String username;
 
     @Column(name = "password", length = 144, nullable = false)
-    @Size(min = 6, message = "Mật khẩu của bạn phải từ 6 ký tự trở lên.")
-    @Size(max = 144, message = "Mật khẩu của bạn không được vượt quá 144 ký tự.")
-    @Pattern(regexp = "(.*[a-zA-Z]){4}.*", message = "Mật khẩu phải có ít nhất 4 chữ cái.")
+    @Size(min = 6, message = "Mật khẩu phải ít nhất 6 ký tự.")
+    @Size(max = 144, message = "Mật khẩu không được vượt quá 144 ký tự.")
     private String password;
 
     @Column(name = "verifycation_code", length = 64)

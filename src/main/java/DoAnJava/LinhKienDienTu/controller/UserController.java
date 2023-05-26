@@ -2,13 +2,16 @@ package DoAnJava.LinhKienDienTu.controller;
 
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.UserService;
+import DoAnJava.LinhKienDienTu.utils.Utility;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -36,6 +40,7 @@ public class UserController {
         return "user/login";
     }
 
+    //region Register
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("user", new User());
@@ -67,7 +72,9 @@ public class UserController {
             return "user/verify-fail";
         }
     }
+    //endregion
 
+    //region Profile User
     @GetMapping("/profile")
     public String getProfile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -101,4 +108,61 @@ public class UserController {
 
         return "redirect:/change-password";
     }
+    //endregion
+
+    //region Forgot Password
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm() {
+        return "user/forgot-password";
+    }
+    @PostMapping("/forgot-password")
+    public String processForgotPassword(HttpServletRequest request, Model model) {
+        String email = request.getParameter("email");
+        String token = RandomStringUtils.randomAlphanumeric(30);
+
+        try {
+            userService.updateResetPasswordToken(token, email);
+            String resetPasswordLink = Utility.getSiteURL(request) + "/reset-password?token=" + token;
+            userService.sendForgotPasswordEmail(email, resetPasswordLink);
+            model.addAttribute("message", "We have sent a reset password link to your email. Please check.");
+        } catch (UsernameNotFoundException ex) {
+            model.addAttribute("error", ex.getMessage());
+        } catch (UnsupportedEncodingException | MessagingException e) {
+            model.addAttribute("error", "Error while sending email");
+        }
+
+        return "user/forgot-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@Param(value = "token") String token, Model model) {
+        User user = userService.getByResetPasswordToken(token);
+        model.addAttribute("token", token);
+
+        if (user == null) {
+            model.addAttribute("message", "Invalid token");
+            return "user/message";
+        }
+
+        return "user/reset-password";
+    }
+    @PostMapping("/reset-password")
+    public String processResetPassword(HttpServletRequest request, Model model) {
+        String token = request.getParameter("token");
+        String password = request.getParameter("password");
+
+        User user = userService.getByResetPasswordToken(token);
+        model.addAttribute("title", "Reset your password");
+
+        if (user == null) {
+            model.addAttribute("message", "Invalid token");
+            return "user/message";
+        }
+
+        userService.updatePassword(user, password);
+        model.addAttribute("message", "You have successfully changed your password");
+
+        return "user/message";
+    }
+    //endregion
 }
