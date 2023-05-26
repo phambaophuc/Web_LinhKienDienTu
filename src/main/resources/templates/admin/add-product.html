@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="">
+<head>
+    <meta charset="UTF-8">
+    <title>Tạo Sản Phẩm</title>
+    <th:block th:replace="layout-admin :: link-css"></th:block>
+</head>
+<body id="page-top">
+<div id="wrapper">
+    <th:block th:replace="layout-admin :: header"></th:block>
+    <div id="content-wrapper">
+        <div id="content">
+            <th:block th:replace="layout-admin :: nav"></th:block>
+            <div class="container-fluid">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Thêm sản phẩm</h6>
+                    </div>
+                    <form class="p-3" th:action="@{/admin/add-product}" th:object="${product}" method="POST">
+                        <div class="mb-2">
+                            <label class="form-label" for="productName">Tên Sản Phẩm: </label>
+                            <input class="form-control" type="text" id="productName" th:field="*{productName}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="description">Mô Tả: </label>
+                            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                            <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="image">Hình Ảnh: </label>
+                            <input class="form-control" type="text" id="image" th:field="*{image}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="price">Giá: </label>
+                            <input class="form-control" type="text" id="price" th:field="*{price}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="amount">Số Lượng: </label>
+                            <input class="form-control" type="text" id="amount" th:field="*{productName}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="note">Ghi Chú: </label>
+                            <input class="form-control" type="text" id="note" th:field="*{note}">
+                            <span class="text-danger" th:if="${#fields.hasErrors('note')}" th:errors="*{note}"></span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="category">Danh Mục:</label>
+                            <select class="form-control" id="category" name="category.categoryId">
+                                <option value=""></option>
+                                <option th:each="category: ${categories}" th:value="${category.categoryId}"
+                                        th:text="${category.categoryName}"></option>
+                            </select>
+                        </div>
+                        <button class="btn btn-outline-success" type="submit">Thêm</button>
+                    </form>
+                </div>
+            </div>
+            <th:block th:replace="layout-admin :: footer"></th:block>
+        </div>
+    </div>
+</div>
+</body>
+</html>

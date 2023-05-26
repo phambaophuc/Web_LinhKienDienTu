@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý sản phẩm</title>
+    <title>Quản lý hóa đơn</title>
     <th:block th:replace="layout-admin :: link-css"></th:block>
     <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
@@ -15,43 +15,30 @@
             <div class="container-fluid">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTables Product</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">DataTables Bills</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Amount</th>
-                                    <th>Note</th>
-                                    <th>Category</th>
-                                    <th>Action</th>
+                                    <th>Id</th>
+                                    <th>Tổng Tiền</th>
+                                    <th>Ngày tạo</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Amount</th>
-                                    <th>Note</th>
-                                    <th>Category</th>
-                                    <th>Action</th>
+                                    <th>Id</th>
+                                    <th>Tổng Tiền</th>
+                                    <th>Ngày tạo</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="product: ${products}">
-                                    <td th:text="${product.productName}"></td>
-                                    <td th:text="${product.price}"></td>
-                                    <td th:text="${product.amount}"></td>
-                                    <td th:text="${product.note}"></td>
-                                    <td th:text="${product.category.categoryName}"></td>
-                                    <td>
-                                        <a href="@{/admin/eidt-product/{id} (id=${product.productId})}" class="mr-3"><i class="fa-regular fa-pen-to-square"></i></a>
-                                        <a th:href="@{/admin/delete-product/{id} (id=${product.productId})}"
-                                           onclick="return confirm('Xóa sản phẩm này?')"><i class="fas fa-times"></i></a>
-                                    </td>
+                                <tr th:each="bill: ${bills}">
+                                    <td th:text="${bill.billId}"></td>
+                                    <td th:text="${bill.totalPrice}"></td>
+                                    <td th:text="${bill.createAt}"></td>
                                 </tr>
                                 </tbody>
                             </table>

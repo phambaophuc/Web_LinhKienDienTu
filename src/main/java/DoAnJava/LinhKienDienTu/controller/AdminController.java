@@ -1,14 +1,14 @@
 package DoAnJava.LinhKienDienTu.controller;
 
+import DoAnJava.LinhKienDienTu.entity.Bill;
 import DoAnJava.LinhKienDienTu.entity.Product;
 import DoAnJava.LinhKienDienTu.entity.Role;
 import DoAnJava.LinhKienDienTu.entity.User;
-import DoAnJava.LinhKienDienTu.services.ProductService;
-import DoAnJava.LinhKienDienTu.services.RoleService;
-import DoAnJava.LinhKienDienTu.services.UserService;
+import DoAnJava.LinhKienDienTu.services.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class    AdminController {
 
     @Autowired
     private ProductService productService;
@@ -30,6 +30,10 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private BillService billService;
 
     @GetMapping
     public String index() {
@@ -43,7 +47,44 @@ public class AdminController {
         model.addAttribute("products", products);
         return "admin/list-product";
     }
+    @GetMapping("/add-product")
+    public String addProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryService.getAllCategory());
+        return "admin/add-product";
+    }
+    @PostMapping("/add-product")
+    public String addProduct (@Valid @ModelAttribute("product") Product product, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors())
+        {
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors)
+            {
+                model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
+            }
+            return "admin/add-product";
+        }
 
+        productService.saveProduct(product);
+        return "redirect:/admin/list-product";
+    }
+
+    @GetMapping("/edit-product/{id}")
+    public String editBookForm (@PathVariable("id") Long id, Model model) {
+        model.addAttribute("categories", categoryService.getAllCategory());
+        Product product = productService.getProductById(id);
+        if (product != null) {
+            model.addAttribute("product", product);
+            return "admin/edit-product";
+        }else {
+            return "not-found";
+        }
+    }
+    @PostMapping("/edit")
+    public String editProduct (@ModelAttribute("product") Product product) {
+        productService.saveProduct(product);
+        return "redirect:/admin/list-product";
+    }
     @GetMapping("/delete-product/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
@@ -117,4 +158,14 @@ public class AdminController {
         }
     }
     //endregion
+
+    //region BillController
+    @GetMapping("/list-bill")
+    public String getAllBill(Model model) {
+        List<Bill> bills = billService.getAllBill();
+        model.addAttribute("bills", bills);
+        return "admin/list-bill";
+    }
+    //endregion
+
 }
