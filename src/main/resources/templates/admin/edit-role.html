@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa Quyền</title>
+    <th:block th:replace="layout-admin :: link-css"></th:block>
+</head>
+<body id="page-top">
+<div id="wrapper">
+    <th:block th:replace="layout-admin :: header"></th:block>
+    <div id="content-wrapper">
+        <div id="content">
+            <th:block th:replace="layout-admin :: nav"></th:block>
+            <div class="container-fluid">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Sửa quyền</h6>
+                    </div>
+                    <form class="p-4" th:action="@{/admin/edit-role/{roleId}(roleId=${role.roleId})}" method="POST" th:object="${role}">
+                        <div>
+                            <label class="form-label" for="roleName" style="width:90px">Tên Quyền:</label>
+                            <input class="form-control-sm" type="roleName" id="roleName" name="roleName" th:field="*{roleName}" th:value="*{roleName}"/>
+                            <span th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}" class="error"></span>
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label" for="description" style="width:90px">Mô Tả:</label>
+                            <input class="form-control-sm" type="text" id="description" name="description" th:field="*{description}" th:value="*{description}"/>
+                            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></span>
+                        </div>
+                        <div>
+                            <button class="mt-2 btn btn-sm btn-success" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <th:block th:replace="layout-admin :: footer"></th:block>
+        </div>
+    </div>
+</div>
+</body>
+</html>

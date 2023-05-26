@@ -16,7 +16,7 @@
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Thêm quyền</h6>
                     </div>
-                    <form class="p-3" th:action="@{/admin/add-role}" th:object="${role}" method="POST">
+                    <form class="p-4" th:action="@{/admin/add-role}" th:object="${role}" method="POST">
                         <div class="mb-2">
                             <label class="form-label" for="roleName" style="width:90px">Tên Quyền: </label>
                             <input class="form-control-sm" type="text" id="roleName" th:field="*{roleName}">

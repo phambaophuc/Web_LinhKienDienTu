@@ -24,18 +24,26 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Role Name</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th>Id</th>
                                     <th>Role Name</th>
+                                    <th>Action</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
                                 <tr th:each="role: ${roles}">
                                     <td th:text="${role.roleId}"></td>
                                     <td th:text="${role.roleName}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/edit-role/{roleId}(roleId=${role.roleId})}">
+                                            <i class="fas fa-pen-to-square mr-3"></i></a>
+                                        <a th:href="@{/admin/delete-role/{roleId}(roleId=${role.roleId})}"
+                                           onclick="return confirm('Delete this role?')"><i class="fas fa-times" style="color:red"></i></a>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

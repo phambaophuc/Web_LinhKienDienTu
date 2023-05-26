@@ -103,6 +103,7 @@ public class    AdminController {
     //endregion
 
     //region RoleController
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-role")
     public String getAllRole(Model model) {
         List<Role> roles = roleService.getAllRoles();
@@ -128,6 +129,35 @@ public class    AdminController {
         roleService.saveRole(role);
         return "redirect:/admin/list-role";
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/delete-role/{roleId}")
+    public String deleteRole(@PathVariable("roleId") UUID roleId) {
+        roleService.removeRole(roleId);
+        return "redirect:/admin/list-role";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/edit-role/{roleId}")
+    public String editRoleForm(@PathVariable("roleId") UUID roleId, Model model) {
+        Role role = roleService.getRoleById(roleId);
+        model.addAttribute("role", role);
+        return "admin/edit-role";
+    }
+    @PostMapping("/edit-role/{roleId}")
+    public String editRole(@Valid @ModelAttribute("role") Role role,
+                           BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
+            }
+            return "admin/edit-role";
+        }
+        roleService.saveRole(role);
+        return "redirect:/admin/list-role";
+    }
+
 
     // Gán quyền cho người dùng
     @PreAuthorize("hasAuthority('ADMIN')")
