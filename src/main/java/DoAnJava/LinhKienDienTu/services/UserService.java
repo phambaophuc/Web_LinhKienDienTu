@@ -6,6 +6,7 @@ import DoAnJava.LinhKienDienTu.reponsitory.IUserReponsitory;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +22,9 @@ import java.util.UUID;
 
 @Service
 public class UserService {
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
     @Autowired
     private IUserReponsitory userReponsitory;
 
@@ -104,10 +108,25 @@ public class UserService {
         sendVerificationEmail(user, siteURL);
     }
 
+    public boolean verify(String verificationCode) {
+        User user = userReponsitory.findByVerificationCode(verificationCode);
+
+        if (user == null || user.isEnabled()) {
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userReponsitory.save(user);
+
+            return true;
+        }
+    }
+
+    //region SendEmail
     private void sendVerificationEmail(User user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
-        String fromAddress = "123phuc27602@gmail.com";
+        String fromAddress = fromEmail;
         String senderName = "Phạm Bảo Phúc";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
@@ -132,26 +151,12 @@ public class UserService {
         mailSender.send(message);
     }
 
-    public boolean verify(String verificationCode) {
-        User user = userReponsitory.findByVerificationCode(verificationCode);
-
-        if (user == null || user.isEnabled()) {
-            return false;
-        } else {
-            user.setVerificationCode(null);
-            user.setEnabled(true);
-            userReponsitory.save(user);
-
-            return true;
-        }
-    }
-
     public void sendForgotPasswordEmail(String recipientEmail, String link)
             throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("123phuc27602@gmail.com", "Support");
+        helper.setFrom(fromEmail, "Support");
         helper.setTo(recipientEmail);
 
         String subject = "Here's the link to reset your password";
@@ -167,4 +172,6 @@ public class UserService {
         helper.setText(content, true);
         mailSender.send(message);
     }
+    //endregion
+
 }
