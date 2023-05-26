@@ -73,7 +73,7 @@ public class    AdminController {
         model.addAttribute("product", product);
         return "admin/product/edit-product";
     }
-    @PostMapping("/edit-prodcut")
+    @PostMapping("/edit-product")
     public String editProduct (@ModelAttribute("product") Product product,
                                BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors())

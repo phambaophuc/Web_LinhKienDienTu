@@ -48,7 +48,7 @@
                                     <td th:text="${product.note}"></td>
                                     <td th:text="${product.category.categoryName}"></td>
                                     <td>
-                                        <a href="@{/admin/edit-product/{id}(id=${product.productId})}" class="mr-2">
+                                        <a th:href="@{/admin/edit-product/{id}(id=${product.productId})}" class="mr-2">
                                             <i class="fa-regular fa-pen-to-square"></i></a>
                                         <a th:href="@{/admin/delete-product/{id}(id=${product.productId})}"
                                            onclick="return confirm('Xóa sản phẩm này?')"><i class="fas fa-times" style="color:red"></i></a>
