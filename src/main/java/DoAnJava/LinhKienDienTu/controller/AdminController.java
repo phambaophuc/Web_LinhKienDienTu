@@ -1,6 +1,5 @@
 package DoAnJava.LinhKienDienTu.controller;
 
-import DoAnJava.LinhKienDienTu.entity.Bill;
 import DoAnJava.LinhKienDienTu.entity.Product;
 import DoAnJava.LinhKienDienTu.entity.Role;
 import DoAnJava.LinhKienDienTu.entity.User;
@@ -8,7 +7,6 @@ import DoAnJava.LinhKienDienTu.services.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,8 +30,6 @@ public class    AdminController {
     private RoleService roleService;
     @Autowired
     private CategoryService categoryService;
-    @Autowired
-    private BillService billService;
 
     @GetMapping
     public String index() {
@@ -45,16 +41,17 @@ public class    AdminController {
     public String getAllProduct(Model model) {
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
-        return "admin/list-product";
+        return "admin/product/list-product";
     }
     @GetMapping("/add-product")
     public String addProductForm(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("categories", categoryService.getAllCategory());
-        return "admin/add-product";
+        return "admin/product/add-product";
     }
     @PostMapping("/add-product")
-    public String addProduct (@Valid @ModelAttribute("product") Product product, BindingResult bindingResult, Model model) {
+    public String addProduct(@Valid @ModelAttribute("product") Product product,
+                             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors())
         {
             List<FieldError> errors = bindingResult.getFieldErrors();
@@ -62,7 +59,7 @@ public class    AdminController {
             {
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
-            return "admin/add-product";
+            return "admin/product/add-product";
         }
 
         productService.saveProduct(product);
@@ -73,15 +70,22 @@ public class    AdminController {
     public String editProductForm (@PathVariable("id") Long id, Model model) {
         model.addAttribute("categories", categoryService.getAllCategory());
         Product product = productService.getProductById(id);
-        if (product != null) {
-            model.addAttribute("product", product);
-            return "admin/edit-product";
-        }else {
-            return "not-found";
-        }
+        model.addAttribute("product", product);
+        return "admin/product/edit-product";
     }
-    @PostMapping("/edit")
-    public String editProduct (@ModelAttribute("product") Product product) {
+    @PostMapping("/edit-prodcut")
+    public String editProduct (@ModelAttribute("product") Product product,
+                               BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("categories", categoryService.getAllCategory());
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors)
+            {
+                model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
+            }
+            return "admin/product/add-product";
+        }
         productService.saveProduct(product);
         return "redirect:/admin/list-product";
     }
@@ -186,15 +190,6 @@ public class    AdminController {
             redirectAttributes.addFlashAttribute("success", "Đã thêm quyền cho người dùng này");
             return "redirect:/admin/assign-role/" + userId;
         }
-    }
-    //endregion
-
-    //region BillController
-    @GetMapping("/list-bill")
-    public String getAllBill(Model model) {
-        List<Bill> bills = billService.getAllBill();
-        model.addAttribute("bills", bills);
-        return "admin/list-bill";
     }
     //endregion
 
