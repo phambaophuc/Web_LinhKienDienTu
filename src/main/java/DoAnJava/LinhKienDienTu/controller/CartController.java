@@ -52,7 +52,9 @@ public class CartController {
 
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (BillDetail billDetail : billDetailList) {
-            totalPrice  = totalPrice.add(billDetail.getProduct().getPrice());
+            String priceStr = billDetail.getProduct().getPrice().replaceAll("[.,]", "");
+            BigDecimal productPrice = new BigDecimal(priceStr);
+            totalPrice = totalPrice.add(productPrice);
         }
 
         model.addAttribute("billDetails", billDetails);

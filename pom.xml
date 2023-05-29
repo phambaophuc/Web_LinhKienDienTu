@@ -85,6 +85,11 @@
 			<artifactId>rest-api-sdk</artifactId>
 			<version>1.4.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.commonmark</groupId>
+			<artifactId>commonmark</artifactId>
+			<version>0.17.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

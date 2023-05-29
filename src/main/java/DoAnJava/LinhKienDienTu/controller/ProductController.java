@@ -3,6 +3,8 @@ package DoAnJava.LinhKienDienTu.controller;
 import DoAnJava.LinhKienDienTu.entity.*;
 import DoAnJava.LinhKienDienTu.services.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +34,10 @@ public class ProductController {
     private BillDetailService billDetailService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private Parser markdownParser;
+    @Autowired
+    private HtmlRenderer markdownHtmlRenderer;
 
     @GetMapping
     public String listProducts(Model model,
@@ -53,7 +59,11 @@ public class ProductController {
         String currentUsername = authentication.getName();
         model.addAttribute("currentUsername", currentUsername);
 
+        // Sử dụng thư viện markdown để hiển thị mô tả sản phẩm.
         Product product = productService.getProductById(productId);
+        String markdownDescription = product.getDescription();
+        String htmlDescription = markdownHtmlRenderer.render(markdownParser.parse(markdownDescription));
+        product.setDescription(htmlDescription);
         model.addAttribute("product", product);
 
         List<Comment> comments = commentService.getCommentByProductId(productId);

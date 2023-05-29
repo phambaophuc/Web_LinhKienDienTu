@@ -4,16 +4,20 @@ import DoAnJava.LinhKienDienTu.entity.Product;
 import DoAnJava.LinhKienDienTu.entity.Role;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.*;
+import DoAnJava.LinhKienDienTu.utils.FileUploadUlti;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +56,31 @@ public class    AdminController {
     }
     @PostMapping("/add-product")
     public String addProduct(@Valid @ModelAttribute("product") Product product,
-                             BindingResult bindingResult, Model model) {
+                             BindingResult bindingResult, Model model,
+                             @RequestParam(value = "mainImage")MultipartFile mainMultipartFile,
+                             @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
+
+        String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
+        product.setMainImage(mainImageName);
+
+        String uploadDir = "./src/main/resources/static/img/product";
+        FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
+
+        int count = 0;
+        for (MultipartFile extraMultipart : extraMultipartFile) {
+            if (!extraMultipart.isEmpty()) {
+                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
+                if (count == 0) product.setExtraImage1(extraImageName);
+                if (count == 1) product.setExtraImage2(extraImageName);
+                if (count == 2) product.setExtraImage3(extraImageName);
+
+                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
+
+                count++;
+            }
+        }
+
+
         if (bindingResult.hasErrors())
         {
             model.addAttribute("categories", categoryService.getAllCategory());
@@ -65,6 +93,7 @@ public class    AdminController {
         }
 
         productService.saveProduct(product);
+
         return "redirect:/admin/list-product";
     }
 
@@ -77,7 +106,43 @@ public class    AdminController {
     }
     @PostMapping("/edit-product")
     public String editProduct(@ModelAttribute("product") Product product,
-                               BindingResult bindingResult, Model model) {
+                              BindingResult bindingResult, Model model,
+                              @RequestParam(value = "mainImage", required = false)MultipartFile mainMultipartFile,
+                              @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
+
+        Product currentProduct = productService.getProductById(product.getProductId());
+
+        boolean isMainImageUpdated = mainMultipartFile != null && !mainMultipartFile.isEmpty();
+
+        String uploadDir = "./src/main/resources/static/img/product";
+
+        if (isMainImageUpdated) {
+            String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
+            product.setMainImage(mainImageName);
+            FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
+        } else {
+            product.setMainImage(currentProduct.getMainImage());
+        }
+
+        int count = 0;
+        for (MultipartFile extraMultipart : extraMultipartFile) {
+            if (!extraMultipart.isEmpty()) {
+                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
+                if (count == 0) product.setExtraImage1(extraImageName);
+                if (count == 1) product.setExtraImage2(extraImageName);
+                if (count == 2) product.setExtraImage3(extraImageName);
+
+                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
+
+                count++;
+            } else {
+                product.setExtraImage1(currentProduct.getExtraImage1());
+                product.setExtraImage2(currentProduct.getExtraImage2());
+                product.setExtraImage3(currentProduct.getExtraImage3());
+                break;
+            }
+        }
+
         if (bindingResult.hasErrors())
         {
             model.addAttribute("categories", categoryService.getAllCategory());

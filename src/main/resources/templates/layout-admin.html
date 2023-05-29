@@ -41,9 +41,6 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Components:</h6>
-                <a class="collapse-item" sec:authorize="hasAnyAuthority('ADMIN')"
-                   th:href="@{/admin/add-role}">Add Role</a>
-                <a class="collapse-item" th:href="@{/admin/add-product}">Add Product</a>
             </div>
         </div>
     </li>
@@ -58,10 +55,6 @@
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="utilities-color.html">Colors</a>
-                <a class="collapse-item" href="utilities-border.html">Borders</a>
-                <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>
             </div>
         </div>
     </li>
@@ -83,7 +76,6 @@
                 <h6 class="collapse-header">Login Screens:</h6>
                 <a class="collapse-item" href="#">Login</a>
                 <a class="collapse-item" href="#">Register</a>
-                <a class="collapse-item" href="#">Forgot Password</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other Pages:</h6>
                 <a class="collapse-item" th:href="@{/}">Trang chủ</a>
@@ -120,8 +112,7 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    <form
-            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
                    aria-label="Search" aria-describedby="basic-addon2">

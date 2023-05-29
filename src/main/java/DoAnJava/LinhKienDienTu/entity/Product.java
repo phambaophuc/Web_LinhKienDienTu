@@ -29,13 +29,21 @@ public class Product {
     @Column(name = "description", length = 10000, nullable = false)
     private String description;
 
-    @NotEmpty(message = "Vui lòng chọn hình ảnh sản phẩm.")
-    @Column(name = "image")
-    private String image;
+    @Column(name = "main_image")
+    private String mainImage;
+
+    @Column(name = "extra_image1")
+    private String extraImage1;
+
+    @Column(name = "extra_image2")
+    private String extraImage2;
+
+    @Column(name = "extra_image3")
+    private String extraImage3;
 
     @NotNull(message = "Vui lòng nhập giá sản phẩm.")
-    @Column(name = "price", precision = 5, scale = 2, nullable = false)
-    private BigDecimal price;
+    @Column(name = "price", nullable = false)
+    private String price;
 
     @NotNull(message = "Vui lòng nhập số lượng sản phẩm.")
     @Column(name = "amount", nullable = false)
@@ -49,9 +57,9 @@ public class Product {
     @ValidCategoryId
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<BillDetail> billDetails;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Comment> comments;
 }

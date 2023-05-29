@@ -19,7 +19,7 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
                                 <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                    <img th:src="@{'/img/product/' + ${product.image} + '.webp'}"
+                                    <img th:src="@{'/img/product/' + ${product.mainImage}}"
                                          class="w-100" />
                                     <a href="#!">
                                         <div class="hover-overlay">
@@ -47,7 +47,6 @@
                             <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
                                 <div class="d-flex flex-row align-items-center mb-1">
                                     <h4 class="mb-1 me-1" th:text="${product.price + '$'}"></h4>
-                                    <span class="text-danger"><s th:text="${product.price * 2 + '$'}"></s></span>
                                 </div>
                                 <h6 class="text-success">Free shipping</h6>
                                 <form class="d-flex flex-column mt-4" th:action="@{'/product/add-to-cart/' + ${product.productId}}" method="POST">

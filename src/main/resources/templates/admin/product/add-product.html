@@ -16,7 +16,7 @@
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Thêm sản phẩm</h6>
                     </div>
-                    <form class="p-4" th:action="@{/admin/add-product}" th:object="${product}" method="POST">
+                    <form class="p-4" th:action="@{/admin/add-product}" th:object="${product}" method="POST" enctype="multipart/form-data">
                         <div class="row mt-2">
                             <div class="col">
                                 <label class="form-label" for="productName">Tên Sản Phẩm: </label>
@@ -47,14 +47,6 @@
                                 <span class="text-danger" th:if="${#fields.hasErrors('note')}" th:errors="*{note}"></span>
                             </div>
                             <div class="col">
-                                <label class="form-label" for="image">Hình Ảnh: </label>
-                                <input class="form-control" type="text" id="image" th:field="*{image}">
-                                <span class="text-danger" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="col">
                                 <label class="form-label" for="price">Giá: </label>
                                 <input class="form-control" type="text" id="price" th:field="*{price}">
                                 <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
@@ -63,6 +55,23 @@
                                 <label class="form-label" for="amount">Số Lượng: </label>
                                 <input class="form-control" type="number" id="amount" th:field="*{amount}">
                                 <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                                    aria-expanded="false" aria-controls="collapseExample">
+                                Thêm hình ảnh
+                            </button>
+                        </div>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                                <div class="com-sm-4">
+                                    <input type="file" name="mainImage" title="Chọn hình ảnh chính cho sản phẩm" accept="image/*" required>
+                                    <input type="file" name="extraImage" accept="image/*">
+                                    <input type="file" name="extraImage" accept="image/*">
+                                    <input type="file" name="extraImage" accept="image/*">
+                                </div>
                             </div>
                         </div>
                         <button class="btn btn-success form-control mt-3" type="submit">Thêm sản phẩm</button>
