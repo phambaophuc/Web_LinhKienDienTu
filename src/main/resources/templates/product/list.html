@@ -32,7 +32,7 @@
                             <p class="small">
                                 <a href="#!" class="text-muted"th:text="${product.category.categoryName}"></a>
                             </p>
-                            <h5 class="text-dark mb-0" th:text="${product.price + ' $'}"></h5>
+                            <h5 class="text-dark mb-0" th:text="${product.price + ' VND'}"></h5>
                         </div>
 
                         <div class="d-flex justify-content-between mb-2">
@@ -53,7 +53,7 @@
         <!-- Phân trang -->
         <div class="row my-3">
             <div class="col">
-                <nav aria-label="Page navigation">
+                <nav aria-label="Page navigation" th:if="${totalPages > 1}">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:class="${currentPage == 0 ? 'disabled' : ''}">
                             <a class="page-link" th:href="@{|/product?page=${currentPage - 1}|}" aria-label="Previous">
@@ -68,11 +68,6 @@
                                 <span aria-hidden="true">&gt;</span>
                             </a>
                         </li>
-                        <!--<li class="page-item" th:class="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                            <a class="page-link" th:href="@{|/product?page=${totalPages - 1}}" aria-label="Last">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>-->
                     </ul>
                 </nav>
             </div>

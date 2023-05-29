@@ -7,6 +7,7 @@ import DoAnJava.LinhKienDienTu.services.*;
 import DoAnJava.LinhKienDienTu.utils.FileUploadUlti;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +25,10 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
-public class    AdminController {
+public class AdminController {
 
+    @Value("${uploadDirectory}")
+    private String uploadDir;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -63,7 +66,6 @@ public class    AdminController {
         String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
         product.setMainImage(mainImageName);
 
-        String uploadDir = "./src/main/resources/static/img/product";
         FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
 
         int count = 0;
@@ -113,8 +115,6 @@ public class    AdminController {
         Product currentProduct = productService.getProductById(product.getProductId());
 
         boolean isMainImageUpdated = mainMultipartFile != null && !mainMultipartFile.isEmpty();
-
-        String uploadDir = "./src/main/resources/static/img/product";
 
         if (isMainImageUpdated) {
             String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());

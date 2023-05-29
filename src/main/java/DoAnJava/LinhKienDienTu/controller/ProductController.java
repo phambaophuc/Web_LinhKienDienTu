@@ -59,12 +59,19 @@ public class ProductController {
         String currentUsername = authentication.getName();
         model.addAttribute("currentUsername", currentUsername);
 
-        // Sử dụng thư viện markdown để hiển thị mô tả sản phẩm.
         Product product = productService.getProductById(productId);
-        String markdownDescription = product.getDescription();
-        String htmlDescription = markdownHtmlRenderer.render(markdownParser.parse(markdownDescription));
-        product.setDescription(htmlDescription);
+
+        // Sử dụng thư viện markdown để hiển thị mô tả sản phẩm.
+        String markdownDescription = markdownHtmlRenderer.render(markdownParser.parse(product.getDescription()));
+        product.setDescription(markdownDescription);
         model.addAttribute("product", product);
+
+        String description = product.getDescription();
+        String htmlDescription = description
+                .replace("{{image1}}", "<img style=\"width:100%;\" src=\"/img/product/" + product.getExtraImage1() + "\"/>")
+                .replace("{{image2}}", "<img style=\"width:100%;\" src=\"/img/product/" + product.getExtraImage2() + "\"/>")
+                .replace("{{image3}}", "<img style=\"width:100%;\" src=\"/img/product/" + product.getExtraImage3() + "\"/>");
+        model.addAttribute("description", htmlDescription);
 
         List<Comment> comments = commentService.getCommentByProductId(productId);
         model.addAttribute("comments", comments);

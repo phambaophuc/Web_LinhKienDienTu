@@ -9,14 +9,13 @@ import DoAnJava.LinhKienDienTu.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Controller
@@ -54,12 +53,18 @@ public class CartController {
         for (BillDetail billDetail : billDetailList) {
             String priceStr = billDetail.getProduct().getPrice().replaceAll("[.,]", "");
             BigDecimal productPrice = new BigDecimal(priceStr);
-            totalPrice = totalPrice.add(productPrice);
+            BigDecimal productAmount = new BigDecimal(billDetail.getAmount());
+
+            BigDecimal subTotal = productPrice.multiply(productAmount);
+            totalPrice = totalPrice.add(subTotal);
         }
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedPrice = decimalFormat.format(totalPrice);
 
         model.addAttribute("billDetails", billDetails);
         model.addAttribute("totalBillDetails", totalBillDetails);
-        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("formattedPrice", formattedPrice);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalItems", billDetailsPage.getTotalElements());

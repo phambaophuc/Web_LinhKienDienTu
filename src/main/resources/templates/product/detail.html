@@ -20,8 +20,9 @@
         <div class="col-md-6">
             <h3 th:text="${product.productName}"></h3>
             <p th:text="${product.note}"></p>
+            <p style="color:orange;"><small th:text="${'Còn ' + product.amount + ' sản phẩm'}"></small></p>
             <h6 class="title-price"><small>Giá</small></h6>
-            <h3 class="mt-0" th:text="${product.price} + '$'"></h3>
+            <h3 class="mt-0" th:text="${product.price} + ' VND'"></h3>
 
             <div class="d-flex">
                 <button class="btn btn-success me-2">Đặt hàng</button>
@@ -31,13 +32,13 @@
             </div>
         </div>
 
-        <div class="col-xs-9 mt-3">
-            <ul class="menu-items">
-                <li class="active">Thông tin</li>
-            </ul>
-            <div style="width:100%;border-top:1px solid silver">
+        <div class="row col-xs-9 mt-3">
+            <div class="col-md-8">
                 <div class="my-3 fw-bold" style="font-size:22px">Mô tả sản phẩm</div>
-                <div th:utext="${product.description}"></div>
+                <div style="text-align: justify;" th:utext="${description}"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="ms-4 fw-bold text-center">Thông tin chi tiết</div>
             </div>
         </div>
 

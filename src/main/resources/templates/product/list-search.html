@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
                                 <div class="d-flex flex-row align-items-center mb-1">
-                                    <h4 class="mb-1 me-1" th:text="${product.price + '$'}"></h4>
+                                    <h4 class="mb-1 me-1" th:text="${product.price + ' VND'}"></h4>
                                 </div>
                                 <h6 class="text-success">Free shipping</h6>
                                 <form class="d-flex flex-column mt-4" th:action="@{'/product/add-to-cart/' + ${product.productId}}" method="POST">

@@ -26,26 +26,12 @@
                                             <img th:src="@{'/img/product/' + ${billDetail.product.mainImage}}"
                                                  class="img-fluid rounded-3" alt="Cotton T-shirt" width="90px">
                                         </div>
-                                        <div class="col-md-3 col-lg-3 col-xl-3">
+                                        <div class="col-md-4 col-lg-4 col-xl-4">
                                             <h6 class="text-black mb-0" th:text="${billDetail.product.productName}"></h6>
                                         </div>
-                                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                        <div class="col-md-5 col-lg-4 col-xl-3">
                                             <h6 th:text="${'Số lượng: '+ billDetail.amount}"></h6>
-                                            <!--<button class="btn btn-link px-2"
-                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                              <i class="fas fa-minus"></i>
-                                            </button>
-
-                                            <input id="form1" min="0" name="quantity" value="1" type="number"
-                                                   class="form-control form-control-sm" />
-
-                                            <button class="btn btn-link px-2"
-                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                              <i class="fas fa-plus"></i>
-                                            </button>-->
-                                        </div>
-                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                            <h6 class="mb-0" th:text="${billDetail.product.price + ' $'}"></h6>
+                                            <h6 class="mb-0" th:text="${billDetail.product.price + ' VND'}"></h6>
                                         </div>
                                         <form class="col-md-1 col-lg-1 col-xl-1 text-end"
                                               th:action="@{'/cart/' + ${billDetail.product.productId} + '/' + ${billDetail.bill.billId}}" method="POST">
@@ -58,7 +44,7 @@
                                     </div>
 
                                     <!-- Phân trang -->
-                                    <nav aria-label="Page navigation">
+                                    <nav aria-label="Page navigation" th:if="${totalPages > 0}">
                                         <ul class="pagination justify-content-center">
                                             <li class="page-item">
                                                 <a class="page-link" th:href="@{|/cart?page=${currentPage - 1}|}" aria-label="Previous">
@@ -73,15 +59,10 @@
                                                     <span aria-hidden="true">&gt;</span>
                                                 </a>
                                             </li>
-                                            <!--<li class="page-item">
-                                                <a class="page-link" th:href="@{|/cart?page=${totalPages - 1}}" aria-label="Last">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>-->
                                         </ul>
                                     </nav>
 
-                                    <div class="pt-5">
+                                    <div class="mt-2">
                                         <h6 class="mb-0"><a th:href="@{/product}" class="text-body"><i
                                                 class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
                                     </div>
@@ -117,11 +98,11 @@
                                     <hr class="my-4">
 
                                     <div class="d-flex justify-content-between mb-5">
-                                        <h5 class="text-uppercase">Total price</h5>
-                                        <h5 th:text="${totalPrice + ' $'}"></h5>
+                                        <h5 class="text-uppercase">Tổng tiền</h5>
+                                        <h5 th:text="${formattedPrice + ' VND'}"></h5>
                                     </div>
                                     <button type="button" class="btn btn-dark btn-block btn-lg"
-                                            data-mdb-ripple-color="dark">Register</button>
+                                            data-mdb-ripple-color="dark">Thanh toán</button>
                                 </div>
                             </div>
                         </div>
