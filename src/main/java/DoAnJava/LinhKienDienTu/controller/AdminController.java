@@ -3,6 +3,7 @@ package DoAnJava.LinhKienDienTu.controller;
 import DoAnJava.LinhKienDienTu.entity.*;
 import DoAnJava.LinhKienDienTu.services.*;
 import DoAnJava.LinhKienDienTu.utils.FileUploadUlti;
+import DoAnJava.LinhKienDienTu.utils.S3Util;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +25,6 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Value("${uploadDirectory}")
-    private String uploadDir;
-
     @Autowired
     private ProductService productService;
     @Autowired
@@ -37,6 +35,9 @@ public class AdminController {
     private RoleService roleService;
     @Autowired
     private CategoryService categoryService;
+
+//    @Value("${uploadDirectory}")
+//    private String uploadDir;
 
     @GetMapping
     public String index() {
@@ -61,12 +62,35 @@ public class AdminController {
     public String addProduct(@Valid @ModelAttribute("product") Product product,
                              BindingResult bindingResult, Model model,
                              @RequestParam(value = "mainImage")MultipartFile mainMultipartFile,
-                             @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
+                             @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) {
+
+//        String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
+//        product.setMainImage(mainImageName);
+//
+//        FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
+//
+//        int count = 0;
+//        for (MultipartFile extraMultipart : extraMultipartFile) {
+//            if (!extraMultipart.isEmpty()) {
+//                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
+//                if (count == 0) product.setExtraImage1(extraImageName);
+//                if (count == 1) product.setExtraImage2(extraImageName);
+//                if (count == 2) product.setExtraImage3(extraImageName);
+//
+//                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
+//
+//                count++;
+//            }
+//        }
 
         String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
         product.setMainImage(mainImageName);
-
-        FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
+        try {
+            S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
+            System.out.println("File " + mainImageName + " has been uploaded successfully!");
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
 
         int count = 0;
         for (MultipartFile extraMultipart : extraMultipartFile) {
@@ -76,12 +100,16 @@ public class AdminController {
                 if (count == 1) product.setExtraImage2(extraImageName);
                 if (count == 2) product.setExtraImage3(extraImageName);
 
-                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
+                try {
+                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
+                    System.out.println("File " + extraImageName + " has been uploaded successfully!");
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
 
                 count++;
             }
         }
-
 
         if (bindingResult.hasErrors())
         {
@@ -110,16 +138,20 @@ public class AdminController {
     public String editProduct(@ModelAttribute("product") Product product,
                               BindingResult bindingResult, Model model,
                               @RequestParam(value = "mainImage", required = false)MultipartFile mainMultipartFile,
-                              @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
+                              @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) {
 
         Product currentProduct = productService.getProductById(product.getProductId());
-
         boolean isMainImageUpdated = mainMultipartFile != null && !mainMultipartFile.isEmpty();
 
         if (isMainImageUpdated) {
             String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
             product.setMainImage(mainImageName);
-            FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
+            try {
+                S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
+                System.out.println("File " + mainImageName + " has been uploaded successfully!");
+            } catch (Exception ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
         } else {
             product.setMainImage(currentProduct.getMainImage());
         }
@@ -132,7 +164,12 @@ public class AdminController {
                 if (count == 1) product.setExtraImage2(extraImageName);
                 if (count == 2) product.setExtraImage3(extraImageName);
 
-                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
+                try {
+                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
+                    System.out.println("File " + extraImageName + " has been uploaded successfully!");
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
 
                 count++;
             } else {
