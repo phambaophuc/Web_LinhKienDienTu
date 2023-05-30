@@ -1,7 +1,7 @@
 package DoAnJava.LinhKienDienTu.services;
 
 import DoAnJava.LinhKienDienTu.entity.Product;
-import DoAnJava.LinhKienDienTu.reponsitory.IProductReponsitory;
+import DoAnJava.LinhKienDienTu.repository.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,18 +13,18 @@ import java.util.Optional;
 @Service
 public class ProductService {
     @Autowired
-    private IProductReponsitory productReponsitory;
+    private IProductRepository productRepository;
 
     public List<Product> getAllProducts() {
-        return productReponsitory.findAll();
+        return productRepository.findAll();
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
-        return productReponsitory.findAll(pageable);
+        return productRepository.findAll(pageable);
     }
 
     public Product getProductById(Long id) {
-        Optional<Product> optionalProduct = productReponsitory.findById(id);
+        Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
             return optionalProduct.get();
         } else {
@@ -33,20 +33,20 @@ public class ProductService {
     }
 
     public List<Product> getProductByName(String productName) {
-        List<Product> products = productReponsitory.findProductByName(productName);
+        List<Product> products = productRepository.findProductByName(productName);
         return products;
     }
 
     public List<Product> getProductByCategory(String categoryName) {
-        List<Product> products = productReponsitory.findProductByCategory(categoryName);
+        List<Product> products = productRepository.findProductByCategory(categoryName);
         return products;
     }
 
     public void saveProduct(Product product) {
-        productReponsitory.save(product);
+        productRepository.save(product);
     }
 
     public void deleteProduct(Long id) {
-        productReponsitory.deleteById(id);
+        productRepository.deleteById(id);
     }
 }

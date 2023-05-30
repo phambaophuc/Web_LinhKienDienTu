@@ -2,10 +2,7 @@ package DoAnJava.LinhKienDienTu.entity;
 
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidCategoryId;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +39,7 @@ public class Product {
     private String extraImage3;
 
     @NotNull(message = "Vui lòng nhập giá sản phẩm.")
+    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*", message = "Giá sản phẩm không hợp lệ.")
     @Column(name = "price", nullable = false)
     private String price;
 

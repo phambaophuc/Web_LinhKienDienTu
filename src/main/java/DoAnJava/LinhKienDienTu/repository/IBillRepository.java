@@ -1,4 +1,4 @@
-package DoAnJava.LinhKienDienTu.reponsitory;
+package DoAnJava.LinhKienDienTu.repository;
 
 import DoAnJava.LinhKienDienTu.entity.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface IBillReponsitory extends JpaRepository<Bill, Long> {
+public interface IBillRepository extends JpaRepository<Bill, Long> {
     @Query("SELECT b FROM Bill b, User u " +
             "WHERE b.user.userId = :userId")
     Bill findBillByUser(@Param("userId") UUID userId);

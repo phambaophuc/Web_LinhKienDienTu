@@ -1,9 +1,10 @@
-package DoAnJava.LinhKienDienTu.reponsitory;
+package DoAnJava.LinhKienDienTu.repository;
 
 import DoAnJava.LinhKienDienTu.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface IUserReponsitory extends JpaRepository<User, UUID> {
+public interface IUserRepository extends JpaRepository<User, UUID> {
     User findByEmail(String email);
 
     @Query("SELECT u FROM User u WHERE u.username = ?1")
@@ -34,6 +35,12 @@ public interface IUserReponsitory extends JpaRepository<User, UUID> {
     @Query(value = "SELECT r.role_name FROM Role r INNER JOIN user_role ur " +
             "ON r.role_id = ur.role_id WHERE ur.user_id = ?1", nativeQuery = true)
     String[] getRolesOfUser(UUID userId);
+
+    @Query(value = "SELECT r.role_name FROM Role r " +
+            "INNER JOIN user_role ur ON r.role_id = ur.role_id " +
+            "INNER JOIN user u ON u.user_id = ur.user_id " +
+            "WHERE u.username = :username", nativeQuery = true)
+    String[] getRolesOfUser(@Param("username") String username);
 
     @Modifying
     @Transactional

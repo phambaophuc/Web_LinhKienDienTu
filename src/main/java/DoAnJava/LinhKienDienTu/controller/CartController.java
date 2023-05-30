@@ -9,6 +9,7 @@ import DoAnJava.LinhKienDienTu.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class CartController {
     private UserService userService;
 
     // View giỏ hàng
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public String viewBillForm(Model model, Principal principal,
                                @RequestParam(defaultValue = "0") int page,

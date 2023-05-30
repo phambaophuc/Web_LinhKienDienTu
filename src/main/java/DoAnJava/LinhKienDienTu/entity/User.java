@@ -18,8 +18,7 @@ public class User {
     @GeneratedValue
     private UUID userId;
 
-    @Column(name = "fullname", length = 60, nullable = false)
-    @NotEmpty(message = "Vui lòng nhập tên của bạn.")
+    @Column(name = "fullname", length = 40)
     @Size(max = 60, message = "Tên của bạn không được vượt quá 60 ký tự.")
     private String fullname;
 
@@ -28,18 +27,17 @@ public class User {
     private String phone;
 
     @Email(message = "Email invalid")
-    @Column(name = "email", length = 144, nullable = false, unique = true)
-    @NotBlank(message = "Vui lòng nhập Email.")
+    @Column(name = "email", length = 40)
     @ValidEmail
     private String email;
 
-    @Column(name = "username", length = 40, nullable = false, unique = true)
+    @Column(name = "username", length = 40)
     @Size(min = 5, message = "Tên tài khoản phải ít nhất 5 ký tự.")
     @Size(max = 40, message = "Tài khoản không được vượt quá 40 ký tự.")
     @ValidUsername
     private String username;
 
-    @Column(name = "password", length = 144, nullable = false)
+    @Column(name = "password", length = 64)
     @Size(min = 6, message = "Mật khẩu phải ít nhất 6 ký tự.")
     @Size(max = 144, message = "Mật khẩu không được vượt quá 144 ký tự.")
     private String password;
@@ -47,8 +45,12 @@ public class User {
     @Column(name = "verifycation_code", length = 64)
     private String verificationCode;
 
-    @Column(name = "reset_password_token")
+    @Column(name = "reset_password_token", length = 30)
     private String resetPasswordToken;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authentication_provider", length = 15)
+    private Provider authenticationProvider;
 
     private boolean enabled;
 

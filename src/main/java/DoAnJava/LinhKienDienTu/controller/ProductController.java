@@ -42,7 +42,7 @@ public class ProductController {
     @GetMapping
     public String listProducts(Model model,
                                @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "6") int pageSize) {
+                               @RequestParam(defaultValue = "9") int pageSize) {
         if (page < 0) page = 0;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Product> productPage = productService.getAllProducts(pageable);
@@ -138,7 +138,7 @@ public class ProductController {
             bill = billService.getBillByUser(user.getUserId());
         }
 
-        BillDetail billDetail = billDetailService.getBillDetailByProduct(productId);
+        BillDetail billDetail = billDetailService.getBillDetailByProduct(productId, bill.getBillId());
         if (billDetail != null) {
             billDetail.setAmount(billDetail.getAmount() + 1);
             billDetailService.saveBillDetail(billDetail);

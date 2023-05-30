@@ -16,26 +16,26 @@
             <form th:action="@{/register}" th:object="${user}" method="POST" onsubmit="return validateForm()">
                 <div class="row">
                     <div class="col mb-4">
-                        <input type="text" class="form-control" id="fullname" th:field="*{fullname}" placeholder="Nhập tên đầy đủ của bạn">
+                        <input type="text" class="form-control" id="fullname" th:field="*{fullname}" placeholder="Nhập tên đầy đủ của bạn" required>
                         <span class="text-danger" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></span>
                     </div>
                     <div class="col mb-4">
-                        <input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="Nhập số điện thoại của bạn">
+                        <input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="Nhập số điện thoại của bạn" required>
                         <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
                     </div>
                 </div>
                 <div class="mb-4 form-floating">
-                    <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Nhập email của bạn">
+                    <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Nhập email của bạn" required>
                     <label for="email">Email: <span class="text-danger"> *</span></label>
                     <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                 </div>
                 <div class="mb-4 form-floating">
-                    <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Nhập tên tài khoản của bạn">
+                    <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Nhập tên tài khoản của bạn" required>
                     <label for="username">Username: <span class="text-danger"> *</span></label>
                     <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                 </div>
                 <div class="mb-4 form-floating">
-                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Nhập mật khẩu của bạn">
+                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Nhập mật khẩu của bạn" required>
                     <label for="password">Password: <span class="text-danger"> *</span></label>
                     <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
                 </div>

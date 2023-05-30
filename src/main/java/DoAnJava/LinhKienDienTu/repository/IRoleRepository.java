@@ -1,4 +1,4 @@
-package DoAnJava.LinhKienDienTu.reponsitory;
+package DoAnJava.LinhKienDienTu.repository;
 
 import DoAnJava.LinhKienDienTu.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface IRoleReponsitory extends JpaRepository<Role, UUID> {
+public interface IRoleRepository extends JpaRepository<Role, UUID> {
     @Query("SELECT r FROM Role r WHERE r.roleName = ?1")
     Role findByRoleName(String roleName);
     @Query("SELECT r.roleId FROM Role r WHERE r.roleName = ?1")

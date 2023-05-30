@@ -1,8 +1,9 @@
 package DoAnJava.LinhKienDienTu.services;
 
+import DoAnJava.LinhKienDienTu.entity.Provider;
 import DoAnJava.LinhKienDienTu.entity.User;
-import DoAnJava.LinhKienDienTu.reponsitory.IRoleReponsitory;
-import DoAnJava.LinhKienDienTu.reponsitory.IUserReponsitory;
+import DoAnJava.LinhKienDienTu.repository.IRoleRepository;
+import DoAnJava.LinhKienDienTu.repository.IUserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserService {
     private String fromEmail;
 
     @Autowired
-    private IUserReponsitory userReponsitory;
+    private IUserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -35,49 +36,53 @@ public class UserService {
     private JavaMailSender mailSender;
 
     @Autowired
-    private IRoleReponsitory roleReponsitory;
+    private IRoleRepository roleRepository;
 
     public List<User> getAllUsers() {
-        return userReponsitory.findAll();
+        return userRepository.findAll();
     }
 
     public User getUserByUsername(String username) {
-        return userReponsitory.findByUsername(username);
+        return userRepository.findByUsername(username);
     }
 
     public User getUserById(UUID id) {
-        Optional<User> optionalUser = userReponsitory.findById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
         return optionalUser.orElse(null);
     }
 
     public void addRoleToUser(UUID userId, UUID roleId) {
-        userReponsitory.addRoleToUser(userId, roleId);
+        userRepository.addRoleToUser(userId, roleId);
     }
 
     public void removeRoleFromUser(UUID userId, UUID roleId) {
-        userReponsitory.removeRoleFromUser(userId, roleId);
+        userRepository.removeRoleFromUser(userId, roleId);
     }
 
     public String[] getRolesOfUser(UUID id) {
-        return userReponsitory.getRolesOfUser(id);
+        return userRepository.getRolesOfUser(id);
+    }
+
+    public String[] getRolesOfRole(String username) {
+        return userRepository.getRolesOfUser(username);
     }
 
     public void saveUser(User user) {
-        userReponsitory.save(user);
+        userRepository.save(user);
     }
 
     public void updateResetPasswordToken(String token, String email) throws UsernameNotFoundException {
-        User user = userReponsitory.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         if (user != null) {
             user.setResetPasswordToken(token);
-            userReponsitory.save(user);
+            userRepository.save(user);
         } else {
             throw new UsernameNotFoundException("Không tìm thấy user với email là: " + email);
         }
     }
 
     public User getByResetPasswordToken(String token) {
-        return userReponsitory.findByResetPasswordToken(token);
+        return userRepository.findByResetPasswordToken(token);
     }
 
     public void updatePassword(User user, String newPassword) {
@@ -86,11 +91,12 @@ public class UserService {
         user.setPassword(encodedPassword);
 
         user.setResetPasswordToken(null);
-        userReponsitory.save(user);
+        userRepository.save(user);
     }
 
     public void register(User user, String siteURL)
             throws UnsupportedEncodingException, MessagingException {
+
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
@@ -98,25 +104,27 @@ public class UserService {
         user.setVerificationCode(randomCode);
         user.setEnabled(false);
 
-        userReponsitory.save(user);
-        UUID userId = userReponsitory.getUserIdByUsername(user.getUsername());
-        UUID roleId = roleReponsitory.getRoleIdByRoleName("USER");
+        user.setAuthenticationProvider(Provider.LOCAL);
+
+        userRepository.save(user);
+        UUID userId = userRepository.getUserIdByUsername(user.getUsername());
+        UUID roleId = roleRepository.getRoleIdByRoleName("USER");
         if (roleId != null && userId != null) {
-            userReponsitory.addRoleToUser(userId, roleId);
+            userRepository.addRoleToUser(userId, roleId);
         }
 
         sendVerificationEmail(user, siteURL);
     }
 
     public boolean verify(String verificationCode) {
-        User user = userReponsitory.findByVerificationCode(verificationCode);
+        User user = userRepository.findByVerificationCode(verificationCode);
 
         if (user == null || user.isEnabled()) {
             return false;
         } else {
             user.setVerificationCode(null);
             user.setEnabled(true);
-            userReponsitory.save(user);
+            userRepository.save(user);
 
             return true;
         }
@@ -174,4 +182,23 @@ public class UserService {
     }
     //endregion
 
+    public void processOAuthPostLogin(String username, String fullname) {
+        User existUser = userRepository.findByUsername(username);
+
+        if (existUser == null) {
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setFullname(fullname);
+            newUser.setAuthenticationProvider(Provider.GOOGLE);
+            newUser.setEnabled(true);
+
+            userRepository.save(newUser);
+
+            UUID userId = userRepository.getUserIdByUsername(username);
+            UUID roleId = roleRepository.getRoleIdByRoleName("USER");
+            if (roleId != null && userId != null) {
+                userRepository.addRoleToUser(userId, roleId);
+            }
+        }
+    }
 }

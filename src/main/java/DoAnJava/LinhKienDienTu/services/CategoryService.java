@@ -1,7 +1,7 @@
 package DoAnJava.LinhKienDienTu.services;
 
 import DoAnJava.LinhKienDienTu.entity.Category;
-import DoAnJava.LinhKienDienTu.reponsitory.ICategoryRepository;
+import DoAnJava.LinhKienDienTu.repository.ICategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

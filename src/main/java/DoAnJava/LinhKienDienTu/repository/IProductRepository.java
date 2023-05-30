@@ -1,4 +1,4 @@
-package DoAnJava.LinhKienDienTu.reponsitory;
+package DoAnJava.LinhKienDienTu.repository;
 
 import DoAnJava.LinhKienDienTu.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IProductReponsitory extends JpaRepository<Product, Long> {
+public interface IProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.productName LIKE CONCAT('%',:query,'%')")
     List<Product> findProductByName(String query);
 

@@ -76,9 +76,8 @@ public class UserController {
 
     //region Profile User
     @GetMapping("/profile")
-    public String getProfile(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+    public String getProfile(Model model, Principal principal) {
+        String username = principal.getName();
 
         User user = userService.getUserByUsername(username);
         model.addAttribute("user", user);

@@ -1,7 +1,7 @@
 package DoAnJava.LinhKienDienTu.services;
 
 import DoAnJava.LinhKienDienTu.entity.Comment;
-import DoAnJava.LinhKienDienTu.reponsitory.ICommentReponsitory;
+import DoAnJava.LinhKienDienTu.repository.ICommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,23 +12,23 @@ import java.util.UUID;
 @Service
 public class CommentService {
     @Autowired
-    private ICommentReponsitory commentReponsitory;
+    private ICommentRepository commentRepository;
 
     public List<Comment> getCommentByProductId(Long id) {
-        List<Comment> comment = commentReponsitory.findCommentByProductId(id);
+        List<Comment> comment = commentRepository.findCommentByProductId(id);
         return comment;
     }
 
     public Comment getCommentById(UUID id) {
-        return commentReponsitory.findById(id).orElse(null);
+        return commentRepository.findById(id).orElse(null);
     }
 
     public void saveComment(Comment comment) {
         comment.setCreatedAt(LocalDate.now());
-        commentReponsitory.save(comment);
+        commentRepository.save(comment);
     }
 
     public void removeComment(UUID id) {
-        commentReponsitory.deleteById(id);
+        commentRepository.deleteById(id);
     }
 }

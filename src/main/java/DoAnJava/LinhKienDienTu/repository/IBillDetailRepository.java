@@ -1,4 +1,4 @@
-package DoAnJava.LinhKienDienTu.reponsitory;
+package DoAnJava.LinhKienDienTu.repository;
 
 import DoAnJava.LinhKienDienTu.entity.BillDetail;
 import DoAnJava.LinhKienDienTu.entity.compositeKey.BillDetailKey;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface IBillDetailReponsitory extends JpaRepository<BillDetail, BillDetailKey> {
+public interface IBillDetailRepository extends JpaRepository<BillDetail, BillDetailKey> {
     @Query("SELECT bd FROM BillDetail bd " +
             "JOIN Bill b ON b.billId = bd.id.billId " +
             "JOIN User u ON u.userId = b.user.userId " +
@@ -29,8 +29,8 @@ public interface IBillDetailReponsitory extends JpaRepository<BillDetail, BillDe
     Page<BillDetail> findAllBillDetailByUser(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("SELECT bd FROM BillDetail bd " +
-            "WHERE bd.product.productId = :productId")
-    BillDetail findBillDetailByProduct(@Param("productId") Long productId);
+            "WHERE bd.product.productId = :productId AND bd.bill.billId = :billId")
+    BillDetail findBillDetailByProduct(@Param("productId") Long productId, @Param("billId") Long billId);
 
     @Modifying
     @Transactional

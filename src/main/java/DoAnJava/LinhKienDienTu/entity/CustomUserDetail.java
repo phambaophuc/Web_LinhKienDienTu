@@ -1,29 +1,28 @@
 package DoAnJava.LinhKienDienTu.entity;
 
-import DoAnJava.LinhKienDienTu.reponsitory.IUserReponsitory;
+import DoAnJava.LinhKienDienTu.repository.IUserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CustomUserDetail implements UserDetails {
     private final User user;
 
-    private final IUserReponsitory userReponsitory;
+    private final IUserRepository userRepository;
 
-    public CustomUserDetail(User user, IUserReponsitory userReponsitory) {
+    public CustomUserDetail(User user, IUserRepository userReponsitory) {
         this.user = user;
-        this.userReponsitory = userReponsitory;
+        this.userRepository = userReponsitory;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        String[] roles = userReponsitory.getRolesOfUser(user.getUserId());
+        String[] roles = userRepository.getRolesOfUser(user.getUsername());
         for (String role : roles) {
             authorities.add(new SimpleGrantedAuthority(role));
         }

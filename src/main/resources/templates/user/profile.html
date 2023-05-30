@@ -30,37 +30,49 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Full Name</p>
+                                <p class="mb-0 fw-bold">Name</p>
                             </div>
                             <div class="col-sm-6">
-                                <p class="text-muted mb-0" th:text="${user.fullname}"></p>
+                                <p class="mb-0" th:text="${user.fullname}"></p>
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="text-decoration-none" th:href="@{#}">Đổi tên</a>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Email</p>
+                                <p class="mb-0 fw-bold">Email</p>
                             </div>
                             <div class="col-sm-6">
-                                <p class="text-muted mb-0" th:text="${user.email}"></p>
+                                <p class="mb-0" th:if="${user.email != null}" th:text="${user.email}"></p>
+                                <p class="mb-0" th:if="${user.email == null}" th:text="${user.username}"></p>
+                            </div>
+                            <div class="col-sm-3" th:if="${user.email != null}">
+                                <a class="text-decoration-none" th:if="${user.email != null}" th:href="@{#}">Đổi email</a>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Phone</p>
+                                <p class="mb-0 fw-bold">Phone</p>
                             </div>
                             <div class="col-sm-6">
-                                <p class="text-muted mb-0" th:text="${user.phone}"></p>
+                                <p class="mb-0" th:if="${user.phone != null}" th:text="${user.phone}"></p>
+                                <p class="mb-0" th:if="${user.phone == null}">Tài khoản chưa đăng ký số điện thoại.</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="text-decoration-none" th:if="${user.phone == null}" th:href="@{#}">Thêm số điện thoại</a>
+                                <a class="text-decoration-none" th:if="${user.phone != null}" th:href="@{#}">Đổi số điện thoại</a>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
+                        <hr th:if="${user.password != null}">
+                        <div class="row" th:if="${user.password != null}">
                             <div class="col-sm-3">
-                                <p class="mb-0">Password</p>
+                                <p class="mb-0 fw-bold">Password</p>
                             </div>
                             <div class="col-sm-6">
-                                <p class="text-muted mb-0" th:text="*{&quot;*&quot; + ' *'.repeat(user.password.length() / 2)}"></p>
+                                <p class="mb-0" th:text="*{&quot;*&quot; + ' *'.repeat(user.password.length() / 2)}"></p>
                             </div>
                             <div class="col-sm-3">
                                 <a class="text-decoration-none" th:href="@{/change-password}">Đổi mật khẩu</a>

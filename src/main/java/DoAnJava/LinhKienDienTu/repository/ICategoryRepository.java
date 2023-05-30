@@ -1,4 +1,4 @@
-package DoAnJava.LinhKienDienTu.reponsitory;
+package DoAnJava.LinhKienDienTu.repository;
 
 import DoAnJava.LinhKienDienTu.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,7 +2,7 @@ package DoAnJava.LinhKienDienTu.services;
 
 import DoAnJava.LinhKienDienTu.entity.Bill;
 import DoAnJava.LinhKienDienTu.entity.User;
-import DoAnJava.LinhKienDienTu.reponsitory.IBillReponsitory;
+import DoAnJava.LinhKienDienTu.repository.IBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,24 +13,24 @@ import java.util.UUID;
 @Service
 public class BillService {
     @Autowired
-    private IBillReponsitory billReponsitory;
+    private IBillRepository billRepository;
 
     public Bill getBillById(Long id) {
-        return billReponsitory.findById(id).orElse(null);
+        return billRepository.findById(id).orElse(null);
     }
 
     public Bill getBillByUser(UUID userId) {
-        return billReponsitory.findBillByUser(userId);
+        return billRepository.findBillByUser(userId);
     }
 
     public List<Bill> getAllBill() {
-        return billReponsitory.findAll();
+        return billRepository.findAll();
     }
 
     public void saveBill(Bill bill, User user) {
         bill.setUser(user);
         bill.setTotalPrice(0D);
         bill.setCreatedAt(LocalDate.now());
-        billReponsitory.save(bill);
+        billRepository.save(bill);
     }
 }

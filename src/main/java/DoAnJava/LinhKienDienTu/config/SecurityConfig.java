@@ -1,21 +1,37 @@
 package DoAnJava.LinhKienDienTu.config;
 
+import DoAnJava.LinhKienDienTu.entity.CustomOAuth2User;
+import DoAnJava.LinhKienDienTu.services.CustomOAuth2UserService;
 import DoAnJava.LinhKienDienTu.services.CustomUserDetailsService;
+import DoAnJava.LinhKienDienTu.services.UserService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    @Autowired
+    private CustomOAuth2UserService oAuth2UserService;
+    @Autowired
+    private UserService userService;
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new CustomUserDetailsService();
@@ -38,12 +54,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/img/**")
-                        .permitAll()
                         .requestMatchers("/admin/**")
                         .hasAnyAuthority("ADMIN", "MANAGE")
-                        .requestMatchers("/cart", "/product/add-to-cart/**", "/wallet")
-                        .hasAnyAuthority("USER")
                         .anyRequest().permitAll()
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
@@ -57,6 +69,21 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
                         .permitAll()
+                )
+                .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login")
+                        .userInfoEndpoint()
+                        .userService(oAuth2UserService)
+                        .and()
+                        .successHandler(new AuthenticationSuccessHandler() {
+                            @Override
+                            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                                Authentication authentication) throws IOException, ServletException {
+
+                                CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+                                userService.processOAuthPostLogin(oauthUser.getName(), oauthUser.getFullName());
+                                response.sendRedirect("/product");
+                            }
+                        })
                 )
                 .rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret")
                         .tokenValiditySeconds(86400)

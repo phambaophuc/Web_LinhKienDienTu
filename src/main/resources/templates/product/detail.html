@@ -27,7 +27,7 @@
             <div class="d-flex">
                 <button class="btn btn-success me-2">Đặt hàng</button>
                 <form th:action="@{'/product/add-to-cart/' + ${product.productId}}" method="POST">
-                    <button class="btn btn-outline-danger" type="submit">Thêm vào giỏ hàng</button>
+                    <button class="btn btn-outline-danger" id="addProductToBill" type="submit">Thêm vào giỏ hàng</button>
                 </form>
             </div>
         </div>
@@ -131,15 +131,33 @@ $(document).ready(function() {
 });
 </script>
 <script>
-    $(document).ready(function () {
-        $('.edit-btn').click(function () {
-            var commentId = $(this).attr('data-comment-id');
-            var commentText = $(this).parent().siblings('p').text();
-
-            $(this).parent().siblings('p').hide();
-            $(this).parent().siblings('input').val(commentText).show().focus();
-        });
+$(document).ready(function() {
+    $("#addProductToBill").click(function(event) {
+        if (!isLoggedIn()) {
+            event.preventDefault(); // Ngăn chặn gửi biểu mẫu
+            alert("Bạn cần đăng nhập để sử dụng chức năng này");
+        }
     });
+
+    function isLoggedIn() {
+        return $.ajax({
+            url: "/api/user/check-authentication",
+            method: "GET",
+            async: false
+        }).responseJSON.authenticated;
+    }
+});
+</script>
+<script>
+$(document).ready(function () {
+    $('.edit-btn').click(function () {
+        var commentId = $(this).attr('data-comment-id');
+        var commentText = $(this).parent().siblings('p').text();
+
+        $(this).parent().siblings('p').hide();
+        $(this).parent().siblings('input').val(commentText).show().focus();
+    });
+});
 </script>
 </body>
 </html>
