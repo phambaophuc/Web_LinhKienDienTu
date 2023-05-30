@@ -1,8 +1,6 @@
 package DoAnJava.LinhKienDienTu.controller;
 
-import DoAnJava.LinhKienDienTu.entity.Product;
-import DoAnJava.LinhKienDienTu.entity.Role;
-import DoAnJava.LinhKienDienTu.entity.User;
+import DoAnJava.LinhKienDienTu.entity.*;
 import DoAnJava.LinhKienDienTu.services.*;
 import DoAnJava.LinhKienDienTu.utils.FileUploadUlti;
 import jakarta.validation.Valid;
@@ -26,11 +24,13 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
     @Value("${uploadDirectory}")
     private String uploadDir;
+
     @Autowired
     private ProductService productService;
+    @Autowired
+    private BillDetailService billDetailService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -158,6 +158,7 @@ public class AdminController {
     }
     @GetMapping("/delete-product/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
+        Product product = productService.getProductById(id);
         productService.deleteProduct(id);
         return "redirect:/admin/list-product";
     }

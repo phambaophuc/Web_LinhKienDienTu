@@ -4,13 +4,15 @@ import DoAnJava.LinhKienDienTu.validator.annotation.ValidEmail;
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidUsername;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class User {

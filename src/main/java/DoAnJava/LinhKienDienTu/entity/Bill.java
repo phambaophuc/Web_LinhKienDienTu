@@ -1,12 +1,14 @@
 package DoAnJava.LinhKienDienTu.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "bill")
 public class Bill {
@@ -20,7 +22,7 @@ public class Bill {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "bill")
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
     private Set<BillDetail> billDetails;
 
     @OneToOne(fetch = FetchType.LAZY)

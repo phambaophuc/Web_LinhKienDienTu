@@ -42,6 +42,7 @@ public class BillDetailService {
     }
 
     public void deleteByProductIdAndBillId(Long productId, Long billId) {
-        billDetailRepository.deleteByProductIdAndBillId(productId, billId);
+        billDetailRepository.deleteBillDetailByProductIdAndBillId(productId, billId);
     }
+
 }
