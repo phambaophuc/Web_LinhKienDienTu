@@ -61,12 +61,12 @@ public class CartController {
             totalPrice = totalPrice.add(subTotal);
         }
 
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        String formattedPrice = decimalFormat.format(totalPrice);
+//        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+//        String formattedPrice = decimalFormat.format(totalPrice);
 
         model.addAttribute("billDetails", billDetails);
         model.addAttribute("totalBillDetails", totalBillDetails);
-        model.addAttribute("formattedPrice", formattedPrice);
+        model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalItems", billDetailsPage.getTotalElements());

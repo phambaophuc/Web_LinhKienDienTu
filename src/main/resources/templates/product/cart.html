@@ -23,7 +23,7 @@
 
                                     <div class="row mb-4 d-flex justify-content-between align-items-center" th:each="billDetail, iterStat : ${billDetails}">
                                         <div class="col-md-2 col-lg-2 col-xl-2">
-                                            <img th:src="@{'/img/product/' + ${billDetail.product.mainImage}}"
+                                            <img th:src="@{'https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + ${billDetail.product.mainImage}}"
                                                  class="img-fluid rounded-3" alt="Cotton T-shirt" width="90px">
                                         </div>
                                         <div class="col-md-4 col-lg-4 col-xl-4">
@@ -97,12 +97,15 @@
 
                                     <hr class="my-4">
 
-                                    <div class="d-flex justify-content-between mb-5">
-                                        <h5 class="text-uppercase">Tổng tiền</h5>
-                                        <h5 th:text="${formattedPrice + ' VND'}"></h5>
-                                    </div>
-                                    <button type="button" class="btn btn-dark btn-block btn-lg"
-                                            data-mdb-ripple-color="dark">Thanh toán</button>
+                                    <form th:action="@{/pay}" method="POST">
+                                        <div class="d-flex justify-content-between mb-5">
+                                            <h5 class="text-uppercase">Tổng tiền</h5>
+                                            <h5 th:text="${totalPrice + ' VND'}"></h5>
+                                        </div>
+                                        <input type="hidden" name="totalPrice" th:value="${totalPrice}">
+                                        <button type="submit" class="btn btn-dark btn-block btn-lg"
+                                                data-mdb-ripple-color="dark">Thanh toán</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -25,19 +25,15 @@ import java.security.Principal;
 
 @Controller
 public class PaypalController {
-    public static final String URL_PAYPAL_SUCCESS = "wallet/success";
-    public static final String URL_PAYPAL_CANCEL = "wallet/cancel";
+    public static final String URL_PAYPAL_SUCCESS = "paypal/success";
+    public static final String URL_PAYPAL_CANCEL = "paypal/cancel";
     private Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private PaypalService paypalService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private WalletService walletService;
 
-    @PostMapping("/wallet/pay")
-    public String pay(HttpServletRequest request, @RequestParam("price") BigDecimal price) {
+    @PostMapping("/pay")
+    public String pay(HttpServletRequest request, @RequestParam("totalPrice") BigDecimal price) {
         String successUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_SUCCESS;
         String cancelUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_CANCEL;
 
@@ -58,12 +54,12 @@ public class PaypalController {
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
         }
-        return "redirect:/wallet";
+        return "redirect:/";
     }
 
     @GetMapping(URL_PAYPAL_CANCEL)
     public String cancelPay(){
-        return "wallet/pay-cancel";
+        return "paypal/pay-cancel";
     }
 
     @GetMapping(URL_PAYPAL_SUCCESS)
@@ -72,23 +68,12 @@ public class PaypalController {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
-                String amountStr = payment.getTransactions().get(0).getAmount().getTotal();
-                BigDecimal amount = new BigDecimal(amountStr);
 
-                User user = userService.getUserByUsername(principal.getName());
-                Wallet wallet = walletService.getWalletByUserId(user.getUserId());
-
-                BigDecimal currentPrice = wallet.getPrice();
-                BigDecimal updatedPrice = currentPrice.add(amount);
-
-                wallet.setPrice(updatedPrice);
-                walletService.saveWallet(wallet);
-
-                return "wallet/pay-success";
+                return "paypal/pay-success";
             }
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
         }
-        return "redirect:/wallet";
+        return "redirect:/";
     }
 }
