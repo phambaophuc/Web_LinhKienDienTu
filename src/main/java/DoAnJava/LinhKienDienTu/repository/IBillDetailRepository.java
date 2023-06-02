@@ -46,7 +46,11 @@ public interface IBillDetailRepository extends JpaRepository<BillDetail, BillDet
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM bill_detail WHERE product_id = :productId " +
-            "AND bill_id = :billId", nativeQuery = true)
-    void deleteBillDetailByProductIdAndBillId(@Param("productId") Long productId, @Param("billId") Long billId);
+    @Query(value = "DELETE FROM bill_detail WHERE product_id = :productId AND bill_id = :billId", nativeQuery = true)
+    void deleteBillDetailByProductId(@Param("productId") Long productId, @Param("billId") Long billId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM bill_detail WHERE bill_id = :billId ", nativeQuery = true)
+    void deleteBillDetailByBillId(@Param("billId") Long billId);
 }

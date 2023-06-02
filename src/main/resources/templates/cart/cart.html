@@ -33,8 +33,8 @@
                                             <h6 th:text="${'Số lượng: '+ billDetail.amount}"></h6>
                                             <h6 class="mb-0" th:text="${billDetail.product.price + ' $'}"></h6>
                                         </div>
-                                        <form class="col-md-1 col-lg-1 col-xl-1 text-end"
-                                              th:action="@{'/cart/' + ${billDetail.product.productId} + '/' + ${billDetail.bill.billId}}" method="POST">
+                                        <form class="col-md-1 col-lg-1 col-xl-1 text-end" method="POST"
+                                              th:action="@{'/cart/delete-from-cart/' + ${billDetail.product.productId} + '/' + ${billDetail.bill.billId}}">
                                             <button type="submit" class="btn btn-sm" onclick="return confirm('Xóa sản phẩm này khỏi giỏ hàng?')">
                                                 <i class="fas fa-times"></i>
                                             </button>

@@ -49,9 +49,9 @@
                                     <h4 class="mb-1 me-1" th:text="${product.price + ' $'}"></h4>
                                 </div>
                                 <h6 class="text-success">Free shipping</h6>
-                                <form class="d-flex flex-column mt-4" th:action="@{'/product/add-to-cart/' + ${product.productId}}" method="POST">
+                                <form class="d-flex flex-column mt-4" th:action="@{'/cart/add-to-cart/' + ${product.productId}}" method="POST">
                                     <a class="btn btn-primary btn-sm" th:href="@{'/product/' + ${product.productId}}">Thông tin</a>
-                                    <button class="btn btn-outline-primary btn-sm mt-2" type="submit">Thêm vào giỏ hàng</button>
+                                    <button class="btn btn-outline-primary btn-sm mt-2" id="addProductToBill" type="submit">Thêm vào giỏ hàng</button>
                                 </form>
                             </div>
                         </div>
@@ -62,5 +62,6 @@
     </div>
 </section>
 <th:block th:replace="layout :: footer"></th:block>
+<script th:src="@{/js/product.js}"></script>
 </body>
 </html>

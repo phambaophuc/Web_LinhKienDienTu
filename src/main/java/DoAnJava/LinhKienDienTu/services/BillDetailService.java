@@ -41,8 +41,12 @@ public class BillDetailService {
         return billDetailRepository.countItemCart(userId);
     }
 
-    public void deleteByProductIdAndBillId(Long productId, Long billId) {
-        billDetailRepository.deleteBillDetailByProductIdAndBillId(productId, billId);
+    public void deleteBillDetailByProductIdAndBillId(Long productId, Long billId) {
+        billDetailRepository.deleteBillDetailByProductId(productId, billId);
+    }
+
+    public void deleteBillDetailByBillId(Long billId) {
+        billDetailRepository.deleteBillDetailByBillId(billId);
     }
 
 }
