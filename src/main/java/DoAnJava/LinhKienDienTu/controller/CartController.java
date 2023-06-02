@@ -53,16 +53,12 @@ public class CartController {
 
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (BillDetail billDetail : billDetailList) {
-            String priceStr = billDetail.getProduct().getPrice().replaceAll("[.,]", "");
-            BigDecimal productPrice = new BigDecimal(priceStr);
-            BigDecimal productAmount = new BigDecimal(billDetail.getAmount());
-
-            BigDecimal subTotal = productPrice.multiply(productAmount);
-            totalPrice = totalPrice.add(subTotal);
+            BigDecimal productPrice = billDetail.getProduct().getPrice();
+            Long amount = billDetail.getAmount();
+            BigDecimal amountDecimal = new BigDecimal(amount);
+            BigDecimal subtotal = productPrice.multiply(amountDecimal);
+            totalPrice = totalPrice.add(subtotal);
         }
-
-//        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-//        String formattedPrice = decimalFormat.format(totalPrice);
 
         model.addAttribute("billDetails", billDetails);
         model.addAttribute("totalBillDetails", totalBillDetails);
@@ -72,7 +68,7 @@ public class CartController {
         model.addAttribute("totalItems", billDetailsPage.getTotalElements());
         model.addAttribute("totalPages", billDetailsPage.getTotalPages());
 
-        return "product/cart";
+        return "cart/cart";
     }
 
     @PostMapping("/{productId}/{billId}")

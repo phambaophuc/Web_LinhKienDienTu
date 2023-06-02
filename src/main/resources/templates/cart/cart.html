@@ -31,7 +31,7 @@
                                         </div>
                                         <div class="col-md-5 col-lg-4 col-xl-3">
                                             <h6 th:text="${'Số lượng: '+ billDetail.amount}"></h6>
-                                            <h6 class="mb-0" th:text="${billDetail.product.price + ' VND'}"></h6>
+                                            <h6 class="mb-0" th:text="${billDetail.product.price + ' $'}"></h6>
                                         </div>
                                         <form class="col-md-1 col-lg-1 col-xl-1 text-end"
                                               th:action="@{'/cart/' + ${billDetail.product.productId} + '/' + ${billDetail.bill.billId}}" method="POST">
@@ -100,7 +100,7 @@
                                     <form th:action="@{/pay}" method="POST">
                                         <div class="d-flex justify-content-between mb-5">
                                             <h5 class="text-uppercase">Tổng tiền</h5>
-                                            <h5 th:text="${totalPrice + ' VND'}"></h5>
+                                            <h5 th:text="${totalPrice + ' $'}"></h5>
                                         </div>
                                         <input type="hidden" name="totalPrice" th:value="${totalPrice}">
                                         <button type="submit" class="btn btn-dark btn-block btn-lg"

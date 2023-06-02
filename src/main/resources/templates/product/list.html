@@ -20,7 +20,7 @@
                             <p class="text-white mb-0 small">x4</p>
                         </div>
                     </div>
-                    <img th:src="@{'/img/product/' + ${product.mainImage}}"
+                    <img th:src="@{'https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + ${product.mainImage}}"
                          class="m-auto" alt="${product.category.categoryName}" style="width:200px"/>
                     <div class="card-body">
                         <p class="mb-0 text-center text-truncate">
@@ -32,7 +32,7 @@
                             <p class="small">
                                 <a href="#!" class="text-muted"th:text="${product.category.categoryName}"></a>
                             </p>
-                            <h5 class="text-dark mb-0" th:text="${product.price + ' VND'}"></h5>
+                            <h5 class="text-dark mb-0" th:text="${product.price + ' $'}"></h5>
                         </div>
 
                         <div class="d-flex justify-content-between mb-2">

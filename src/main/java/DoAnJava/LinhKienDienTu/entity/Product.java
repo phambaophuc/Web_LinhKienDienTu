@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Getter
@@ -18,11 +19,11 @@ public class Product {
     private Long productId;
 
     @NotEmpty(message = "Vui lòng nhập tên sản phẩm.")
-    @Column(name = "product_name", length = 144, nullable = false)
+    @Column(name = "product_name", length = 144)
     private String productName;
 
     @NotEmpty(message = "Vui lòng nhập nội dung sản phẩm.")
-    @Column(name = "description", length = 10000, nullable = false)
+    @Column(name = "description", length = 10000)
     private String description;
 
     @Column(name = "main_image")
@@ -38,12 +39,11 @@ public class Product {
     private String extraImage3;
 
     @NotNull(message = "Vui lòng nhập giá sản phẩm.")
-    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*", message = "Giá sản phẩm không hợp lệ.")
-    @Column(name = "price", nullable = false)
-    private String price;
+    @Column(name = "price")
+    private BigDecimal price;
 
     @NotNull(message = "Vui lòng nhập số lượng sản phẩm.")
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount")
     private Long amount;
 
     @Column(name = "note", length = 144)

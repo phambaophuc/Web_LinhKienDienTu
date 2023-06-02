@@ -2,11 +2,7 @@ package DoAnJava.LinhKienDienTu.controller;
 
 import DoAnJava.LinhKienDienTu.config.PaypalPaymentIntent;
 import DoAnJava.LinhKienDienTu.config.PaypalPaymentMethod;
-import DoAnJava.LinhKienDienTu.entity.User;
-import DoAnJava.LinhKienDienTu.entity.Wallet;
 import DoAnJava.LinhKienDienTu.services.PaypalService;
-import DoAnJava.LinhKienDienTu.services.UserService;
-import DoAnJava.LinhKienDienTu.services.WalletService;
 import DoAnJava.LinhKienDienTu.utils.Utils;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;

@@ -67,7 +67,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Comment> comments;
-
-    @OneToOne(mappedBy = "user")
-    private Wallet wallet;
 }

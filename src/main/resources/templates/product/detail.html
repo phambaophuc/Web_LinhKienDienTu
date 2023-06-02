@@ -15,14 +15,14 @@
 <div class="container py-5">
     <div class="row d-flex align-items-center">
         <div class="col-md-4 item-photo">
-            <img style="max-width:100%;" th:src="@{'/img/product/' + ${product.mainImage}}"/>
+            <img style="max-width:100%;" th:src="@{'https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + ${product.mainImage}}"/>
         </div>
         <div class="col-md-6">
             <h3 th:text="${product.productName}"></h3>
             <p th:text="${product.note}"></p>
             <p style="color:orange;"><small th:text="${'Còn ' + product.amount + ' sản phẩm'}"></small></p>
             <h6 class="title-price"><small>Giá</small></h6>
-            <h3 class="mt-0" th:text="${product.price} + ' VND'"></h3>
+            <h3 class="mt-0" th:text="${product.price} + ' $'"></h3>
 
             <div class="d-flex">
                 <button class="btn btn-success me-2">Đặt hàng</button>
