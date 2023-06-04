@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.UUID;
 
 @Controller
 public class PaypalController {
@@ -76,7 +75,7 @@ public class PaypalController {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
                 User user = userService.getUserByUsername(principal.getName());
-                Bill bill = billService.getBillByUser(user.getUserId());
+                Bill bill = billService.getBillByUserId(user.getUserId());
 
                 billDetailService.deleteBillDetailByBillId(bill.getBillId());
 

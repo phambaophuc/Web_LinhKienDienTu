@@ -4,6 +4,7 @@ import DoAnJava.LinhKienDienTu.entity.CustomOAuth2User;
 import DoAnJava.LinhKienDienTu.services.CustomOAuth2UserService;
 import DoAnJava.LinhKienDienTu.services.CustomUserDetailsService;
 import DoAnJava.LinhKienDienTu.services.UserService;
+import DoAnJava.LinhKienDienTu.utils.OAuthLoginSuccessHandler;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +31,7 @@ public class SecurityConfig {
     @Autowired
     private CustomOAuth2UserService oAuth2UserService;
     @Autowired
-    private UserService userService;
+    private OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -74,16 +75,7 @@ public class SecurityConfig {
                         .userInfoEndpoint()
                         .userService(oAuth2UserService)
                         .and()
-                        .successHandler(new AuthenticationSuccessHandler() {
-                            @Override
-                            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                                Authentication authentication) throws IOException, ServletException {
-
-                                CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-                                userService.processOAuthPostLogin(oauthUser.getName(), oauthUser.getFullName());
-                                response.sendRedirect("/product");
-                            }
-                        })
+                        .successHandler(oAuthLoginSuccessHandler)
                 )
                 .rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret")
                         .tokenValiditySeconds(86400)

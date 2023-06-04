@@ -9,11 +9,12 @@ import java.util.*;
 
 public class CustomOAuth2User implements OAuth2User {
     private final OAuth2User oAuth2User;
-
+    private final String oAuth2ClientName;
     private final IUserRepository userRepository;
 
-    public CustomOAuth2User(OAuth2User oAuth2User, IUserRepository userRepository) {
+    public CustomOAuth2User(OAuth2User oAuth2User, String oAuth2ClientName, IUserRepository userRepository) {
         this.oAuth2User = oAuth2User;
+        this.oAuth2ClientName = oAuth2ClientName;
         this.userRepository = userRepository;
     }
 
@@ -35,10 +36,14 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        return oAuth2User.getAttribute("email");
+        return oAuth2User.getAttribute("name");
     }
 
-    public String getFullName() {
-        return oAuth2User.<String>getAttribute("name");
+    public String getEmail() {
+        return oAuth2User.<String>getAttribute("email");
+    }
+
+    public String getOAuth2ClientName() {
+        return this.oAuth2ClientName;
     }
 }

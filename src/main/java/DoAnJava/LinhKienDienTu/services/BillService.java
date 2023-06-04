@@ -19,7 +19,7 @@ public class BillService {
         return billRepository.findById(id).orElse(null);
     }
 
-    public Bill getBillByUser(UUID userId) {
+    public Bill getBillByUserId(UUID userId) {
         return billRepository.findBillByUser(userId);
     }
 

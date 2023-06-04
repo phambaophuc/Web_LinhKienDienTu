@@ -51,8 +51,8 @@ public class User {
     private String resetPasswordToken;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "authentication_provider", length = 15)
-    private Provider authenticationProvider;
+    @Column(name = "auth_type", length = 15)
+    private AuthenticationType authType;
 
     private boolean enabled;
 

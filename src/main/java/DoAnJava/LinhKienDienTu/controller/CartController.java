@@ -37,7 +37,7 @@ public class CartController {
                                @RequestParam(defaultValue = "3") int pageSize) {
 
         User user = userService.getUserByUsername(principal.getName());
-        Bill bill = billService.getBillByUser(user.getUserId());
+        Bill bill = billService.getBillByUserId(user.getUserId());
 
         if (bill == null) {
             billService.saveBill(new Bill(), user);
@@ -76,12 +76,12 @@ public class CartController {
     public String addProductToCart(@PathVariable Long productId, Principal principal,
                                    HttpServletRequest request, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByUsername(principal.getName());
-        Bill bill = billService.getBillByUser(user.getUserId());
+        Bill bill = billService.getBillByUserId(user.getUserId());
         String previousPage = request.getHeader("Referer");
 
         if (bill == null) {
             billService.saveBill(new Bill(), user);
-            bill = billService.getBillByUser(user.getUserId());
+            bill = billService.getBillByUserId(user.getUserId());
         }
 
         BillDetail billDetail = billDetailService.getBillDetailByProduct(productId, bill.getBillId());

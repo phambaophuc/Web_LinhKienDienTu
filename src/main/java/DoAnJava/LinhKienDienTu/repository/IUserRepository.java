@@ -1,5 +1,6 @@
 package DoAnJava.LinhKienDienTu.repository;
 
+import DoAnJava.LinhKienDienTu.entity.AuthenticationType;
 import DoAnJava.LinhKienDienTu.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -46,4 +47,9 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
     @Transactional
     @Query(value = "DELETE FROM user_role WHERE user_id = ?1 AND role_id = ?2", nativeQuery = true)
     void removeRoleFromUser(UUID userId, UUID roleId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.authType = ?2 WHERE u.username = ?1")
+    void updateAuthenticationType(String username, AuthenticationType authType);
 }

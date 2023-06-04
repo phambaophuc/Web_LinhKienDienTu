@@ -1,6 +1,6 @@
 package DoAnJava.LinhKienDienTu.services;
 
-import DoAnJava.LinhKienDienTu.entity.Provider;
+import DoAnJava.LinhKienDienTu.entity.AuthenticationType;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.repository.IRoleRepository;
 import DoAnJava.LinhKienDienTu.repository.IUserRepository;
@@ -103,8 +103,7 @@ public class UserService {
         String randomCode = RandomStringUtils.randomAlphanumeric(64);
         user.setVerificationCode(randomCode);
         user.setEnabled(false);
-
-        user.setAuthenticationProvider(Provider.LOCAL);
+        user.setAuthType(AuthenticationType.LOCAL);
 
         userRepository.save(user);
         UUID userId = userRepository.getUserIdByUsername(user.getUsername());
@@ -182,23 +181,25 @@ public class UserService {
     }
     //endregion
 
-    public void processOAuthPostLogin(String username, String fullname) {
+    public void updateAuthenticationType(String username, String oauth2ClientName) {
         User existUser = userRepository.findByUsername(username);
+        AuthenticationType authType = AuthenticationType.valueOf(oauth2ClientName.toUpperCase());
 
         if (existUser == null) {
             User newUser = new User();
             newUser.setUsername(username);
-            newUser.setFullname(fullname);
-            newUser.setAuthenticationProvider(Provider.GOOGLE);
             newUser.setEnabled(true);
 
             userRepository.save(newUser);
+            userRepository.updateAuthenticationType(username, authType);
 
             UUID userId = userRepository.getUserIdByUsername(username);
             UUID roleId = roleRepository.getRoleIdByRoleName("USER");
             if (roleId != null && userId != null) {
                 userRepository.addRoleToUser(userId, roleId);
             }
+        } else {
+            userRepository.updateAuthenticationType(username, authType);
         }
     }
 }

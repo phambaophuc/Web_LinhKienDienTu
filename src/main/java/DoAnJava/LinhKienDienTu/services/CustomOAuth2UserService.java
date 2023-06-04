@@ -16,8 +16,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User user =  super.loadUser(userRequest);
-        if (user == null) throw new OAuth2AuthenticationException("Invalid user");
-        return new CustomOAuth2User(user, userRepository);
+        String clientName = userRequest.getClientRegistration().getClientName();
+        OAuth2User user = super.loadUser(userRequest);
+        return new CustomOAuth2User(user, clientName, userRepository);
     }
 }
