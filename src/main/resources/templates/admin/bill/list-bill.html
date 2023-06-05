@@ -23,27 +23,27 @@
                                 <thead>
                                 <tr>
                                     <th>BillID</th>
+                                    <th>Tên khách hàng</th>
                                     <th>Tổng tiền</th>
                                     <th>Ngày tạo</th>
-                                    <th>Tên khách hàng</th>
                                     <th>Chức năng</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th>BillID</th>
+                                    <th>Tên khách hàng</th>
                                     <th>Tổng tiền</th>
                                     <th>Ngày tạo</th>
-                                    <th>Tên khách hàng</th>
                                     <th>Chức năng</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
                                 <tr th:each="bill: ${bills}">
                                     <td th:text="${bill.billId}"></td>
+                                    <td th:text="${bill.name}"></td>
                                     <td th:text="${bill.totalPrice}"></td>
                                     <td th:text="${bill.createdAt}"></td>
-                                    <td th:text="${bill.name}"></td>
                                     <td>
                                         <a th:href="@{#}" class="mr-2">
                                             <i class="fa-regular fa-pen-to-square"></i></a>

@@ -29,9 +29,13 @@ public class BillService {
     }
 
     public void saveBill(Bill bill, User user) {
-        bill.setUser(user);
-        bill.setTotalPrice(BigDecimal.valueOf(0));
-        bill.setCreatedAt(LocalDate.now());
-        billRepository.save(bill);
+        if (billRepository.findById(bill.getBillId()) == null) {
+            bill.setUser(user);
+            bill.setTotalPrice(BigDecimal.valueOf(0));
+            bill.setCreatedAt(LocalDate.now());
+            billRepository.save(bill);
+        } else {
+            billRepository.save(bill);
+        }
     }
 }

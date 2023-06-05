@@ -3,6 +3,7 @@ package DoAnJava.LinhKienDienTu.controller;
 import DoAnJava.LinhKienDienTu.config.PaypalPaymentIntent;
 import DoAnJava.LinhKienDienTu.config.PaypalPaymentMethod;
 import DoAnJava.LinhKienDienTu.entity.Bill;
+import DoAnJava.LinhKienDienTu.entity.BillDetail;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.*;
 import DoAnJava.LinhKienDienTu.utils.Utils;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class PaypalController {
@@ -76,8 +78,21 @@ public class PaypalController {
             if(payment.getState().equals("approved")){
                 User user = userService.getUserByUsername(principal.getName());
                 Bill bill = billService.getBillByUserId(user.getUserId());
+                List<BillDetail> billDetailList = billDetailService.getAllBillDetail(user.getUserId());
+
+                BigDecimal totalPrice = BigDecimal.ZERO;
+                for (BillDetail billDetail : billDetailList) {
+                    BigDecimal productPrice = billDetail.getProduct().getPrice();
+                    Long amount = billDetail.getAmount();
+                    BigDecimal amountDecimal = new BigDecimal(amount);
+                    BigDecimal subtotal = productPrice.multiply(amountDecimal);
+                    totalPrice = totalPrice.add(subtotal);
+                }
+                bill.setTotalPrice(totalPrice);
+                billService.saveBill(bill, user);
 
                 billDetailService.deleteBillDetailByBillId(bill.getBillId());
+
 
                 return "paypal/pay-success";
             }
