@@ -1,10 +1,13 @@
 package DoAnJava.LinhKienDienTu.controller;
 
+import DoAnJava.LinhKienDienTu.dto.BillDto;
 import DoAnJava.LinhKienDienTu.entity.*;
+import DoAnJava.LinhKienDienTu.mapper.BillMapper;
 import DoAnJava.LinhKienDienTu.services.*;
 import DoAnJava.LinhKienDienTu.utils.S3Util;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -32,17 +36,21 @@ public class AdminController {
     private RoleService roleService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private BillService billService;
+    @Autowired
+    private BillMapper billMapper;
 
-//    @Value("${uploadDirectory}")
-//    private String uploadDir;
+    @Value("${uploadDirectory}")
+    private String uploadDir;
 
     @GetMapping
     public String index() {
         return "admin/index";
     }
 
-    //region ProductController
-    @GetMapping("/list-product")
+    //region Product
+    @GetMapping("/products")
     public String getAllProduct(Model model) {
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
@@ -198,7 +206,7 @@ public class AdminController {
     }
     //endregion
 
-    //region UserController
+    //region User
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-user")
     public String getAllUser(Model model) {
@@ -208,9 +216,9 @@ public class AdminController {
     }
     //endregion
 
-    //region RoleController
+    //region Role
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/list-role")
+    @GetMapping("/roles")
     public String getAllRole(Model model) {
         List<Role> roles = roleService.getAllRoles();
         model.addAttribute("roles", roles);
@@ -312,4 +320,16 @@ public class AdminController {
     }
     //endregion
 
+    //region Bill
+    @GetMapping("/bills")
+    public String getAllBills(Model model) {
+        List<Bill> bills = billService.getAllBill();
+        List<BillDto> billDtos = bills.stream()
+                .map(billMapper::toDto)
+                .collect(Collectors.toList());
+
+        model.addAttribute("bills", billDtos);
+        return "admin/bill/list-bill";
+    }
+    //endregion
 }

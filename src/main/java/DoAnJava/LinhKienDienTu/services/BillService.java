@@ -6,6 +6,7 @@ import DoAnJava.LinhKienDienTu.repository.IBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +30,7 @@ public class BillService {
 
     public void saveBill(Bill bill, User user) {
         bill.setUser(user);
-        bill.setTotalPrice(0D);
+        bill.setTotalPrice(BigDecimal.valueOf(0));
         bill.setCreatedAt(LocalDate.now());
         billRepository.save(bill);
     }
