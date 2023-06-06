@@ -181,13 +181,15 @@ public class UserService {
     }
     //endregion
 
-    public void updateAuthenticationType(String username, String oauth2ClientName) {
+    public void updateAuthenticationType(String username, String email, String fullname, String oauth2ClientName) {
         User existUser = userRepository.findByUsername(username);
         AuthenticationType authType = AuthenticationType.valueOf(oauth2ClientName.toUpperCase());
 
         if (existUser == null) {
             User newUser = new User();
             newUser.setUsername(username);
+            newUser.setEmail(email);
+            newUser.setFullname(fullname);
             newUser.setEnabled(true);
 
             userRepository.save(newUser);

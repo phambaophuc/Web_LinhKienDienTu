@@ -40,7 +40,7 @@ public class CartController {
         Bill bill = billService.getBillByUserId(user.getUserId());
 
         if (bill == null) {
-            billService.saveBill(new Bill(), user);
+            billService.createBill(new Bill(), user);
         }
 
         if (page < 0) page = 0;
@@ -80,7 +80,7 @@ public class CartController {
         String previousPage = request.getHeader("Referer");
 
         if (bill == null) {
-            billService.saveBill(new Bill(), user);
+            billService.createBill(new Bill(), user);
             bill = billService.getBillByUserId(user.getUserId());
         }
 

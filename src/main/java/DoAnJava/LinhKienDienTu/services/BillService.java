@@ -28,14 +28,14 @@ public class BillService {
         return billRepository.findAll();
     }
 
-    public void saveBill(Bill bill, User user) {
-        if (billRepository.findById(bill.getBillId()) == null) {
-            bill.setUser(user);
-            bill.setTotalPrice(BigDecimal.valueOf(0));
-            bill.setCreatedAt(LocalDate.now());
-            billRepository.save(bill);
-        } else {
-            billRepository.save(bill);
-        }
+    public void createBill(Bill bill, User user) {
+        bill.setUser(user);
+        bill.setTotalPrice(BigDecimal.valueOf(0));
+        bill.setCreatedAt(LocalDate.now());
+        billRepository.save(bill);
+    }
+
+    public void updateBill(Bill bill) {
+        billRepository.save(bill);
     }
 }

@@ -89,7 +89,7 @@ public class PaypalController {
                     totalPrice = totalPrice.add(subtotal);
                 }
                 bill.setTotalPrice(totalPrice);
-                billService.saveBill(bill, user);
+                billService.updateBill(bill);
 
                 billDetailService.deleteBillDetailByBillId(bill.getBillId());
 

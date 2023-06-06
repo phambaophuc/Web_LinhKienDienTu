@@ -22,9 +22,11 @@ public class OAuthLoginSuccessHandler extends SavedRequestAwareAuthenticationSuc
                                         Authentication authentication) throws ServletException, IOException {
         CustomOAuth2User oauth2User = (CustomOAuth2User) authentication.getPrincipal();
         String oauth2ClientName = oauth2User.getOAuth2ClientName();
-        String username = oauth2User.getEmail();
+        String username = oauth2User.getName();
+        String email = oauth2User.getEmail();
+        String fullname = oauth2User.getFullName();
 
-        userService.updateAuthenticationType(username, oauth2ClientName);
+        userService.updateAuthenticationType(username, email, fullname, oauth2ClientName);
 
         super.onAuthenticationSuccess(request, response, authentication);
 
