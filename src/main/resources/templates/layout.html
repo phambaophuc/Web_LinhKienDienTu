@@ -69,20 +69,28 @@
                 </ul>
                 <ul class="navbar-nav ms-auto d-flex">
                     <li class="nav-item">
-                        <a class="nav-link mx-1 text-uppercase position-relative" th:href="@{/cart}">
-                            <i class="fa-solid fa-cart-shopping me-1"></i>
+                        <a class="nav-link text-uppercase position-relative"
+                           sec:authorize="isAuthenticated()" th:href="@{/cart}">
+                            <i class="fa-solid fa-cart-shopping"></i>
                             Cart
                             <sup class="text-danger" id="cartItemCount" style="font-size:14px"></sup>
                         </a>
+                        <a href="#" class="nav-link text-uppercase position-relative" sec:authorize="!isAuthenticated()"
+                           data-bs-toggle="modal" data-bs-target="#ModalForm">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            Cart
+                        </a>
                     </li>
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link mx-1 text-uppercase text-success" th:href="@{/login}"><i class="fa-solid fa-circle-user me-1"></i> Login</a>
+                        <a href="#" class="nav-link mx-1 text-uppercase text-success"
+                           data-bs-toggle="modal" data-bs-target="#ModalForm">
+                            <i class="fa-solid fa-circle-user"></i> Login</a>
                     </li>
-                    <ul class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                         <a class="nav-link mx-1 text-uppercase dropdown-toggle" href="#" role="button"
                            id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-circle-user me-1"></i>
-                            <span class="text-primary" th:text="${#authentication.name}"></span>
+                            <i class="fa-solid fa-circle-user"></i>
+                            <span th:text="${#authentication.name}"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li>
@@ -105,11 +113,58 @@
                                 </a>
                             </li>
                         </ul>
-                    </ul>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
+
+    <div class="modal fade" id="ModalForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="form-area bg-primary">
+                        <h1 class="text-center">Login</h1>
+                        <form th:action="@{/login}" method="POST">
+                            <div class="form-floating mb-3 mt-4">
+                                <input type="text" class="form-control" id="username"
+                                       name="username" placeholder="Username">
+                                <label for="username" class="text-info">Username</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="password"
+                                       name="password" placeholder="Password">
+                                <label for="password" class="text-info">Password</label>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center my-2">
+                                <!-- Checkbox -->
+                                <div class="form-check mb-0">
+                                    <input class="form-check-input me-2" type="checkbox" name="remember-me" id="remember-me" />
+                                    <label class="form-check-label" for="remember-me">
+                                        Remember me?
+                                    </label>
+                                </div>
+                                <a th:href="@{/forgot-password}" class="link-light fw-bold">Forgot password?</a>
+                            </div>
+                            <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                                <a th:href="@{/oauth2/authorization/facebook}" class="btn btn-sm btn-light mx-1">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a th:href="@{/oauth2/authorization/google}" class="btn btn-sm btn-light mx-1">
+                                    <i class="fab fa-google"></i>
+                                </a>
+                            </div>
+                            <button type="submit" class="btn btn-light mt-3">LOGIN</button>
+                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
+                                <a th:href="@{/register}" class="text-light">Register</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
 
 <div th:insert="~{::${content}}">

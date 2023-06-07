@@ -4,6 +4,7 @@ import DoAnJava.LinhKienDienTu.dto.BillDto;
 import DoAnJava.LinhKienDienTu.entity.*;
 import DoAnJava.LinhKienDienTu.mapper.BillMapper;
 import DoAnJava.LinhKienDienTu.services.*;
+import DoAnJava.LinhKienDienTu.utils.FileUploadUlti;
 import DoAnJava.LinhKienDienTu.utils.S3Util;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -67,35 +69,13 @@ public class AdminController {
     public String addProduct(@Valid @ModelAttribute("product") Product product,
                              BindingResult bindingResult, Model model,
                              @RequestParam(value = "mainImage")MultipartFile mainMultipartFile,
-                             @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) {
+                             @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
 
-//        String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
-//        product.setMainImage(mainImageName);
-//
-//        FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
-//
-//        int count = 0;
-//        for (MultipartFile extraMultipart : extraMultipartFile) {
-//            if (!extraMultipart.isEmpty()) {
-//                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
-//                if (count == 0) product.setExtraImage1(extraImageName);
-//                if (count == 1) product.setExtraImage2(extraImageName);
-//                if (count == 2) product.setExtraImage3(extraImageName);
-//
-//                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
-//
-//                count++;
-//            }
-//        }
-
+        // upload hình vào thư mục img trong static
         String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
         product.setMainImage(mainImageName);
-        try {
-            S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
-            System.out.println("File " + mainImageName + " has been uploaded successfully!");
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
-        }
+
+        FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
 
         int count = 0;
         for (MultipartFile extraMultipart : extraMultipartFile) {
@@ -105,12 +85,7 @@ public class AdminController {
                 if (count == 1) product.setExtraImage2(extraImageName);
                 if (count == 2) product.setExtraImage3(extraImageName);
 
-                try {
-                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
-                    System.out.println("File " + extraImageName + " has been uploaded successfully!");
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                }
+                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
 
                 count++;
             }
@@ -124,8 +99,37 @@ public class AdminController {
             {
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
-            return "admin/product/add-product";
+            return "admin/product/products";
         }
+
+        // upload hình lên amazone s3
+//        String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
+//        product.setMainImage(mainImageName);
+//        try {
+//            S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
+//            System.out.println("File " + mainImageName + " has been uploaded successfully!");
+//        } catch (Exception ex) {
+//            System.out.println("Error: " + ex.getMessage());
+//        }
+//
+//        int count = 0;
+//        for (MultipartFile extraMultipart : extraMultipartFile) {
+//            if (!extraMultipart.isEmpty()) {
+//                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
+//                if (count == 0) product.setExtraImage1(extraImageName);
+//                if (count == 1) product.setExtraImage2(extraImageName);
+//                if (count == 2) product.setExtraImage3(extraImageName);
+//
+//                try {
+//                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
+//                    System.out.println("File " + extraImageName + " has been uploaded successfully!");
+//                } catch (Exception ex) {
+//                    System.out.println("Error: " + ex.getMessage());
+//                }
+//
+//                count++;
+//            }
+//        }
 
         productService.saveProduct(product);
 
@@ -196,13 +200,13 @@ public class AdminController {
             return "admin/product/edit-product/" + product.getProductId();
         }
         productService.saveProduct(product);
-        return "redirect:/admin/list-product";
+        return "redirect:/admin/products";
     }
     @GetMapping("/delete-product/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
         Product product = productService.getProductById(id);
         productService.deleteProduct(id);
-        return "redirect:/admin/list-product";
+        return "redirect:/admin/products";
     }
     //endregion
 
@@ -241,14 +245,14 @@ public class AdminController {
             return "admin/role/add-role";
         }
         roleService.saveRole(role);
-        return "redirect:/admin/list-role";
+        return "redirect:/admin/roles";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete-role/{roleId}")
     public String deleteRole(@PathVariable("roleId") UUID roleId) {
         roleService.removeRole(roleId);
-        return "redirect:/admin/list-role";
+        return "redirect:/admin/roles";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -269,7 +273,7 @@ public class AdminController {
             return "admin/role/edit-role";
         }
         roleService.saveRole(role);
-        return "redirect:/admin/list-role";
+        return "redirect:/admin/roles";
     }
 
 

@@ -35,11 +35,6 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/login")
-    public String login() {
-        return "user/login";
-    }
-
     //region Register
     @GetMapping("/register")
     public String register(Model model) {
