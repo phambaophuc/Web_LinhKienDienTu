@@ -7,6 +7,8 @@ import DoAnJava.LinhKienDienTu.services.*;
 import DoAnJava.LinhKienDienTu.utils.FileUploadUlti;
 import DoAnJava.LinhKienDienTu.utils.S3Util;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +48,8 @@ public class AdminController {
     @Value("${uploadDirectory}")
     private String uploadDir;
 
+    Logger logger = LoggerFactory.getLogger(AdminController.class);
+
     @GetMapping
     public String index() {
         return "admin/index";
@@ -72,10 +76,48 @@ public class AdminController {
                              @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
 
         // upload hình vào thư mục img trong static
+
+//        String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
+//        product.setMainImage(mainImageName);
+//
+//        FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
+//
+//        int count = 0;
+//        for (MultipartFile extraMultipart : extraMultipartFile) {
+//            if (!extraMultipart.isEmpty()) {
+//                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
+//                if (count == 0) product.setExtraImage1(extraImageName);
+//                if (count == 1) product.setExtraImage2(extraImageName);
+//                if (count == 2) product.setExtraImage3(extraImageName);
+//
+//                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
+//
+//                count++;
+//            }
+//        }
+
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("categories", categoryService.getAllCategory());
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors)
+            {
+                logger.error("Lỗi binding trường {}: {}", error.getField(), error.getDefaultMessage());
+                model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
+            }
+            return "admin/product/add-product";
+        }
+
         String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
         product.setMainImage(mainImageName);
 
         FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
+        try {
+            S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
+            logger.info("File " + mainImageName + " has been uploaded successfully!");
+        } catch (Exception ex) {
+            logger.error("Error: " + ex.getMessage());
+        }
 
         int count = 0;
         for (MultipartFile extraMultipart : extraMultipartFile) {
@@ -87,19 +129,14 @@ public class AdminController {
 
                 FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
 
+                try {
+                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
+                    logger.info("File " + extraImageName + " has been uploaded successfully!");
+                } catch (Exception ex) {
+                    logger.error("Error: " + ex.getMessage());
+                }
                 count++;
             }
-        }
-
-        if (bindingResult.hasErrors())
-        {
-            model.addAttribute("categories", categoryService.getAllCategory());
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors)
-            {
-                model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
-            }
-            return "admin/product/products";
         }
 
         // upload hình lên amazone s3
@@ -132,7 +169,7 @@ public class AdminController {
 //        }
 
         productService.saveProduct(product);
-
+        logger.info("Tạo thành công sản phẩm có Id {}", product.getProductId());
         return "redirect:/admin/list-product";
     }
 
@@ -157,9 +194,9 @@ public class AdminController {
             product.setMainImage(mainImageName);
             try {
                 S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
-                System.out.println("File " + mainImageName + " has been uploaded successfully!");
+                logger.info("File " + mainImageName + " has been uploaded successfully!");
             } catch (Exception ex) {
-                System.out.println("Error: " + ex.getMessage());
+                logger.error("Error: " + ex.getMessage());
             }
         } else {
             product.setMainImage(currentProduct.getMainImage());
@@ -195,18 +232,21 @@ public class AdminController {
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors)
             {
+                logger.error("Lỗi binding trường {}: {}", error.getField(), error.getDefaultMessage());
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
             return "admin/product/edit-product/" + product.getProductId();
         }
+        logger.info("Sửa thành công sản phẩm có Id {}", product.getProductId());
         productService.saveProduct(product);
-        return "redirect:/admin/products";
+        return "redirect:/admin/list-product";
     }
     @GetMapping("/delete-product/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
         Product product = productService.getProductById(id);
         productService.deleteProduct(id);
-        return "redirect:/admin/products";
+        logger.info("Xóa thành công sản phẩm có Id {}", product.getProductId());
+        return "redirect:/admin/list-product";
     }
     //endregion
 
@@ -240,10 +280,12 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors) {
+                logger.error("Lỗi binding trường {}: {}", error.getField(), error.getDefaultMessage());
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
             return "admin/role/add-role";
         }
+        logger.info("Tạo thành công role có Id{}", role.getRoleId());
         roleService.saveRole(role);
         return "redirect:/admin/roles";
     }
@@ -251,7 +293,9 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete-role/{roleId}")
     public String deleteRole(@PathVariable("roleId") UUID roleId) {
+        Role role = roleService.getRoleById(roleId);
         roleService.removeRole(roleId);
+        logger.info("Xóa thành công role {}", role.getRoleName());
         return "redirect:/admin/roles";
     }
 
@@ -268,11 +312,13 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors) {
+                logger.error("Lỗi binding trường {}: {}", error.getField(), error.getDefaultMessage());
                 model.addAttribute(error.getField() + "_error", error.getDefaultMessage());
             }
             return "admin/role/edit-role";
         }
         roleService.saveRole(role);
+        logger.info("Sửa thành công role có Id {}", role.getRoleId());
         return "redirect:/admin/roles";
     }
 
@@ -298,10 +344,12 @@ public class AdminController {
 
         if (Arrays.asList(roles).contains(roleName)) {
             redirectAttributes.addFlashAttribute("exists", "Quyền đã tồn tại cho người dùng này");
+            logger.warn("Quyền có Id {} đã tồn tại cho người dùng có Id {}", roleService.getRoleById(roleId).getRoleId(), userId);
             return "redirect:/admin/assign-role/" + userId;
         } else {
             userService.addRoleToUser(userId, roleId);
             redirectAttributes.addFlashAttribute("success", "Đã thêm quyền cho người dùng này");
+                logger.info("Gán thành công quyền có Id {} cho user có Id {}", roleService.getRoleById(roleId).getRoleId(), userId);
             return "redirect:/admin/assign-role/" + userId;
         }
     }
@@ -316,8 +364,10 @@ public class AdminController {
         if (Arrays.asList(roles).contains(roleName)) {
             userService.removeRoleFromUser(userId, roleId);
             redirectAttributes.addFlashAttribute("success", "Đã xóa quyền cho người dùng này");
+            logger.info("Xóa thành công quyền có Id {} cho user có Id {}", roleService.getRoleById(roleId).getRoleId(), userId);
         } else {
             redirectAttributes.addFlashAttribute("notExist", "Người dùng không có quyền này");
+            logger.warn("Người dùng có Id {} không có quyền có Id {} để xóa", userId, roleService.getRoleById(roleId).getRoleId());
         }
 
         return "redirect:/admin/assign-role/" + userId;
