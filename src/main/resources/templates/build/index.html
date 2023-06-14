@@ -29,14 +29,13 @@
                     <td>
                         <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal"
                                 th:attr="data-categoryId=${category.categoryId}, data-categoryName=${category.categoryName}"
-                                onclick="search(this.getAttribute('data-categoryId'), this.getAttribute('data-categoryName'))">
-                            Chọn
-                        </button>
-
+                                onclick="search(this.getAttribute('data-categoryId'), this.getAttribute('data-categoryName'))">Chọn</button>
+                        <button type="button" class="btn btn-outline-danger" th:onclick="'deleteText(\'' + ${category.categoryId} + '\')'">Xóa</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <button type="button" class="btn btn-outline-success" onclick="addToCart()">Thêm vào giỏ hàng</button>
 
             <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -60,19 +59,19 @@
 <th:block th:replace="layout :: footer"></th:block>
 
 <script>
+    let builds = [];
+
     function search(id, name) {
         $('#ModalLabel').text(name);
 
         $.ajax({
             url: 'http://localhost:8080/api/build/' + id,
             type: 'GET',
-            success: function (data) {
-                var productList = $('#productList'); // Lấy phần tử chứa danh sách sản phẩm
-                // Trước khi tạo danh sách sản phẩm, xóa các phần tử cũ trong productList (nếu có)
+            success: function(data) {
+                var productList = $('#productList');
                 productList.empty();
 
-                // Duyệt qua danh sách sản phẩm và tạo các phần tử danh sách
-                data.forEach(function (product) {
+                data.forEach(function(product) {
                     var card = $('<div></div>').addClass('card');
 
                     var cardImage = $('<img>').attr('src', 'https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + product.image)
@@ -85,28 +84,58 @@
 
                     var productPrice = $('<p></p>').addClass('card-text').text('Price: ' + product.price + ' $');
 
-                    // Thêm các phần tử vào cardBody
                     cardBody.append(productName, productPrice);
 
-                    // Thêm cardImage và cardBody vào card
                     card.append(cardImage, cardBody);
 
-                    // Thêm card vào productList
                     productList.append(card);
 
-                    card.on('click', function () {
+                    card.on('click', function() {
                         $('#image' + product.categoryId).html('<img src="https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + product.image + '">');
                         $('#name' + product.categoryId).text(product.productName);
                         $('#price' + product.categoryId).text(product.price + ' $');
-
                         $('#modal').modal('hide');
+
+                        let buildIndex = builds.findIndex(function(item) {
+                            return item.categoryId === product.categoryId;
+                        });
+                        if (buildIndex !== -1) {
+                            builds[buildIndex].productId = product.productId;
+                        } else {
+                            builds.push({
+                                categoryId: product.categoryId,
+                                productId: product.productId
+                            });
+                        }
                     });
                 });
+            }
+        });
+    }
+    function deleteText(id) {
+        $('#image' + id).empty();
+        $('#name' + id).empty();
+        $('#price' + id).empty();
+        $('#text').html('');
 
+        builds = builds.filter(function(build) {
+            return build.categoryId !== parseInt(id);
+        });
+    }
+
+    function addToCart() {
+        let productIds = builds.map(build => build.productId); // Lấy danh sách productId từ mảng builds
+
+        $.ajax({
+            url: '/api/build/add-to-cart',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ productIds: productIds }),
+            success: function() {
             }
         });
     }
 </script>
-
 </body>
 </html>
