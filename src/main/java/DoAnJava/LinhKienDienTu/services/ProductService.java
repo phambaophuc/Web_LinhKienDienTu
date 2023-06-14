@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -64,14 +65,16 @@ public class ProductService {
     }
 
     public void uploadFileAWS(Product product, MultipartFile multipartFile,
-                              MultipartFile[] multipartFiles, String uploadDir, boolean exist) throws IOException {
+                              MultipartFile[] multipartFiles, boolean exist) throws IOException {
+
+        String mainImageName;
 
         if (exist) {
             Product currentProduct = productRepository.findById(product.getProductId()).orElse(null);
             boolean isMainImageUpdated = multipartFile != null && !multipartFile.isEmpty();
 
             if (isMainImageUpdated) {
-                String mainImageName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                mainImageName = UUID.randomUUID().toString() + "." + StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
                 product.setMainImage(mainImageName);
                 try {
                     S3Util.uploadFile(mainImageName, multipartFile.getInputStream());
@@ -86,7 +89,8 @@ public class ProductService {
             int count = 0;
             for (MultipartFile extraMultipart : multipartFiles) {
                 if (!extraMultipart.isEmpty()) {
-                    String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
+                    String extraImageName = UUID.randomUUID().toString() + "."
+                            + StringUtils.getFilenameExtension(extraMultipart.getOriginalFilename());
                     if (count == 0) product.setExtraImage1(extraImageName);
                     if (count == 1) product.setExtraImage2(extraImageName);
                     if (count == 2) product.setExtraImage3(extraImageName);
@@ -107,10 +111,9 @@ public class ProductService {
                 }
             }
         } else {
-            String mainImageName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            mainImageName = UUID.randomUUID().toString() + "." + StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
             product.setMainImage(mainImageName);
 
-            FileUploadUlti.saveFile(uploadDir, multipartFile, mainImageName);
             try {
                 S3Util.uploadFile(mainImageName, multipartFile.getInputStream());
                 logger.info("File " + mainImageName + " has been uploaded successfully!");
@@ -121,12 +124,11 @@ public class ProductService {
             int count = 0;
             for (MultipartFile extraMultipart : multipartFiles) {
                 if (!extraMultipart.isEmpty()) {
-                    String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
+                    String extraImageName = UUID.randomUUID().toString() + "."
+                            + StringUtils.getFilenameExtension(extraMultipart.getOriginalFilename());
                     if (count == 0) product.setExtraImage1(extraImageName);
                     if (count == 1) product.setExtraImage2(extraImageName);
                     if (count == 2) product.setExtraImage3(extraImageName);
-
-                    FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
 
                     try {
                         S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
@@ -136,6 +138,30 @@ public class ProductService {
                     }
                     count++;
                 }
+            }
+        }
+    }
+
+    public void uploadFileStatic(Product product, MultipartFile multipartFile,
+                                 MultipartFile[] multipartFiles, String uploadDir) throws IOException {
+        String mainImageName = UUID.randomUUID().toString() + "."
+                + StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+        product.setMainImage(mainImageName);
+
+        FileUploadUlti.saveFile(uploadDir, multipartFile, mainImageName);
+
+        int count = 0;
+        for (MultipartFile extraMultipart : multipartFiles) {
+            if (!extraMultipart.isEmpty()) {
+                String extraImageName = UUID.randomUUID().toString() + "."
+                        + StringUtils.getFilenameExtension(extraMultipart.getOriginalFilename());
+                if (count == 0) product.setExtraImage1(extraImageName);
+                if (count == 1) product.setExtraImage2(extraImageName);
+                if (count == 2) product.setExtraImage3(extraImageName);
+
+                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
+
+                count++;
             }
         }
     }
