@@ -128,14 +128,12 @@
                         <h1 class="text-center">Login</h1>
                         <form th:action="@{/login}" method="POST">
                             <div class="form-floating mb-3 mt-4">
-                                <input type="text" class="form-control" id="username"
-                                       name="username" placeholder="Username">
-                                <label for="username" class="text-info">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                                <label for="username" class="text-dark">Username</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="password"
-                                       name="password" placeholder="Password">
-                                <label for="password" class="text-info">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                <label for="password" class="text-dark">Password</label>
                             </div>
                             <div class="d-flex justify-content-between align-items-center my-2">
                                 <!-- Checkbox -->
@@ -216,16 +214,16 @@
                         Products
                     </h6>
                     <p>
-                        <a th:href="@{/product/search?category=cpu}" class="text-reset">CPU</a>
+                        <a href="/product/search?category=cpu" class="text-reset">CPU</a>
                     </p>
                     <p>
-                        <a th:href="@{/product/search?category=mainboard}" class="text-reset">Mainboard</a>
+                        <a href="/product/search?category=mainboard" class="text-reset">Mainboard</a>
                     </p>
                     <p>
-                        <a th:href="@{/product/search?category=ram}" class="text-reset">RAM</a>
+                        <a href="/product/search?category=ram" class="text-reset">RAM</a>
                     </p>
                     <p>
-                        <a th:href="@{/product/search?category=vga}" class="text-reset">VGA</a>
+                        <a href="/product/search?category=vga" class="text-reset">VGA</a>
                     </p>
                 </div>
                 <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
@@ -265,14 +263,14 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var cartItemCountElement = document.getElementById("cartItemCount");
+            const cartItemCountElement = document.getElementById("cartItemCount");
 
             // Gọi API để lấy số lượng sản phẩm trong chi tiết hóa đơn
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open("GET", "/cartItemCount", true);
             xhr.onload = function() {
               if (xhr.status === 200) {
-                var cartItemCount = JSON.parse(xhr.responseText);
+                const cartItemCount = JSON.parse(xhr.responseText);
                 cartItemCountElement.textContent = cartItemCount;
               }
             };

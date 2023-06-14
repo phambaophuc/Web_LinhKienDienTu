@@ -52,7 +52,7 @@ public class UserController {
             return "user/register";
         }
         userService.register(user, getSiteURL(request));
-        return "redirect:/login";
+        return "redirect:/";
     }
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();

@@ -108,69 +108,11 @@ public class AdminController {
             return "admin/product/add-product";
         }
 
-        String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
-        product.setMainImage(mainImageName);
-
-        FileUploadUlti.saveFile(uploadDir, mainMultipartFile, mainImageName);
-        try {
-            S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
-            logger.info("File " + mainImageName + " has been uploaded successfully!");
-        } catch (Exception ex) {
-            logger.error("Error: " + ex.getMessage());
-        }
-
-        int count = 0;
-        for (MultipartFile extraMultipart : extraMultipartFile) {
-            if (!extraMultipart.isEmpty()) {
-                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
-                if (count == 0) product.setExtraImage1(extraImageName);
-                if (count == 1) product.setExtraImage2(extraImageName);
-                if (count == 2) product.setExtraImage3(extraImageName);
-
-                FileUploadUlti.saveFile(uploadDir, extraMultipart, extraImageName);
-
-                try {
-                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
-                    logger.info("File " + extraImageName + " has been uploaded successfully!");
-                } catch (Exception ex) {
-                    logger.error("Error: " + ex.getMessage());
-                }
-                count++;
-            }
-        }
-
-        // upload hình lên amazone s3
-//        String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
-//        product.setMainImage(mainImageName);
-//        try {
-//            S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
-//            System.out.println("File " + mainImageName + " has been uploaded successfully!");
-//        } catch (Exception ex) {
-//            System.out.println("Error: " + ex.getMessage());
-//        }
-//
-//        int count = 0;
-//        for (MultipartFile extraMultipart : extraMultipartFile) {
-//            if (!extraMultipart.isEmpty()) {
-//                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
-//                if (count == 0) product.setExtraImage1(extraImageName);
-//                if (count == 1) product.setExtraImage2(extraImageName);
-//                if (count == 2) product.setExtraImage3(extraImageName);
-//
-//                try {
-//                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
-//                    System.out.println("File " + extraImageName + " has been uploaded successfully!");
-//                } catch (Exception ex) {
-//                    System.out.println("Error: " + ex.getMessage());
-//                }
-//
-//                count++;
-//            }
-//        }
+        productService.uploadFileAWS(product, mainMultipartFile, extraMultipartFile, uploadDir, false);
 
         productService.saveProduct(product);
         logger.info("Tạo thành công sản phẩm có Id {}", product.getProductId());
-        return "redirect:/admin/list-product";
+        return "redirect:/admin/products";
     }
 
     @GetMapping("/edit-product/{id}")
@@ -184,47 +126,9 @@ public class AdminController {
     public String editProduct(@ModelAttribute("product") Product product,
                               BindingResult bindingResult, Model model,
                               @RequestParam(value = "mainImage", required = false)MultipartFile mainMultipartFile,
-                              @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) {
+                              @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
 
-        Product currentProduct = productService.getProductById(product.getProductId());
-        boolean isMainImageUpdated = mainMultipartFile != null && !mainMultipartFile.isEmpty();
-
-        if (isMainImageUpdated) {
-            String mainImageName = StringUtils.cleanPath(mainMultipartFile.getOriginalFilename());
-            product.setMainImage(mainImageName);
-            try {
-                S3Util.uploadFile(mainImageName, mainMultipartFile.getInputStream());
-                logger.info("File " + mainImageName + " has been uploaded successfully!");
-            } catch (Exception ex) {
-                logger.error("Error: " + ex.getMessage());
-            }
-        } else {
-            product.setMainImage(currentProduct.getMainImage());
-        }
-
-        int count = 0;
-        for (MultipartFile extraMultipart : extraMultipartFile) {
-            if (!extraMultipart.isEmpty()) {
-                String extraImageName = StringUtils.cleanPath(extraMultipart.getOriginalFilename());
-                if (count == 0) product.setExtraImage1(extraImageName);
-                if (count == 1) product.setExtraImage2(extraImageName);
-                if (count == 2) product.setExtraImage3(extraImageName);
-
-                try {
-                    S3Util.uploadFile(extraImageName, extraMultipart.getInputStream());
-                    System.out.println("File " + extraImageName + " has been uploaded successfully!");
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                }
-
-                count++;
-            } else {
-                product.setExtraImage1(currentProduct.getExtraImage1());
-                product.setExtraImage2(currentProduct.getExtraImage2());
-                product.setExtraImage3(currentProduct.getExtraImage3());
-                break;
-            }
-        }
+        productService.uploadFileAWS(product, mainMultipartFile, extraMultipartFile, uploadDir, true);
 
         if (bindingResult.hasErrors())
         {
@@ -237,16 +141,18 @@ public class AdminController {
             }
             return "admin/product/edit-product/" + product.getProductId();
         }
+
         logger.info("Sửa thành công sản phẩm có Id {}", product.getProductId());
         productService.saveProduct(product);
-        return "redirect:/admin/list-product";
+
+        return "redirect:/admin/products";
     }
     @GetMapping("/delete-product/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
         Product product = productService.getProductById(id);
         productService.deleteProduct(id);
         logger.info("Xóa thành công sản phẩm có Id {}", product.getProductId());
-        return "redirect:/admin/list-product";
+        return "redirect:/admin/products";
     }
     //endregion
 
