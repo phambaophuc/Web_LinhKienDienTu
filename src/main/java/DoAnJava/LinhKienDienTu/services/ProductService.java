@@ -50,6 +50,10 @@ public class ProductService {
         List<Product> products = productRepository.findProductByCategory(categoryName);
         return products;
     }
+    public List<Product> getProductByCategoryId(Long categoryId) {
+        List<Product> products = productRepository.findProductByCategoryId(categoryId);
+        return products;
+    }
 
     public void saveProduct(Product product) {
         productRepository.save(product);

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="">
+<head>
+    <meta charset="UTF-8">
+    <title>Build linh kiện</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+</head>
+<body id="page-top">
+<th:block th:replace="layout :: header"></th:block>
+<div class="container">
+    <div>
+        <div id="content">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Danh mục</th>
+                    <th>Hình</th>
+                    <th>Tên</th>
+                    <th>Giá</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categories}">
+                    <td th:text="${category.categoryName}"></td>
+                    <td th:id="'image' + ${category.categoryId}"></td>
+                    <td th:id="'name' + ${category.categoryId}"></td>
+                    <td th:id="'price' + ${category.categoryId}"></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal"
+                                th:attr="data-categoryId=${category.categoryId}, data-categoryName=${category.categoryName}"
+                                onclick="search(this.getAttribute('data-categoryId'), this.getAttribute('data-categoryName'))">
+                            Chọn
+                        </button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLabel"></h5>
+                            <button type="button" class="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="productList">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+
+<script>
+    function search(id, name) {
+        $('#ModalLabel').text(name);
+
+        $.ajax({
+            url: 'http://localhost:8080/api/build/' + id,
+            type: 'GET',
+            success: function (data) {
+                var productList = $('#productList'); // Lấy phần tử chứa danh sách sản phẩm
+                // Trước khi tạo danh sách sản phẩm, xóa các phần tử cũ trong productList (nếu có)
+                productList.empty();
+
+                // Duyệt qua danh sách sản phẩm và tạo các phần tử danh sách
+                data.forEach(function (product) {
+                    var card = $('<div></div>').addClass('card');
+
+                    var cardImage = $('<img>').attr('src', 'https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + product.image)
+                        .addClass('card-img-top')
+                        .attr('alt', product.productName);
+
+                    var cardBody = $('<div></div>').addClass('card-body');
+
+                    var productName = $('<h5></h5>').addClass('card-title').text(product.productName);
+
+                    var productPrice = $('<p></p>').addClass('card-text').text('Price: ' + product.price + ' $');
+
+                    // Thêm các phần tử vào cardBody
+                    cardBody.append(productName, productPrice);
+
+                    // Thêm cardImage và cardBody vào card
+                    card.append(cardImage, cardBody);
+
+                    // Thêm card vào productList
+                    productList.append(card);
+
+                    card.on('click', function () {
+                        $('#image' + product.categoryId).html('<img src="https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + product.image + '">');
+                        $('#name' + product.categoryId).text(product.productName);
+                        $('#price' + product.categoryId).text(product.price + ' $');
+
+                        $('#modal').modal('hide');
+                    });
+                });
+
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

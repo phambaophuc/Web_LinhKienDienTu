@@ -14,4 +14,7 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.category.categoryName LIKE CONCAT('%',:query,'%')")
     List<Product> findProductByCategory(String query);
+
+    @Query("SELECT p FROM Product p WHERE p.category.categoryId = :query")
+    List<Product> findProductByCategoryId(Long query);
 }
