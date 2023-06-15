@@ -67,7 +67,7 @@ public class BuildApiController {
                 billDetail.setAmount(billDetail.getAmount() + 1);
                 billDetailService.saveBillDetail(billDetail);
             } else {
-                billDetailService.addProductToBill(productId, bill.getBillId());
+                billDetailService.addProductToBill(productId, bill.getBillId(), 1);
             }
         }
 

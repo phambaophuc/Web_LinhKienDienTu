@@ -20,11 +20,6 @@ public class BillDetailService {
         return billDetailRepository.findAllBillDetailByUser(userId);
     }
 
-    public Page<BillDetail> getAllBillDetail(UUID userId, int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return billDetailRepository.findAllBillDetailByUser(userId, pageable);
-    }
-
     public BillDetail getBillDetailByProduct(Long productId, Long billId) {
         return billDetailRepository.findBillDetailByProduct(productId, billId);
     }
@@ -33,20 +28,8 @@ public class BillDetailService {
         billDetailRepository.save(billDetail);
     }
 
-    public void addProductToBill(Long productId, Long billId) {
-        billDetailRepository.addProductToBill(productId, billId);
-    }
-
-    public int countItemCart(UUID userId) {
-        return billDetailRepository.countItemCart(userId);
-    }
-
-    public void deleteBillDetailByProductIdAndBillId(Long productId, Long billId) {
-        billDetailRepository.deleteBillDetailByProductId(productId, billId);
-    }
-
-    public void deleteBillDetailByBillId(Long billId) {
-        billDetailRepository.deleteBillDetailByBillId(billId);
+    public void addProductToBill(Long productId, Long billId, int quantity) {
+        billDetailRepository.addProductToBill(productId, billId, quantity);
     }
 
 }

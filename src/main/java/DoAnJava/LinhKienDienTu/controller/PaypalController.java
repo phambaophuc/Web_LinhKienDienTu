@@ -2,8 +2,11 @@ package DoAnJava.LinhKienDienTu.controller;
 
 import DoAnJava.LinhKienDienTu.config.PaypalPaymentIntent;
 import DoAnJava.LinhKienDienTu.config.PaypalPaymentMethod;
+import DoAnJava.LinhKienDienTu.daos.Cart;
+import DoAnJava.LinhKienDienTu.daos.Item;
 import DoAnJava.LinhKienDienTu.entity.Bill;
 import DoAnJava.LinhKienDienTu.entity.BillDetail;
+import DoAnJava.LinhKienDienTu.entity.Product;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.*;
 import DoAnJava.LinhKienDienTu.utils.Utils;
@@ -11,6 +14,7 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +36,15 @@ public class PaypalController {
     @Autowired
     private PaypalService paypalService;
     @Autowired
-    private BillDetailService billDetailService;
-    @Autowired
     private UserService userService;
     @Autowired
     private BillService billService;
     @Autowired
+    private CartService cartService;
+    @Autowired
     private ProductService productService;
+    @Autowired
+    private BillDetailService billDetailService;
 
     @PostMapping("/pay")
     public String pay(HttpServletRequest request, @RequestParam("totalPrice") BigDecimal price) {
@@ -72,10 +78,27 @@ public class PaypalController {
 
     @GetMapping(URL_PAYPAL_SUCCESS)
     public String successPay(@RequestParam("paymentId") String paymentId,
-                             @RequestParam("PayerID") String payerId, Principal principal){
+                             @RequestParam("PayerID") String payerId,
+                             Principal principal, HttpSession session){
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
+
+                User user = userService.getUserByUsername(principal.getName());
+                billService.createBill(new Bill(), user);
+
+                Cart cart = cartService.getCart(session);
+                List<Item> cartItems = cart.getCartItems();
+
+                Bill bill = billService.getBillByUserId(user.getUserId());
+                for (Item cartItem : cartItems) {
+                    Product product = productService.getProductById(cartItem.getProductId());
+                    billDetailService.addProductToBill(product.getProductId(), bill.getBillId(), cartItem.getQuantity());
+                }
+                bill.setTotalPrice(BigDecimal.valueOf(cartService.getSumPrice(session)));
+                billService.updateBill(bill);
+
+                cartService.removeCart(session);
 
                 return "paypal/pay-success";
             }

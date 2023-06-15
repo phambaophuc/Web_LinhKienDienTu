@@ -23,34 +23,13 @@ public interface IBillDetailRepository extends JpaRepository<BillDetail, BillDet
     List<BillDetail> findAllBillDetailByUser(@Param("userId") UUID userId);
 
     @Query("SELECT bd FROM BillDetail bd " +
-            "JOIN Bill b ON b.billId = bd.id.billId " +
-            "JOIN User u ON u.userId = b.user.userId " +
-            "WHERE u.userId = :userId")
-    Page<BillDetail> findAllBillDetailByUser(@Param("userId") UUID userId, Pageable pageable);
-
-    @Query("SELECT bd FROM BillDetail bd " +
             "WHERE bd.product.productId = :productId AND bd.bill.billId = :billId")
     BillDetail findBillDetailByProduct(@Param("productId") Long productId, @Param("billId") Long billId);
 
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO bill_detail (product_id, bill_id, amount) " +
-            "VALUES (?1, ?2, 1)", nativeQuery = true)
-    void addProductToBill(Long productId, Long billId);
+            "VALUES (?1, ?2, ?3)", nativeQuery = true)
+    void addProductToBill(Long productId, Long billId, int amount);
 
-    @Query(value = "SELECT COUNT(*) FROM bill_detail bd " +
-            "JOIN bill b ON b.bill_id = bd.bill_id " +
-            "JOIN user u ON u.user_id = b.user_id " +
-            "WHERE u.user_id = :userId", nativeQuery = true)
-    int countItemCart(@Param("userId") UUID userId);
-
-    @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM bill_detail WHERE product_id = :productId AND bill_id = :billId", nativeQuery = true)
-    void deleteBillDetailByProductId(@Param("productId") Long productId, @Param("billId") Long billId);
-
-    @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM bill_detail WHERE bill_id = :billId ", nativeQuery = true)
-    void deleteBillDetailByBillId(@Param("billId") Long billId);
 }

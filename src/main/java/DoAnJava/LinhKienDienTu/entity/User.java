@@ -62,8 +62,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Bill bill;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Bill> bill;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Comment> comments;
