@@ -1,106 +1,75 @@
 package DoAnJava.LinhKienDienTu.controller;
 
-import DoAnJava.LinhKienDienTu.entity.Bill;
-import DoAnJava.LinhKienDienTu.entity.BillDetail;
-import DoAnJava.LinhKienDienTu.entity.User;
-import DoAnJava.LinhKienDienTu.services.BillDetailService;
-import DoAnJava.LinhKienDienTu.services.BillService;
-import DoAnJava.LinhKienDienTu.services.UserService;
+import DoAnJava.LinhKienDienTu.daos.Item;
+import DoAnJava.LinhKienDienTu.services.CartService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
 public class CartController {
     @Autowired
-    private BillDetailService billDetailService;
-    @Autowired
-    private BillService billService;
-    @Autowired
-    private UserService userService;
+    private CartService cartService;
 
-    // View giỏ hàng
-    @PreAuthorize("isAuthenticated()")
+    // Sử dụng Session
     @GetMapping
-    public String viewCartForm(Model model, Principal principal,
-                               @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "3") int pageSize) {
+    public String showCart(HttpSession session, @NotNull Model model,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "4") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Item> cartPage = cartService.getCartPage(session, pageable);
+        List<Item> cartItems = cartPage.getContent();
 
-        User user = userService.getUserByUsername(principal.getName());
-        Bill bill = billService.getBillByUserId(user.getUserId());
-
-        if (bill == null) {
-            billService.createBill(new Bill(), user);
-        }
-
-        if (page < 0) page = 0;
-
-        Page<BillDetail> billDetailsPage = billDetailService.getAllBillDetail(user.getUserId(), page, pageSize);
-        List<BillDetail> billDetails = billDetailsPage.getContent();
-
-        List<BillDetail> billDetailList = billDetailService.getAllBillDetail(user.getUserId());
-        int totalBillDetails = billDetailList.size();
-
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (BillDetail billDetail : billDetailList) {
-            BigDecimal productPrice = billDetail.getProduct().getPrice();
-            Long amount = billDetail.getAmount();
-            BigDecimal amountDecimal = new BigDecimal(amount);
-            BigDecimal subtotal = productPrice.multiply(amountDecimal);
-            totalPrice = totalPrice.add(subtotal);
-        }
-
-        model.addAttribute("billDetails", billDetails);
-        model.addAttribute("totalBillDetails", totalBillDetails);
-        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("cart", cartItems);
+        model.addAttribute("totalPrice", cartService.getSumPrice(session));
+        model.addAttribute("totalQuantity", cartService.getSumQuantity(session));
         model.addAttribute("currentPage", page);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalItems", billDetailsPage.getTotalElements());
-        model.addAttribute("totalPages", billDetailsPage.getTotalPages());
-
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", cartPage.getTotalPages());
         return "cart/cart";
     }
 
-
-    @PostMapping("/add-to-cart/{productId}")
-    public String addProductToCart(@PathVariable Long productId, Principal principal,
-                                   HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        User user = userService.getUserByUsername(principal.getName());
-        Bill bill = billService.getBillByUserId(user.getUserId());
-        String previousPage = request.getHeader("Referer");
-
-        if (bill == null) {
-            billService.createBill(new Bill(), user);
-            bill = billService.getBillByUserId(user.getUserId());
-        }
-
-        BillDetail billDetail = billDetailService.getBillDetailByProduct(productId, bill.getBillId());
-        if (billDetail != null) {
-            billDetail.setAmount(billDetail.getAmount() + 1);
-            billDetailService.saveBillDetail(billDetail);
-        } else {
-            billDetailService.addProductToBill(productId, bill.getBillId());
-        }
-
-        return "redirect:" + previousPage;
+    @GetMapping("/removeFromCart/{id}")
+    public String removeFromCart(HttpSession session, @PathVariable Long id) {
+        var cart = cartService.getCart(session);
+        cart.removeItems(id);
+        return "redirect:/cart";
     }
 
-    @PostMapping("/delete-from-cart/{productId}/{billId}")
-    public String deleteProductFromCart(@PathVariable Long productId, @PathVariable Long billId,
-                                   HttpServletRequest request) {
-        String previousPage = request.getHeader("Referer");
-        billDetailService.deleteBillDetailByProductIdAndBillId(productId, billId);
-        return "redirect:" + previousPage;
+    @GetMapping("/updateCart/{id}/{quantity}")
+    public String updateCart(HttpSession session, @PathVariable Long id,
+                             @PathVariable int quantity) {
+        var cart = cartService.getCart(session);
+        cart.updateItems(id, quantity);
+        return "cart/cart";
     }
 
+    @GetMapping("/clearCart")
+    public String clearCart(HttpSession session) {
+        cartService.removeCart(session);
+        return "redirect:/cart";
+    }
+
+    @PostMapping("/add-to-cart")
+    public String addToCart(HttpSession session, @RequestParam long id,
+                            @RequestParam String name, @RequestParam double price,
+                            @RequestParam String image, @RequestParam(defaultValue = "1") int quantity,
+                            HttpServletRequest request) {
+        var cart = cartService.getCart(session);
+        String previousPage = request.getHeader("Referer");
+
+        cart.addItems(new Item(id, name, price, image, quantity));
+        cartService.updateCart(session, cart);
+        return "redirect:" + previousPage;
+    }
 }

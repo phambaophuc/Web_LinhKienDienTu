@@ -35,7 +35,7 @@
                 </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-outline-success" onclick="addToCart()">Thêm vào giỏ hàng</button>
+            <button class="btn btn-success" onclick="addToCart()">Thêm vào giỏ hàng</button>
 
             <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -68,21 +68,21 @@
             url: 'http://localhost:8080/api/build/' + id,
             type: 'GET',
             success: function(data) {
-                var productList = $('#productList');
+                const productList = $('#productList');
                 productList.empty();
 
                 data.forEach(function(product) {
-                    var card = $('<div></div>').addClass('card');
+                    const card = $('<div></div>').addClass('card');
 
-                    var cardImage = $('<img>').attr('src', 'https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + product.image)
+                    const cardImage = $('<img>').attr('src', 'https://phuc-public-image.s3.ap-southeast-2.amazonaws.com/' + product.image)
                         .addClass('card-img-top')
                         .attr('alt', product.productName);
 
-                    var cardBody = $('<div></div>').addClass('card-body');
+                    const cardBody = $('<div></div>').addClass('card-body');
 
-                    var productName = $('<h5></h5>').addClass('card-title').text(product.productName);
+                    const productName = $('<h5></h5>').addClass('card-title').text(product.productName);
 
-                    var productPrice = $('<p></p>').addClass('card-text').text('Price: ' + product.price + ' $');
+                    const productPrice = $('<p></p>').addClass('card-text').text('Price: ' + product.price + ' $');
 
                     cardBody.append(productName, productPrice);
 

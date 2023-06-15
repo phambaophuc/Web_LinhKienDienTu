@@ -26,8 +26,15 @@
 
             <div class="d-flex">
                 <button class="btn btn-success me-2">Đặt hàng</button>
-                <form th:action="@{'/cart/add-to-cart/' + ${product.productId}}" method="POST">
-                    <button class="btn btn-outline-danger" id="addProductToBill" type="submit">Thêm vào giỏ hàng</button>
+                <form th:action="@{/cart/add-to-cart}" method="POST">
+                    <input type="hidden" name="id" th:value="${product.getProductId()}">
+                    <input type="hidden" name="name" th:value="${product.getProductName()}">
+                    <input type="hidden" name="price" th:value="${product.getPrice()}">
+                    <input type="hidden" name="image" th:value="${product.getMainImage()}">
+                    <button class="btn btn-outline-danger" type="submit"
+                            onclick="return confirm('Bạn có muốn thêm sản phẩm này vào giỏ hàng?')">
+                        Thêm vào giỏ hàng
+                    </button>
                 </form>
             </div>
         </div>

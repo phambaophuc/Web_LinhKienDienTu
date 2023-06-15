@@ -69,16 +69,10 @@
                 </ul>
                 <ul class="navbar-nav ms-auto d-flex">
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase position-relative"
-                           sec:authorize="isAuthenticated()" th:href="@{/cart}">
+                        <a class="nav-link text-uppercase position-relative" th:href="@{/cart}">
                             <i class="fa-solid fa-cart-shopping"></i>
                             Cart
                             <sup class="text-danger" id="cartItemCount" style="font-size:14px"></sup>
-                        </a>
-                        <a href="#" class="nav-link text-uppercase position-relative" sec:authorize="!isAuthenticated()"
-                           data-bs-toggle="modal" data-bs-target="#ModalForm">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            Cart
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="!isAuthenticated()">

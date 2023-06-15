@@ -76,23 +76,6 @@ public class PaypalController {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
-                User user = userService.getUserByUsername(principal.getName());
-                Bill bill = billService.getBillByUserId(user.getUserId());
-                List<BillDetail> billDetailList = billDetailService.getAllBillDetail(user.getUserId());
-
-                BigDecimal totalPrice = BigDecimal.ZERO;
-                for (BillDetail billDetail : billDetailList) {
-                    BigDecimal productPrice = billDetail.getProduct().getPrice();
-                    Long amount = billDetail.getAmount();
-                    BigDecimal amountDecimal = new BigDecimal(amount);
-                    BigDecimal subtotal = productPrice.multiply(amountDecimal);
-                    totalPrice = totalPrice.add(subtotal);
-                }
-                bill.setTotalPrice(totalPrice);
-                billService.updateBill(bill);
-
-                billDetailService.deleteBillDetailByBillId(bill.getBillId());
-
 
                 return "paypal/pay-success";
             }

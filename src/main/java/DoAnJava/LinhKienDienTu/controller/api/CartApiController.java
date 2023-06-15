@@ -1,10 +1,8 @@
 package DoAnJava.LinhKienDienTu.controller.api;
 
 import DoAnJava.LinhKienDienTu.entity.User;
-import DoAnJava.LinhKienDienTu.services.BillDetailService;
-import DoAnJava.LinhKienDienTu.services.BillService;
-import DoAnJava.LinhKienDienTu.services.ProductService;
-import DoAnJava.LinhKienDienTu.services.UserService;
+import DoAnJava.LinhKienDienTu.services.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,22 +13,11 @@ import java.security.Principal;
 @RestController
 public class CartApiController {
     @Autowired
-    private BillDetailService billDetailService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private BillService billService;
-    @Autowired
-    private UserService userService;
+    private CartService cartService;
 
     @GetMapping("/cartItemCount")
-    public ResponseEntity<Integer> getCartItemCount(Principal principal) {
-        if (principal == null) {
-            return ResponseEntity.ok(0);
-        } else {
-            User user = userService.getUserByUsername(principal.getName());
-            int cartItemCount = billDetailService.countItemCart(user.getUserId());
-            return ResponseEntity.ok(cartItemCount);
-        }
+    public ResponseEntity<Integer> getCartItemCount(HttpSession session) {
+        int count = cartService.getSumQuantity(session);
+        return ResponseEntity.ok(count);
     }
 }
