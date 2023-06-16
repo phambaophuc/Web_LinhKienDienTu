@@ -22,8 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -272,6 +275,36 @@ public class AdminController {
 
         model.addAttribute("bills", billDtos);
         return "admin/bill/list-bill";
+    }
+
+    // Thống kê theo tháng
+    @GetMapping("/thongKeTheoThang")
+    public String thongKeTheoThang(Model model) {
+        int year = LocalDate.now().getYear();
+        Map<Integer, BigDecimal> revenueByMonth = billService.thongKeTongTienTheoThang(year);
+        model.addAttribute("revenueByMonth", revenueByMonth);
+        return "admin/bill/thongKeTheoThang";
+    }
+    @GetMapping("/thongKeTheoThang-data")
+    @ResponseBody
+    public Map<Integer, BigDecimal> thongKeData(@RequestParam("year") int year) {
+        return billService.thongKeTongTienTheoThang(year);
+    }
+
+    // Thống kê theo ngày
+    @GetMapping("/thongKeTheoNgay")
+    public String thongKeNgay(Model model) {
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear();
+        Map<Integer, BigDecimal> revenueByDay = billService.thongKeTongTienTheoNgay(month, year);
+        model.addAttribute("revenueByDay", revenueByDay);
+        return "admin/bill/thongKeTheoNgay";
+    }
+    @GetMapping("/thongKeTheoNgay-data")
+    @ResponseBody
+    public Map<Integer, BigDecimal> thongKeNgayData(@RequestParam("month") int month,
+                                                @RequestParam("year") int year) {
+        return billService.thongKeTongTienTheoNgay(month, year);
     }
     //endregion
 }
