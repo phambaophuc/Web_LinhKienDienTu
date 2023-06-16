@@ -85,16 +85,17 @@ public class PaypalController {
             if(payment.getState().equals("approved")){
 
                 User user = userService.getUserByUsername(principal.getName());
-                billService.createBill(new Bill(), user);
+                Bill bill = new Bill();
+                billService.createBill(bill, user);
 
                 Cart cart = cartService.getCart(session);
                 List<Item> cartItems = cart.getCartItems();
 
-                Bill bill = billService.getBillByUserId(user.getUserId());
                 for (Item cartItem : cartItems) {
                     Product product = productService.getProductById(cartItem.getProductId());
                     billDetailService.addProductToBill(product.getProductId(), bill.getBillId(), cartItem.getQuantity());
                 }
+
                 bill.setTotalPrice(BigDecimal.valueOf(cartService.getSumPrice(session)));
                 billService.updateBill(bill);
 
