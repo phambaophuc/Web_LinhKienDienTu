@@ -61,7 +61,7 @@
                                 <div class="card-body p-4">
                                     <div class="d-flex flex-start">
                                         <img class="rounded-circle shadow-1-strong me-3"
-                                             src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
+                                             src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar" width="60"
                                              height="60" />
                                         <div>
                                             <h6 class="fw-bold mb-1" th:text="${comment.user.fullname}"></h6>
@@ -71,13 +71,10 @@
                                                 </p>
                                                 <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
                                                 <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                                                <div th:if="${comment.user.username == currentUsername}">
-                                                    <form th:action="@{/product/delete-comment/{commentId}(commentId=${comment.commentId})}" method="POST">
-                                                        <button class="btn btn-sm" type="submit" onclick="return confirm('Bạn có muốn xóa comment?')">
-                                                            <i class="fa-sharp fa-solid fa-xmark" style="color:red"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                <a th:href="@{'/product/delete-comment/' + ${comment.getCommentId()}}"
+                                                   class="link-muted link-danger" onclick="return confirm('Xoá comment?')">
+                                                    <i class="fas fa-xmark ms-2"></i>
+                                                </a>
                                             </div>
                                             <p class="mb-0" th:utext="${comment.content}" style="white-space: pre-line;"></p>
                                         </div>
@@ -95,21 +92,21 @@
             <div class="row d-flex justify-content-start">
                 <div class="col-md-12 col-lg-10">
                     <form th:action="@{'/product/' + ${product.productId}}" method="POST" th:object="${newComment}">
-                        <div class="card-footer py-3 border-0">
+                        <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                             <div class="d-flex flex-start w-100">
                                 <img class="rounded-circle shadow-1-strong me-3"
-                                     src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="40"
+                                     src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar" width="40"
                                      height="40" />
                                 <div class="form-outline w-100">
-                                    <textarea class="form-control" id="textAreaExample" rows="4"
-                                            style="background: #fff;" th:field="${newComment.content}">
-                                    </textarea>
+                                            <textarea class="form-control" id="textAreaExample" rows="4"
+                                                      style="background: #fff;" th:field="${newComment.content}">
+                                            </textarea>
                                     <label class="form-label" for="textAreaExample">Message</label>
-                                    <div class="float-end mt-2">
-                                        <button type="submit" class="btn btn-success btn-sm" id="postCommentBtn">Post comment</button>
-                                        <button type="button" class="btn btn-outline-success btn-sm">Cancel</button>
-                                    </div>
                                 </div>
+                            </div>
+                            <div class="float-end mt-2 pt-1">
+                                <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
                             </div>
                         </div>
                     </form>

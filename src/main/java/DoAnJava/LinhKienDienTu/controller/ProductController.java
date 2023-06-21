@@ -27,10 +27,6 @@ public class ProductController {
     @Autowired
     private CommentService commentService;
     @Autowired
-    private BillService billService;
-    @Autowired
-    private BillDetailService billDetailService;
-    @Autowired
     private UserService userService;
     @Autowired
     private Parser markdownParser;
@@ -40,7 +36,7 @@ public class ProductController {
     @GetMapping
     public String listProducts(Model model,
                                @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "9") int pageSize) {
+                               @RequestParam(defaultValue = "12") int pageSize) {
         if (page < 0) page = 0;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Product> productPage = productService.getAllProducts(pageable);
@@ -94,7 +90,7 @@ public class ProductController {
         return "redirect:/product/{productId}";
     }
 
-    @PostMapping("/delete-comment/{commentId}")
+    @GetMapping("/delete-comment/{commentId}")
     public String deleteComment(@PathVariable UUID commentId, HttpServletRequest request) {
         String previoustPage = request.getHeader("Referer");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

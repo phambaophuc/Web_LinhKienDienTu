@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link th:fragment="link-css" rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/vendor/font-awesome/css/all.min.css}">
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/styles.css}">
+    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/mdb.min.css}">
 </head>
 <body>
 <header th:fragment="header">
@@ -99,7 +99,6 @@
                                     Setting
                                 </a>
                             </li>
-                            <hr>
                             <li>
                                 <a class="dropdown-item text-uppercase fw-bold link-danger" th:href="@{/logout}">
                                     <i class="fa-solid fa-right-from-bracket me-1"></i>
@@ -116,18 +115,18 @@
     <div class="modal fade" id="ModalForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body">
+                <div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="form-area bg-primary">
                         <h1 class="text-center">Login</h1>
                         <form th:action="@{/login}" method="POST">
-                            <div class="form-floating mb-3 mt-4">
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-                                <label for="username" class="text-dark">Username</label>
+                            <div class="form-outline flex-fill mb-3 mt-4">
+                                <input type="text" class="form-control text-light" id="username" name="username">
+                                <label for="username" class="text-light form-label">Username</label>
                             </div>
-                            <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                                <label for="password" class="text-dark">Password</label>
+                            <div class="form-outline flex-fill mb-3">
+                                <input type="password" class="form-control text-light" id="password" name="password">
+                                <label for="password" class="text-light form-label">Password</label>
                             </div>
                             <div class="d-flex justify-content-between align-items-center my-2">
                                 <!-- Checkbox -->
@@ -163,103 +162,76 @@
 <!-- Nội dung chính -->
 </div>
 
-<footer class="text-center text-lg-start bg-light text-muted mt-lg-3" th:fragment="footer">
-    <section class="">
-        <div class="container d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-            <div class="me-5 d-none d-lg-block">
-                <span>Get connected with us on social networks:</span>
-            </div>
-            <div>
-                <a href="" class="me-4 text-reset">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fab fa-google"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fab fa-github"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-    <section class="">
-        <div class="container text-center text-md-start mt-5">
-            <div class="row mt-3">
-                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fas fa-gem me-3"></i>Company name
-                    </h6>
-                    <p>
-                        Here you can use rows and columns to organize your footer content. Lorem ipsum
-                        dolor sit amet, consectetur adipisicing elit.
-                    </p>
-                </div>
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        Products
-                    </h6>
-                    <p>
-                        <a href="/product/search?category=cpu" class="text-reset">CPU</a>
-                    </p>
-                    <p>
-                        <a href="/product/search?category=mainboard" class="text-reset">Mainboard</a>
-                    </p>
-                    <p>
-                        <a href="/product/search?category=ram" class="text-reset">RAM</a>
-                    </p>
-                    <p>
-                        <a href="/product/search?category=vga" class="text-reset">VGA</a>
-                    </p>
-                </div>
-                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        Useful links
-                    </h6>
-                    <p>
-                        <a th:href="@{/catalog}" class="text-reset">Catalog</a>
-                    </p>
-                    <p>
-                        <a th:href="@{/product}" class="text-reset">Product</a>
-                    </p>
-                    <p>
-                        <a th:href="@{/services}" class="text-reset">Services</a>
-                    </p>
-                    <p>
-                        <a th:href="@{/about}" class="text-reset">About</a>
-                    </p>
-                </div>
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-                    <p><i class="fas fa-home me-3"></i> Trường Đại học Công Nghệ TP.HCM</p>
-                    <p>
-                        <i class="fas fa-envelope me-3"></i>
-                        info@example.com
-                    </p>
-                    <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-                    <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-        © 2023 Copyright:
-        <a class="fw-bold link-info" href="#">Phạm Bảo Phúc</a>
+<footer class="bg-light text-center text-white" th:fragment="footer">
+    <div class="container p-4 pb-0">
+        <!-- Section: Social media -->
+        <section class="mb-4">
+            <!-- Facebook -->
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #3b5998;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-facebook-f"></i
+            ></a>
+
+            <!-- Twitter -->
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #55acee;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-twitter"></i
+            ></a>
+
+            <!-- Google -->
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #dd4b39;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-google"></i
+            ></a>
+
+            <!-- Instagram -->
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #ac2bac;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-instagram"></i
+            ></a>
+
+            <!-- Linkedin -->
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #0082ca;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <!-- Github -->
+            <a
+                    class="btn btn-primary btn-floating m-1"
+                    style="background-color: #333333;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-github"></i
+            ></a>
+        </section>
+        <!-- Section: Social media -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const cartItemCountElement = document.getElementById("cartItemCount");
-
-            // Gọi API để lấy số lượng sản phẩm trong chi tiết hóa đơn
             const xhr = new XMLHttpRequest();
             xhr.open("GET", "/cartItemCount", true);
             xhr.onload = function() {
@@ -271,6 +243,7 @@
             xhr.send();
         });
     </script>
+    <script th:src="@{/js/mdb.min.js}"></script>
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
