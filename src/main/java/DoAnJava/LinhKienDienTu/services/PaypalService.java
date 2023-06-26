@@ -1,7 +1,7 @@
 package DoAnJava.LinhKienDienTu.services;
 
-import DoAnJava.LinhKienDienTu.config.PaypalPaymentIntent;
-import DoAnJava.LinhKienDienTu.config.PaypalPaymentMethod;
+import DoAnJava.LinhKienDienTu.enums.PaypalPaymentIntent;
+import DoAnJava.LinhKienDienTu.enums.PaypalPaymentMethod;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;

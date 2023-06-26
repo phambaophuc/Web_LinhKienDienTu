@@ -1,11 +1,10 @@
 package DoAnJava.LinhKienDienTu.controller;
 
-import DoAnJava.LinhKienDienTu.config.PaypalPaymentIntent;
-import DoAnJava.LinhKienDienTu.config.PaypalPaymentMethod;
+import DoAnJava.LinhKienDienTu.enums.PaypalPaymentIntent;
+import DoAnJava.LinhKienDienTu.enums.PaypalPaymentMethod;
 import DoAnJava.LinhKienDienTu.daos.Cart;
 import DoAnJava.LinhKienDienTu.daos.Item;
 import DoAnJava.LinhKienDienTu.entity.Bill;
-import DoAnJava.LinhKienDienTu.entity.BillDetail;
 import DoAnJava.LinhKienDienTu.entity.Product;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.services.*;
@@ -46,14 +45,23 @@ public class PaypalController {
     @Autowired
     private BillDetailService billDetailService;
 
-    @PostMapping("/pay")
-    public String pay(HttpServletRequest request, @RequestParam("totalPrice") BigDecimal price) {
+    private static final BigDecimal EXCHANGE_RATE = new BigDecimal("0.000043");
+
+    public static BigDecimal convertVNDToUSD(int amountInVND) {
+        BigDecimal amountInUSD = new BigDecimal(amountInVND).multiply(EXCHANGE_RATE);
+        return amountInUSD;
+    }
+
+    @PostMapping("/paypal")
+    public String pay(HttpServletRequest request, @RequestParam("totalPrice") int price) {
         String successUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_SUCCESS;
         String cancelUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_CANCEL;
 
+        BigDecimal priceInUSD = convertVNDToUSD(price);
+
         try {
             Payment payment = paypalService.createPayment(
-                    price,
+                    priceInUSD,
                     "USD",
                     PaypalPaymentMethod.paypal,
                     PaypalPaymentIntent.sale,

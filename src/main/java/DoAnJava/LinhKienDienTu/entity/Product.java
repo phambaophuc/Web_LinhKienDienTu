@@ -40,11 +40,11 @@ public class Product {
 
     @NotNull(message = "Vui lòng nhập giá sản phẩm.")
     @Column(name = "price")
-    private BigDecimal price;
+    private int price;
 
     @NotNull(message = "Vui lòng nhập số lượng sản phẩm.")
     @Column(name = "amount")
-    private Long amount;
+    private int amount;
 
     @Column(name = "note", length = 144)
     private String note;

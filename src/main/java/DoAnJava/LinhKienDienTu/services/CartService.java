@@ -51,9 +51,9 @@ public class CartService {
                 .sum();
     }
     
-    public double getSumPrice(@NotNull HttpSession session) {
+    public int getSumPrice(@NotNull HttpSession session) {
         return getCart(session).getCartItems().stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .mapToInt(item -> item.getPrice() * item.getQuantity())
                 .sum();
     }
 }

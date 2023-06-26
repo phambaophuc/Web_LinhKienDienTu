@@ -4,154 +4,141 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link th:fragment="link-css" rel="preconnect" href="https://fonts.googleapis.com">
+    <link th:fragment="link-css" rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link th:fragment="link-css" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@600&display=swap" rel="stylesheet">
+
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/vendor/font-awesome/css/all.min.css}">
-    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/styles.css}">
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/mdb.min.css}">
+    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 <header th:fragment="header">
-    <div class="superNav border-bottom py-2 bg-light">
+    <!-- Jumbotron -->
+    <div class="p-3 text-center bg-white border-bottom">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 centerOnMobile">
-                    <select  class="me-3 border-0 bg-light">
-                        <option value="en-us">EN-US</option>
-                    </select>
-                    <span class="me-3" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGE')">
-                        <a class="text-danger text-decoration-none" th:href="@{/admin}"><i class="fa-solid fa-house-user"></i> Admin</a>
-                    </span>
-                    <span class="d-none d-lg-inline-block d-md-inline-block d-sm-inline-block d-xs-none me-3">
-                        <strong>info@somedomain.com</strong>
-                    </span>
-                    <span class="me-3">
-                        <i class="fa-solid fa-phone me-1 text-warning"></i> <strong>1-800-123-1234</strong>
-                    </span>
+                <!-- Left elements -->
+                <div class="col-md-4 d-flex justify-content-center justify-content-md-start mb-3 mb-md-0">
+                    <a href="/" class="ms-md-2">
+                        <img src="/img/logos/logo.png" height="40" />
+                    </a>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-none d-lg-block d-md-block-d-sm-block d-xs-none text-end">
-                    <span class="me-3">
-                        <i class="fa-solid fa-wrench text-muted me-1"></i>
-                        <a class="text-muted" th:href="@{/build}">Xây dựng cấu hình</a>
-                    </span>
-                    <span class="me-3"><i class="fa-solid fa-file text-muted me-2"></i><a class="text-muted" href="#">Policy</a></span>
+                <!-- Left elements -->
+
+                <!-- Center elements -->
+                <div class="col-md-4">
+                    <form class="d-flex input-group w-auto my-auto mb-3 mb-md-0" th:action="@{/product/search}">
+                        <input autocomplete="off" type="search" name="name" class="form-control rounded" placeholder="Search" />
+                        <span class="input-group-text border-0 d-none d-lg-flex"><i class="fas fa-search"></i></span>
+                    </form>
                 </div>
+                <!-- Center elements -->
+
+                <!-- Right elements -->
+                <div class="col-md-4 d-flex justify-content-center justify-content-md-end align-items-center">
+                    <div class="d-flex">
+                        <!-- Cart -->
+                        <a class="text-reset me-3" href="/cart">
+                            <span><i class="fas fa-shopping-cart"></i></span>
+                            <span class="badge rounded-pill badge-notification bg-danger" id="cartItemCount"></span>
+                        </a>
+
+                        <!-- User -->
+                        <a href="#" class="text-reset text-uppercase" sec:authorize="!isAuthenticated()"
+                           data-bs-toggle="modal" data-bs-target="#ModalForm">
+                            <i class="fa-solid fa-circle-user"></i> Login
+                        </a>
+                        <div class="dropdown" sec:authorize="isAuthenticated()">
+                            <a class="text-reset dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                               id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" class="rounded-circle" height="22"
+                                     alt="" loading="lazy" />
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" th:href="@{/profile}">My profile</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item link-danger" th:href="@{/logout}">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right elements -->
             </div>
         </div>
     </div>
-    <nav class="navbar navbar-expand-lg bg-light sticky-top navbar-light p-3 shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/}"><i class="fa-solid fa-shop"></i> <strong>GEAR SHOP</strong></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <!-- Jumbotron -->
 
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <div class="ms-auto d-none d-lg-block">
-                    <form th:action="@{/product/search}" method="GET">
-                        <div class="input-group">
-                            <span class="border-warning input-group-text bg-warning text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" name="name" class="form-control border-warning" style="color:#7a7a7a">
-                            <button class="btn btn-warning text-white" type="submit">Search</button>
-                        </div>
-                    </form>
-                </div>
-                <ul class="navbar-nav ms-auto">
-                        <a class="nav-link mx-1 text-uppercase" th:href="@{/product?page=0}">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link mx-1 text-uppercase" th:href="@{/catalog}">Catalog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link mx-1 text-uppercase" th:href="@{/services}">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link mx-1 text-uppercase" th:href="@{/about}">About</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto d-flex">
-                    <li class="nav-item">
-                        <a class="nav-link text-uppercase position-relative" th:href="@{/cart}">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            Cart
-                            <sup class="text-danger" id="cartItemCount" style="font-size:14px"></sup>
-                        </a>
-                    </li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a href="#" class="nav-link mx-1 text-uppercase text-success"
-                           data-bs-toggle="modal" data-bs-target="#ModalForm">
-                            <i class="fa-solid fa-circle-user"></i> Login</a>
-                    </li>
-                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                        <a class="nav-link mx-1 text-uppercase dropdown-toggle" href="#" role="button"
-                           id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-circle-user"></i>
-                            <span th:text="${#authentication.name}"></span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li>
-                                <a class="dropdown-item text-uppercase fw-bold" th:href="@{/profile}">
-                                    <i class="fa-solid fa-id-card me-1"></i>
-                                    Profile
-                                </a>
-                            </li>
-                            <li class="mt-1">
-                                <a class="dropdown-item text-uppercase fw-bold" href="#">
-                                    <i class="fa-solid fa-gear me-1"></i>
-                                    Setting
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-uppercase fw-bold link-danger" th:href="@{/logout}">
-                                    <i class="fa-solid fa-right-from-bracket me-1"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <!-- Container wrapper -->
+        <div class="container justify-content-center justify-content-md-between">
+            <!-- Left links -->
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item me-2 me-lg-0">
+                    <a class="nav-link btn shadow-0" role="button">
+                        <i class="fas fa-bars me-1"></i>
+                        <span>Categories</span>
+                    </a>
+                </li>
+                <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                    <a class="nav-link" href="/product">Sản phẩm</a>
+                </li>
+                <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                    <a class="nav-link" href="#">Bestsellers</a>
+                </li>
+                <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item me-2 me-lg-0 d-none d-md-inline-block">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+            <!-- Left links -->
         </div>
+        <!-- Container wrapper -->
     </nav>
+    <!-- Navbar -->
 
     <div class="modal fade" id="ModalForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="form-area bg-primary">
-                        <h1 class="text-center">Login</h1>
-                        <form th:action="@{/login}" method="POST">
-                            <div class="form-outline flex-fill mb-3 mt-4">
-                                <input type="text" class="form-control text-light" id="username" name="username">
-                                <label for="username" class="text-light form-label">Username</label>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="form-area bg-primary">
+                    <h1 class="text-center">Login</h1>
+                    <form th:action="@{/login}" method="POST">
+                        <div class="form-floating mb-3 mt-4">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                            <label for="username" class="text-dark">Username</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                            <label for="password" class="text-dark">Password</label>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <!-- Checkbox -->
+                            <div class="form-check mb-0">
+                                <input class="form-check-input me-2" type="checkbox" name="remember-me" id="remember-me" />
+                                <label class="form-check-label" for="remember-me">
+                                    Remember me?
+                                </label>
                             </div>
-                            <div class="form-outline flex-fill mb-3">
-                                <input type="password" class="form-control text-light" id="password" name="password">
-                                <label for="password" class="text-light form-label">Password</label>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center my-2">
-                                <!-- Checkbox -->
-                                <div class="form-check mb-0">
-                                    <input class="form-check-input me-2" type="checkbox" name="remember-me" id="remember-me" />
-                                    <label class="form-check-label" for="remember-me">
-                                        Remember me?
-                                    </label>
-                                </div>
-                                <a th:href="@{/forgot-password}" class="link-light fw-bold">Forgot password?</a>
-                            </div>
-                            <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                                <a th:href="@{/oauth2/authorization/facebook}" class="btn btn-sm btn-light mx-1">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a th:href="@{/oauth2/authorization/google}" class="btn btn-sm btn-light mx-1">
-                                    <i class="fab fa-google"></i>
-                                </a>
-                            </div>
-                            <button type="submit" class="btn btn-light mt-3">LOGIN</button>
-                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
-                                <a th:href="@{/register}" class="text-light">Register</a>
-                            </p>
-                        </form>
-                    </div>
+                            <a th:href="@{/forgot-password}" class="link-light fw-bold">Forgot password?</a>
+                        </div>
+                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                            <a th:href="@{/oauth2/authorization/facebook}" class="btn btn-sm btn-light mx-1">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a th:href="@{/oauth2/authorization/google}" class="btn btn-sm btn-light mx-1">
+                                <i class="fab fa-google"></i>
+                            </a>
+                        </div>
+                        <button type="submit" class="btn btn-light mt-3">LOGIN</button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
+                            <a th:href="@{/register}" class="text-light">Register</a>
+                        </p>
+                    </form>
                 </div>
             </div>
         </div>

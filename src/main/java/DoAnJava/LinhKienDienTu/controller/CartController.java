@@ -62,7 +62,7 @@ public class CartController {
 
     @PostMapping("/add-to-cart")
     public String addToCart(HttpSession session, @RequestParam long id,
-                            @RequestParam String name, @RequestParam double price,
+                            @RequestParam String name, @RequestParam int price,
                             @RequestParam String image, @RequestParam(defaultValue = "1") int quantity,
                             HttpServletRequest request) {
         var cart = cartService.getCart(session);

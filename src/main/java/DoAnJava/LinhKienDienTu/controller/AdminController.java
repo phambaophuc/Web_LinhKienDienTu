@@ -36,8 +36,6 @@ public class AdminController {
     @Autowired
     private ProductService productService;
     @Autowired
-    private BillDetailService billDetailService;
-    @Autowired
     private UserService userService;
     @Autowired
     private RoleService roleService;
@@ -77,9 +75,6 @@ public class AdminController {
                              BindingResult bindingResult, Model model,
                              @RequestParam(value = "mainImage")MultipartFile mainMultipartFile,
                              @RequestParam(value = "extraImage", required = false)MultipartFile[] extraMultipartFile) throws IOException {
-
-        // upload hình vào thư mục img trong static
-//        productService.uploadFileStatic(product, mainMultipartFile, extraMultipartFile, uploadDir);
 
         if (bindingResult.hasErrors())
         {
@@ -277,7 +272,6 @@ public class AdminController {
         return "admin/bill/list-bill";
     }
 
-    // Thống kê theo tháng
     @GetMapping("/thongKeTheoThang")
     public String thongKeTheoThang(Model model) {
         int year = LocalDate.now().getYear();
@@ -291,7 +285,6 @@ public class AdminController {
         return billService.thongKeTongTienTheoThang(year);
     }
 
-    // Thống kê theo ngày
     @GetMapping("/thongKeTheoNgay")
     public String thongKeNgay(Model model) {
         int month = LocalDate.now().getMonthValue();

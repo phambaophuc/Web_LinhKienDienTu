@@ -1,6 +1,6 @@
 package DoAnJava.LinhKienDienTu.services;
 
-import DoAnJava.LinhKienDienTu.entity.AuthenticationType;
+import DoAnJava.LinhKienDienTu.enums.AuthenticationType;
 import DoAnJava.LinhKienDienTu.entity.User;
 import DoAnJava.LinhKienDienTu.repository.IRoleRepository;
 import DoAnJava.LinhKienDienTu.repository.IUserRepository;

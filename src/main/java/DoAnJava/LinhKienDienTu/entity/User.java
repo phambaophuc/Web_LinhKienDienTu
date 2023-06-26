@@ -1,5 +1,6 @@
 package DoAnJava.LinhKienDienTu.entity;
 
+import DoAnJava.LinhKienDienTu.enums.AuthenticationType;
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidEmail;
 import DoAnJava.LinhKienDienTu.validator.annotation.ValidUsername;
 import jakarta.persistence.*;

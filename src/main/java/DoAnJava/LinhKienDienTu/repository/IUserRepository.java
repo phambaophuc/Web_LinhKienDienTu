@@ -1,6 +1,6 @@
 package DoAnJava.LinhKienDienTu.repository;
 
-import DoAnJava.LinhKienDienTu.entity.AuthenticationType;
+import DoAnJava.LinhKienDienTu.enums.AuthenticationType;
 import DoAnJava.LinhKienDienTu.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

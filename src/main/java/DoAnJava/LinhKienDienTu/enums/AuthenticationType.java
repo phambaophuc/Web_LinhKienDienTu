@@ -1,4 +1,4 @@
-package DoAnJava.LinhKienDienTu.entity;
+package DoAnJava.LinhKienDienTu.enums;
 
 public enum AuthenticationType {
     LOCAL, GOOGLE, FACEBOOK

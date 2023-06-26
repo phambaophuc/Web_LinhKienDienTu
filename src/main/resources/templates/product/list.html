@@ -20,7 +20,11 @@
                         <a href="#!">
                             <div class="mask">
                                 <div class="d-flex justify-content-end align-items-end h-100">
-                                    <h5><span class="badge bg-primary me-2" th:text="${product.price + '$'}"></span></h5>
+                                    <h5>
+                                        <span class="badge bg-primary me-2"
+                                              th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' &#273;'}">
+                                        </span>
+                                    </h5>
                                 </div>
                             </div>
                             <div class="hover-overlay">
@@ -33,7 +37,7 @@
                             <p class="card-title mb-3 text-truncate" th:text="${product.productName}"
                                th:title="${product.productName}"></p>
                         </a>
-                        <a th:href="@{'/product/search?category=' + ${product.category.categoryName}}" class="text-reset">
+                        <a th:href="@{'/product/search?category=' + ${product.category.categoryName}}">
                             <p th:text="${product.category.categoryName}"></p>
                         </a>
                     </div>
