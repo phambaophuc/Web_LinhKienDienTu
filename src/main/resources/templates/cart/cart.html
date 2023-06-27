@@ -11,11 +11,11 @@
 <section class="h-100" style="background-color: #eee;">
     <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-10">
+            <div class="col-10" th:if="${totalQuantity > 0}">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="fw-normal mb-0 text-black">Tổng tiền:
-                        <span th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + ' &#273;'}"></span>
+                    <h3 class="fw-normal mb-0 text-black">Số lượng sản phẩm trong giỏ hàng:
+                        <span th:text="${totalQuantity}"></span>
                     </h3>
                     <div>
                         <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!" class="text-body">price <i
@@ -90,37 +90,100 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <form class="card-body" th:action="@{/submitOrder}" method="POST">
-                        <input type="hidden" name="totalPrice" th:value="${totalPrice}">
-                        <input type="hidden" name="orderInfo" value="Thanh toan don hang 2023">
-                        <button type="submit" id="check-auth" class="btn btn-warning btn-block btn-lg">Checkout</button>
-                    </form>
-                </div>
+                <form class="row mb-4" th:action="@{/payment}" method="POST">
+                    <input type="hidden" name="totalPrice" th:value="${totalPrice}">
+                    <input type="hidden" name="orderInfo" value="Thanh toan don hang 2023">
 
+                    <div class="col-lg-6 col-xl-6">
+                        <div class="d-flex flex-row">
+                            <div class="d-flex align-items-center pe-2">
+                                <input class="form-check-input" type="radio" id="check-paypal" onclick="togglePaymentOption('paypal')"/>
+                            </div>
+                            <div class="rounded border w-100 p-2">
+                                <p class="d-flex align-items-center mb-0">
+                                    <img class="me-2" width="50px"
+                                         src="https://img.freepik.com/free-icon/paypal_318-674245.jpg"
+                                         alt="PayPal acceptance mark" />
+                                    PayPal
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="d-flex align-items-center pe-2">
+                                <input class="form-check-input" type="radio" id="check-vnpay" onclick="togglePaymentOption('vnpay')"/>
+                            </div>
+                            <div class="rounded border w-100 p-2">
+                                <p class="d-flex align-items-center mb-0">
+                                    <img class="me-2" width="50px"
+                                         src="https://images.careerbuilder.vn/employer_folders/lot1/175021/90744logovnpay-02.png"
+                                         alt="VNPay acceptance mark" />
+                                    VNPay
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-xl-6 mb-4">
+                        <div class="d-flex justify-content-between" style="font-weight: 500;">
+                            <p>Tổng tiền</p>
+                            <p th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + ' &#273;'}"></p>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <button type="submit" id="check-auth" class="btn btn-primary btn-block btn-lg">
+                            <div class="d-flex justify-content-between">
+                                <span>Checkout</span>
+                                <span th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + ' &#273;'}"></span>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="card mb-lg-0">
+                    <div class="card-body">
+                        <p><strong>We accept</strong></p>
+                        <img class="me-2" width="45px"
+                             src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                             alt="Visa" />
+                        <img class="me-2" width="45px"
+                             src="https://images.careerbuilder.vn/employer_folders/lot1/175021/90744logovnpay-02.png"
+                             alt="VNPay" />
+                        <img class="me-2" width="45px"
+                             src="https://cdn.pixabay.com/photo/2015/05/26/09/37/paypal-784404_1280.png"
+                             alt="PayPal acceptance mark" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center my-5" th:if="${totalQuantity == 0}">
+                <a class="d-block link-warning" href="/product">
+                    <i class="fas fa-fw fa-arrow-left"></i>
+                    Trở về cửa hàng</a>
+                <img src="https://bizweb.dktcdn.net/100/352/749/themes/716356/assets/empty-cart.png?1667786902115" alt="">
             </div>
         </div>
     </div>
 </section>
 
 <th:block th:replace="layout :: footer"></th:block>
+<script th:src="@{/js/check-auth.js}"></script>
 <script>
-    $(document).ready(function() {
-        $("#check-auth").click(function(event) {
-            if (!isLoggedIn()) {
-                event.preventDefault(); // Ngăn chặn gửi biểu mẫu
-                alert("Bạn cần đăng nhập để sử dụng chức năng này");
-            }
-        });
+    function togglePaymentOption(option) {
+        const vnpayRadio = document.getElementById('check-vnpay');
+        const paypalRadio = document.getElementById('check-paypal');
+        if (option === 'paypal') {
+            vnpayRadio.checked = false;
 
-        function isLoggedIn() {
-            return $.ajax({
-                url: "/api/user/check-authentication",
-                method: "GET",
-                async: false
-            }).responseJSON.authenticated;
+            paypalRadio.name = 'paypal';
+            vnpayRadio.name = '';
+        } else if (option === 'vnpay') {
+            paypalRadio.checked = false;
+
+            vnpayRadio.name = 'vnpay';
+            paypalRadio.name = '';
         }
-    });
+    }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 </body>

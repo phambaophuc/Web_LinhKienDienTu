@@ -17,7 +17,7 @@ public class PaypalService {
     @Autowired
     private APIContext apiContext;
 
-    public Payment createPayment(
+    public Payment createPaypal(
             BigDecimal total,
             String currency,
             PaypalPaymentMethod method,

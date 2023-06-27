@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    $("#postCommentBtn").click(function(event) {
+    $("#check-auth").click(function(event) {
         if (!isLoggedIn()) {
             event.preventDefault(); // Ngăn chặn gửi biểu mẫu
-            alert("Vui lòng đăng nhập để bình luận");
+            alert("Vui lòng đăng nhập để sử dụng chức năng này");
         }
     });
 
